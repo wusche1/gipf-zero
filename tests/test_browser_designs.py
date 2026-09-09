@@ -4,16 +4,16 @@ from test_browser_mapping import browser, block_external_fonts, site_url
 
 
 DESIGN_IDS = [
-    "minimal-flat",
-    "bevel-checker",
-    "geometric-hex",
-    "ceramic-square",
-    "frosted-glass",
-    "warm-wood",
-    "go-pebble",
-    "faceted-gem",
-    "graphic-donut",
-    "sculpted-puck",
+    "solid-open",
+    "one-two-lobes",
+    "full-split",
+    "bowl-dome",
+    "thin-tall",
+    "one-two-pips",
+    "plain-scallop",
+    "one-two-rings",
+    "one-two-bars",
+    "diamond-star",
 ]
 
 
@@ -38,11 +38,14 @@ def test_gallery_shows_ten_designs_and_applies_each_to_the_board(browser, site_u
         assert page.locator("#designs-dialog").is_visible()
         assert page.locator(".design-card").count() == 10
         first_preview = page.locator(".design-card").first.locator(".design-preview")
-        assert first_preview.locator(".piece-visual").count() == 6
+        assert first_preview.locator(".preview-piece").count() == 6
+        assert first_preview.locator(".piece-visual").count() >= 2
         assert first_preview.locator(".design-preview-group").all_text_contents() == ["IVORY", "OBSIDIAN"]
         assert first_preview.locator(".design-preview-label").all_text_contents() == ["single", "double", "single", "double"]
         shape_tags = page.locator(".design-preview .piece-visual").evaluate_all("elements => [...new Set(elements.map(element => element.tagName))]")
         assert len(shape_tags) >= 4
+        assert page.locator('.design-card[data-design="solid-open"] .design-hole').count() == 2
+        assert page.locator('.design-card[data-design="one-two-lobes"] .piece-visual').count() == 4
         for design_id in DESIGN_IDS:
             page.locator(f'.design-card[data-design="{design_id}"]').click()
             assert page.locator("body").get_attribute("data-piece-design") == design_id
@@ -55,11 +58,11 @@ def test_gallery_shows_ten_designs_and_applies_each_to_the_board(browser, site_u
 def test_selected_design_persists_after_reload(browser, site_url):
     page = design_page(browser, site_url)
     try:
-        page.locator('.design-card[data-design="geometric-hex"]').click()
+        page.locator('.design-card[data-design="one-two-bars"]').click()
         page.get_by_role("button", name="Play with this design").click()
         page.reload(wait_until="domcontentloaded")
         page.locator("#engine-status").wait_for(state="visible")
-        assert page.locator("body").get_attribute("data-piece-design") == "geometric-hex"
-        assert page.locator("#piece-layer .piece-design-geometric-hex").count() > 0
+        assert page.locator("body").get_attribute("data-piece-design") == "one-two-bars"
+        assert page.locator("#piece-layer .piece-design-one-two-bars").count() > 0
     finally:
         page.close()

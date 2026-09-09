@@ -210,6 +210,22 @@ dialog::backdrop { background: rgba(37,31,27,.34); backdrop-filter: blur(3px); }
 .capture-keep { stroke: #6c9278 !important; stroke-width: 2.8 !important; filter: drop-shadow(0 0 3px rgba(108,146,120,.5)); }
 .design-detail.capture-remove { fill: #b4573f !important; }
 .design-detail.capture-keep { fill: #6c9278 !important; }
+.design-solid-open.ivory, .design-one-two-lobes.ivory, .design-full-split.ivory, .design-bowl-dome.ivory, .design-thin-tall.ivory, .design-one-two-pips.ivory, .design-plain-scallop.ivory, .design-one-two-rings.ivory, .design-one-two-bars.ivory, .design-diamond-star.ivory { fill: #eee8df; stroke: #898078; }
+.design-solid-open.obsidian, .design-one-two-lobes.obsidian, .design-full-split.obsidian, .design-bowl-dome.obsidian, .design-thin-tall.obsidian, .design-one-two-pips.obsidian, .design-plain-scallop.obsidian, .design-one-two-rings.obsidian, .design-one-two-bars.obsidian, .design-diamond-star.obsidian { fill: #26302e; stroke: #101716; }
+.design-hole { fill: var(--paper); stroke: #9b9185; stroke-width: 1.4; pointer-events: none; }
+.design-shade { pointer-events: none; }
+.bowl-shade { fill: #b8afa4; opacity: .42; filter: blur(.4px); }
+.dome-shade { fill: rgba(255,255,255,.62); stroke: rgba(255,255,255,.7); stroke-width: 1.5; }
+.design-top { fill: rgba(255,255,255,.35); stroke: rgba(255,255,255,.45); stroke-width: 1.3; pointer-events: none; }
+.design-pip { fill: #4e5c57; stroke: rgba(255,255,255,.55); stroke-width: 1; pointer-events: none; }
+.obsidian ~ .design-pip, .design-shape.obsidian ~ .design-pip { fill: #d1bc8a; }
+.flat-ring { fill: none; stroke: #9c9287; stroke-width: 2.2; pointer-events: none; }
+.design-one-two-rings.obsidian ~ .flat-ring { stroke: #c8b477; }
+.design-one-two-bars { filter: none; }
+.design-one-two-bars.ivory { fill: #f5eee4; }
+.design-one-two-bars.obsidian { fill: #1c2524; }
+.design-diamond-star.ivory { fill: #e5ddd2; }
+.design-diamond-star.obsidian { fill: #293331; }
 
 .designs-button { width: 100%; display: flex; align-items: center; gap: 11px; margin-top: 9px; padding: 11px 10px; color: var(--ink); text-align: left; border: 1px solid var(--line); border-radius: 7px; background: rgba(255,253,249,.36); transition: border-color .18s, background .18s, transform .18s; }
 .designs-button:hover { border-color: rgba(180,87,63,.5); background: rgba(255,250,245,.9); }

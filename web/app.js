@@ -11,16 +11,16 @@ const els = {
 };
 
 const DESIGNS = [
-  { id: 'minimal-flat', name: 'Minimal Flat', note: 'Clean disc, clear annulus', stackOffset: -8 },
-  { id: 'bevel-checker', name: 'Bevel Checker', note: 'Polished edge and inset', stackOffset: -8 },
-  { id: 'geometric-hex', name: 'Geometric Hex', note: 'A precise six-sided tile', stackOffset: -8 },
-  { id: 'ceramic-square', name: 'Ceramic Square', note: 'Soft corners, solid body', stackOffset: -8 },
-  { id: 'frosted-glass', name: 'Frosted Glass', note: 'Pale lens with thick rim', stackOffset: -8 },
-  { id: 'warm-wood', name: 'Warm Wood', note: 'Quiet carved grain', stackOffset: -8 },
-  { id: 'go-pebble', name: 'Go Pebble', note: 'Low oval playing stone', stackOffset: -7 },
-  { id: 'faceted-gem', name: 'Faceted Gem', note: 'Cut planes, inset crown', stackOffset: -9 },
-  { id: 'graphic-donut', name: 'Graphic Donut', note: 'Bold ring and center', stackOffset: -8 },
-  { id: 'sculpted-puck', name: 'Sculpted Puck', note: 'Raised banded cylinder', stackOffset: -9 }
+  { id: 'solid-open', name: 'Solid / Open', note: 'A filled disc or a clean donut' },
+  { id: 'one-two-lobes', name: 'One / Two Lobes', note: 'Connected lobes count the piece' },
+  { id: 'full-split', name: 'Full / Split', note: 'One face or two parted halves' },
+  { id: 'bowl-dome', name: 'Bowl / Dome', note: 'Concave single, convex double' },
+  { id: 'thin-tall', name: 'Thin / Tall', note: 'Puck versus raised cylinder' },
+  { id: 'one-two-pips', name: 'One / Two Pips', note: 'A quiet count in the center' },
+  { id: 'plain-scallop', name: 'Plain / Scallop', note: 'Smooth rim or crowned edge' },
+  { id: 'one-two-rings', name: 'One / Two Rings', note: 'Flat outlines carry the count' },
+  { id: 'one-two-bars', name: 'One / Two Bars', note: 'A single capsule or parallel pair' },
+  { id: 'diamond-star', name: 'Diamond / Star', note: 'Four points replace the disc' }
 ];
 
 let config = { aiEndpoint: '', engineUrl: '', requestTimeoutMs: 5000 };
@@ -131,58 +131,62 @@ function renderPieces() {
 function pieceElements({ x, y, owner, kind, captureClass = '', capturePart = null, preview = false, designId = selectedDesign }) {
   const design = DESIGNS.find(item => item.id === designId) || DESIGNS[0];
   const className = `piece-design-${design.id}`;
-  const offsets = kind === 'double' ? [design.stackOffset || -8, 0] : [0];
   const elements = [];
-  offsets.forEach(offset => {
-    const cy = y + offset;
-    const shift = kind === 'double' && offset !== 0 && design.id === 'bevel-checker' ? 2 : 0;
-    const radius = design.id === 'go-pebble' ? 17 : 18;
-    const stateClass = `${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}${captureClass} ${className}`;
-    elements.push(svg('ellipse', { cx: x + shift + 1, cy: cy + 4, rx: radius, ry: Math.max(5, radius * .38), class: `piece-shadow ${className}` }));
-    // These zero-opacity circles retain a stable semantic board hook for the renderer tests.
-    const semanticTag = preview ? 'preview-piece' : 'piece';
-    elements.push(svg('circle', { cx: x + shift, cy, r: 1, class: `${semanticTag} ${kind === 'double' ? 'double-piece' : 'single-piece'} ${stateClass} semantic-piece` }));
-    if (kind === 'double' && offset === 0) elements.push(svg('circle', { cx: x, cy, r: 1, class: `double-ring ${stateClass} semantic-piece` }));
-    elements.push(...designShapes({ x: x + shift, y: cy, owner, kind, offset, radius, captureClass, className, design }));
-    if (kind === 'double' && offset === 0 && capturePart) elements.push(svg('text', { x: x + 22, y: cy + 3, class: `double-label${captureClass} ${className}` }, `D${capturePart.bit + 1}`));
-  });
+  const stateClass = `${owner === 'white' ? 'ivory' : 'obsidian'}${captureClass} ${className}`;
+  // Keep two coincident semantic markers for a GIPF piece so board inspection still
+  // distinguishes a double, while the visible design controls its own encoding.
+  const semanticTag = preview ? 'preview-piece' : 'piece';
+  const semanticCount = kind === 'double' ? 2 : 1;
+  for (let index = 0; index < semanticCount; index += 1) {
+    elements.push(svg('circle', { cx: x, cy: y, r: 1, class: `${semanticTag} ${kind === 'double' ? 'double-piece' : 'single-piece'} ${stateClass} semantic-piece` }));
+  }
+  if (kind === 'double') elements.push(svg('circle', { cx: x, cy: y, r: 1, class: `double-ring ${stateClass} semantic-piece` }));
+  elements.push(...designShapes({ x, y, owner, kind, captureClass, className, design }));
+  if (kind === 'double' && capturePart) elements.push(svg('text', { x: x + 22, y: y + 3, class: `double-label${captureClass} ${className}` }, `D${capturePart.bit + 1}`));
   return elements;
 }
 
-function designShapes({ x, y, owner, kind, offset, radius, captureClass, className, design }) {
+function designShapes({ x, y, owner, kind, captureClass, className, design }) {
   const ink = owner === 'white' ? 'ivory-detail' : 'obsidian-detail';
-  const visualClass = `piece-visual design-shape design-${design.id} ${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}${captureClass} ${className}`;
+  const visualClass = `piece-visual design-shape design-${design.id} ${owner === 'white' ? 'ivory' : 'obsidian'}${captureClass} ${className}`;
   const detailClass = `design-detail ${ink}${captureClass} ${className}`;
   const shapes = [];
-  if (design.id === 'minimal-flat') shapes.push(svg('circle', { cx: x, cy: y, r: radius, class: visualClass }));
-  if (design.id === 'bevel-checker') shapes.push(svg('polygon', { points: octagonPointsAt(x, y, radius), class: visualClass }));
-  if (design.id === 'geometric-hex') shapes.push(svg('polygon', { points: hexPointsAt(x, y, radius + 1), class: visualClass }));
-  if (design.id === 'ceramic-square') shapes.push(svg('rect', { x: x - radius, y: y - radius, width: radius * 2, height: radius * 2, rx: 6, class: visualClass }));
-  if (design.id === 'frosted-glass') shapes.push(svg('circle', { cx: x, cy: y, r: radius, class: visualClass }));
-  if (design.id === 'warm-wood') shapes.push(svg('circle', { cx: x, cy: y, r: radius, class: visualClass }));
-  if (design.id === 'go-pebble') shapes.push(svg('ellipse', { cx: x, cy: y, rx: radius + 1, ry: 14, class: visualClass }));
-  if (design.id === 'faceted-gem') shapes.push(svg('polygon', { points: gemPointsAt(x, y, radius), class: visualClass }));
-  if (design.id === 'graphic-donut') shapes.push(svg('circle', { cx: x, cy: y, r: radius, class: visualClass }));
-  if (design.id === 'sculpted-puck') shapes.push(svg('rect', { x: x - radius, y: y - 14, width: radius * 2, height: 28, rx: 8, class: visualClass }));
-  if (kind === 'double' && offset === 0) shapes.push(...doubleOutline({ x, y, radius, design, owner, captureClass, className }));
-  if (design.id === 'bevel-checker') shapes.push(svg('path', { d: `M ${x - 8} ${y - 7} L ${x} ${y} L ${x - 8} ${y + 7} M ${x + 8} ${y - 7} L ${x} ${y} L ${x + 8} ${y + 7}`, class: detailClass }));
-  if (design.id === 'frosted-glass') shapes.push(svg('path', { d: `M ${x - 9} ${y - 10} Q ${x} ${y - 15} ${x + 9} ${y - 10}`, class: detailClass }));
-  if (design.id === 'warm-wood') shapes.push(svg('path', { d: `M ${x - 11} ${y - 5} Q ${x} ${y - 11} ${x + 11} ${y - 5} M ${x - 10} ${y + 4} Q ${x} ${y + 10} ${x + 10} ${y + 4}`, class: detailClass }));
-  if (design.id === 'ceramic-square') shapes.push(svg('rect', { x: x - 11, y: y - 11, width: 22, height: 22, rx: 3, class: detailClass }));
-  if (design.id === 'faceted-gem') shapes.push(svg('polygon', { points: gemPointsAt(x, y, radius - 6), class: detailClass }));
-  if (design.id === 'graphic-donut' && kind === 'double' && offset === 0) shapes.push(svg('circle', { cx: x, cy: y, r: 8, class: `design-donut-hole ${className}` }));
-  if (design.id === 'sculpted-puck' && kind === 'double' && offset === 0) shapes.push(svg('rect', { x: x - 13, y: y - 2, width: 26, height: 4, rx: 2, class: detailClass }));
+  const radius = 18;
+  const full = { cx: x, cy: y, r: radius, class: visualClass };
+  if (design.id === 'solid-open') {
+    if (kind === 'single') shapes.push(svg('circle', full));
+    else { shapes.push(svg('circle', { ...full, class: `${visualClass} open-face` })); shapes.push(svg('circle', { cx: x, cy: y, r: 9, class: `design-hole ${className}` })); }
+  } else if (design.id === 'one-two-lobes') {
+    if (kind === 'single') shapes.push(svg('path', { d: lobePath(x, y, 0), class: visualClass }));
+    else shapes.push(svg('path', { d: `${lobePath(x - 8, y, -1)} ${lobePath(x + 8, y, 1)}`, class: visualClass }));
+  } else if (design.id === 'full-split') {
+    if (kind === 'single') shapes.push(svg('circle', full));
+    else shapes.push(svg('path', { d: splitDiscPath(x, y, radius), class: visualClass }));
+  } else if (design.id === 'bowl-dome') {
+    shapes.push(svg('circle', full));
+    shapes.push(svg('ellipse', { cx: x, cy: y + (kind === 'single' ? 3 : -3), rx: 11, ry: 7, class: `design-shade ${kind === 'single' ? 'bowl-shade' : 'dome-shade'} ${className}` }));
+  } else if (design.id === 'thin-tall') {
+    if (kind === 'single') shapes.push(svg('ellipse', { cx: x, cy: y, rx: 18, ry: 11, class: visualClass }));
+    else { shapes.push(svg('rect', { x: x - 18, y: y - 13, width: 36, height: 26, rx: 5, class: visualClass })); shapes.push(svg('ellipse', { cx: x, cy: y - 13, rx: 18, ry: 6, class: `design-top ${className}` })); }
+  } else if (design.id === 'one-two-pips') {
+    shapes.push(svg('circle', full));
+    shapes.push(svg('circle', { cx: x - (kind === 'double' ? 5 : 0), cy: y, r: 3.4, class: `design-pip ${className}` }));
+    if (kind === 'double') shapes.push(svg('circle', { cx: x + 5, cy: y, r: 3.4, class: `design-pip ${className}` }));
+  } else if (design.id === 'plain-scallop') {
+    shapes.push(svg(kind === 'single' ? 'circle' : 'polygon', kind === 'single' ? full : { points: scallopPointsAt(x, y, 19, 12), class: visualClass }));
+  } else if (design.id === 'one-two-rings') {
+    shapes.push(svg('circle', { cx: x, cy: y, r: 16, class: visualClass }));
+    shapes.push(svg('circle', { cx: x, cy: y, r: kind === 'single' ? 10 : 7, class: `flat-ring ${className}` }));
+    if (kind === 'double') shapes.push(svg('circle', { cx: x, cy: y, r: 12, class: `flat-ring ${className}` }));
+  } else if (design.id === 'one-two-bars') {
+    shapes.push(svg('rect', { x: x - 16, y: y - (kind === 'double' ? 7 : 4), width: 32, height: kind === 'double' ? 6 : 8, rx: 3, class: visualClass }));
+    if (kind === 'double') shapes.push(svg('rect', { x: x - 16, y: y + 1, width: 32, height: 6, rx: 3, class: visualClass }));
+  } else if (design.id === 'diamond-star') {
+    shapes.push(svg('polygon', { points: kind === 'single' ? diamondPointsAt(x, y, 19) : starPointsAt(x, y, 20, 9), class: visualClass }));
+  }
+  if (design.id === 'bowl-dome') shapes.push(svg('path', { d: kind === 'single' ? `M ${x - 10} ${y + 5} Q ${x} ${y + 12} ${x + 10} ${y + 5}` : `M ${x - 10} ${y - 6} Q ${x} ${y - 14} ${x + 10} ${y - 6}`, class: detailClass }));
+  if (design.id === 'full-split') shapes.push(svg('line', { x1: x, y1: y - 13, x2: x, y2: y + 13, class: detailClass }));
   return shapes;
-}
-
-function doubleOutline({ x, y, radius, design, owner, captureClass, className }) {
-  const outlineClass = `double-outline ${owner === 'white' ? 'ivory-outline' : 'obsidian-outline'}${captureClass} ${className}`;
-  if (design.id === 'ceramic-square' || design.id === 'sculpted-puck') return [svg('rect', { x: x - radius - 3, y: y - (design.id === 'sculpted-puck' ? 17 : radius + 3), width: (radius + 3) * 2, height: design.id === 'sculpted-puck' ? 34 : (radius + 3) * 2, rx: 8, class: outlineClass })];
-  if (design.id === 'go-pebble') return [svg('ellipse', { cx: x, cy: y, rx: radius + 4, ry: 16, class: outlineClass })];
-  if (design.id === 'geometric-hex') return [svg('polygon', { points: hexPointsAt(x, y, radius + 4), class: outlineClass })];
-  if (design.id === 'bevel-checker') return [svg('polygon', { points: octagonPointsAt(x, y, radius + 4), class: outlineClass })];
-  if (design.id === 'faceted-gem') return [svg('polygon', { points: gemPointsAt(x, y, radius + 4), class: outlineClass })];
-  return [svg('circle', { cx: x, cy: y, r: radius + 4, class: outlineClass })];
 }
 
 function renderMeta() {
@@ -518,4 +522,9 @@ function hexPoints(radius) { return Array.from({ length: 6 }, (_, i) => { const 
 function hexPointsAt(x, y, radius) { return Array.from({ length: 6 }, (_, i) => { const angle = (-90 + i * 60) * Math.PI / 180; return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`; }).join(' '); }
 function octagonPointsAt(x, y, radius) { return Array.from({ length: 8 }, (_, i) => { const angle = (22.5 + i * 45) * Math.PI / 180; return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`; }).join(' '); }
 function gemPointsAt(x, y, radius) { return Array.from({ length: 8 }, (_, i) => { const angle = (-90 + i * 45) * Math.PI / 180; const scale = i % 2 ? .72 : 1; return `${x + Math.cos(angle) * radius * scale},${y + Math.sin(angle) * radius * scale}`; }).join(' '); }
+function diamondPointsAt(x, y, radius) { return `${x},${y - radius} ${x + radius},${y} ${x},${y + radius} ${x - radius},${y}`; }
+function starPointsAt(x, y, outer, inner) { return Array.from({ length: 8 }, (_, i) => { const angle = (-90 + i * 45) * Math.PI / 180; const radius = i % 2 ? inner : outer; return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`; }).join(' '); }
+function scallopPointsAt(x, y, radius, lobes) { return Array.from({ length: lobes * 2 }, (_, i) => { const angle = (-90 + i * 360 / (lobes * 2)) * Math.PI / 180; const r = i % 2 ? radius - 3 : radius; return `${x + Math.cos(angle) * r},${y + Math.sin(angle) * r}`; }).join(' '); }
+function lobePath(x, y, direction) { const shift = direction * 8; return `M ${x - 10 + shift} ${y} A 10 10 0 1 1 ${x + 10 + shift} ${y} A 10 10 0 1 1 ${x - 10 + shift} ${y} Z`; }
+function splitDiscPath(x, y, radius) { const gap = 2; return `M ${x - gap} ${y - radius} A ${radius} ${radius} 0 0 0 ${x - gap} ${y + radius} L ${x - gap} ${y + radius} L ${x - gap} ${y - radius} Z M ${x + gap} ${y - radius} A ${radius} ${radius} 0 0 1 ${x + gap} ${y + radius} L ${x + gap} ${y + radius} L ${x + gap} ${y - radius} Z`; }
 function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2400); }
