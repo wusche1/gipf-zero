@@ -76,10 +76,21 @@ button { cursor: pointer; }
 .outer-dot { fill: #f1ebe3; stroke: #aa9b89; stroke-width: 1.5; }
 .piece-shadow { fill: rgba(35,34,30,.15); }
 .piece { stroke: rgba(32,39,40,.27); stroke-width: 1.8; filter: url(#soft-shadow); }
+.single-piece { stroke-width: 1.7; }
+.double-piece { stroke-width: 2.8; }
 .piece.ivory { fill: url(#ivory-piece); }
 .piece.obsidian { fill: url(#ink-piece); stroke: #111817; }
 .piece-ring { fill: none; stroke: rgba(255,255,255,.62); stroke-width: 1; }
 .piece-ring.dark { stroke: rgba(255,255,255,.18); }
+.double-ring { fill: none; stroke-width: 3; pointer-events: none; }
+.ivory-ring { stroke: #a6533e; }
+.obsidian-ring { stroke: #d1a26d; }
+.double-mark { stroke-width: 1.5; }
+.ivory-mark { fill: #9e4937; stroke: #fff8ee; }
+.obsidian-mark { fill: #e1b477; stroke: #26302f; }
+.capture-row-line { stroke: var(--rust); stroke-width: 11; stroke-linecap: round; opacity: .18; filter: drop-shadow(0 1px 2px rgba(180,87,63,.3)); pointer-events: none; }
+.capture-remove { stroke: #b4573f !important; stroke-width: 3.2 !important; filter: drop-shadow(0 0 4px rgba(180,87,63,.65)); }
+.capture-keep { stroke: #6c9278 !important; stroke-width: 2.5 !important; filter: drop-shadow(0 0 3px rgba(108,146,120,.5)); }
 .piece-top { opacity: .95; }
 .piece-label { font: 9px var(--mono); text-anchor: middle; fill: rgba(25,31,31,.68); pointer-events: none; }
 .board-hint { color: var(--muted); font-size: 11px; text-align: center; margin: 5px 0 0; min-height: 18px; }

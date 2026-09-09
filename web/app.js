@@ -3,7 +3,7 @@ import * as game from './game.js';
 const $ = (id) => document.getElementById(id);
 const svgNS = 'http://www.w3.org/2000/svg';
 const els = {
-  board: $('board'), base: $('board-base'), rays: $('ray-layer'), grid: $('grid-layer'), pieces: $('piece-layer'), outer: $('outer-layer'), interaction: $('interaction-layer'),
+  board: $('board'), base: $('board-base'), rays: $('ray-layer'), grid: $('grid-layer'), captureLayer: $('capture-layer'), pieces: $('piece-layer'), outer: $('outer-layer'), interaction: $('interaction-layer'),
   status: $('engine-status'), phaseTitle: $('phase-title'), phaseBadge: $('phase-badge'), hint: $('board-hint'), round: $('round-number'), move: $('move-count'), explanation: $('explanation'),
   reserveWhite: $('reserve-white'), reserveBlack: $('reserve-black'), barWhite: $('reserve-bar-white'), barBlack: $('reserve-bar-black'), turnWhite: $('turn-white'), turnBlack: $('turn-black'), toast: $('toast'),
   capture: $('capture-card'), captureOptions: $('capture-options'), captureToggles: $('capture-toggles'), confirmCapture: $('confirm-capture'), mode: $('mode-select'), aiColor: $('ai-color'), difficulty: $('difficulty'), aiStatus: $('ai-status'),
@@ -80,9 +80,10 @@ function render() {
     dot.classList.toggle('open', Boolean(open));
     dot.setAttribute('aria-disabled', String(!open));
   }
-  renderPieces();
   renderMeta();
   renderCapture();
+  renderCaptureHighlight();
+  renderPieces();
   els.undo.disabled = !canUndo();
   if (winnerOf(state) !== 0) {
     aiThinking = false;
@@ -95,17 +96,22 @@ function render() {
 function renderPieces() {
   els.pieces.replaceChildren();
   const board = readBoard(state);
+  const captureInfo = selectedCaptureInfo();
   for (const [key, value] of Object.entries(board)) {
     const node = game.geometry.byKey[key];
     if (!node || !value) continue;
     const owner = normaliseOwner(value.owner || value.player || value.color);
     const kind = value.kind || (value.double || value.isGipf ? 'double' : 'single');
+    const capturePart = captureInfo?.parts.find(part => part.key === key);
+    const captureClass = capturePart ? (capturePart.masked ? ' capture-remove' : ' capture-keep') : '';
     const stack = kind === 'double' ? [-4, 0] : [0];
     for (const offset of stack) {
       const cy = node.y + offset;
       els.pieces.appendChild(svg('ellipse', { cx: node.x + 1, cy: cy + 3, rx: 17, ry: 6, class: 'piece-shadow' }));
-      els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 16, class: `piece ${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}` }));
+      if (kind === 'double' && offset === 0) els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 20, class: `double-ring ${owner === 'white' ? 'ivory-ring' : 'obsidian-ring'}${captureClass}` }));
+      els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 16, class: `piece ${kind === 'double' ? 'double-piece' : 'single-piece'} ${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}${captureClass}` }));
       els.pieces.appendChild(svg('circle', { cx: node.x - 1, cy: cy - 1, r: 12, class: `piece-ring ${owner === 'white' ? '' : 'dark'}` }));
+      if (kind === 'double' && offset === 0) els.pieces.appendChild(svg('circle', { cx: node.x, cy: cy - 1, r: 4, class: `double-mark ${owner === 'white' ? 'ivory-mark' : 'obsidian-mark'}${captureClass}` }));
     }
   }
 }
@@ -157,9 +163,9 @@ function renderCapture() {
   const aiCapture = els.mode.value === 'ai' && currentPlayer() === els.aiColor.value;
   choices.forEach((choice, index) => {
     const button = document.createElement('button');
-    button.type = 'button'; button.disabled = aiCapture; button.className = `capture-option${selectedCapture === choice ? ' selected' : ''}`;
+    button.type = 'button'; button.disabled = aiCapture; button.className = `capture-option${selectedCapture?.id === choice.id ? ' selected' : ''}`;
     button.textContent = choice.label || `Row ${index + 1}`;
-    button.addEventListener('click', () => { selectedCapture = choice; renderCapture(); });
+    button.addEventListener('click', () => { selectedCapture = choice; refreshCaptureView(); });
     els.captureOptions.appendChild(button);
   });
   els.captureToggles.replaceChildren();
@@ -175,14 +181,43 @@ function renderCapture() {
       const targetMask = currentMask ^ (1 << bit);
       const targetAction = captureActions.find(action => action - 42 - selectedCapture.line * 128 === targetMask);
       const toggle = document.createElement('button');
-      toggle.type = 'button'; toggle.className = `capture-toggle${currentMask & (1 << bit) ? ' selected' : ''}`; toggle.textContent = `Double ${bit + 1}`; toggle.disabled = aiCapture || !targetAction;
-      toggle.addEventListener('click', () => { if (targetAction) { selectedCapture = { ...selectedCapture, action: targetAction }; renderCapture(); } });
+      const removing = Boolean(currentMask & (1 << bit));
+      toggle.type = 'button'; toggle.className = `capture-toggle${removing ? ' selected' : ''}`; toggle.textContent = removing ? `Remove D${bit + 1}` : `Keep D${bit + 1}`; toggle.disabled = aiCapture || !targetAction;
+      toggle.addEventListener('click', () => { if (targetAction) { selectedCapture = { ...selectedCapture, action: targetAction }; refreshCaptureView(); } });
       els.captureToggles.appendChild(toggle);
     }
   } else {
     els.captureToggles.hidden = true;
   }
   els.confirmCapture.disabled = !selectedCapture || aiCapture;
+}
+
+function refreshCaptureView() {
+  renderCapture();
+  renderCaptureHighlight();
+  renderPieces();
+}
+
+function renderCaptureHighlight() {
+  els.captureLayer.replaceChildren();
+  const info = selectedCaptureInfo();
+  if (!info) return;
+  for (let index = 1; index < info.nodes.length; index += 1) {
+    const from = info.nodes[index - 1];
+    const to = info.nodes[index];
+    els.captureLayer.appendChild(svg('line', { x1: from.x, y1: from.y, x2: to.x, y2: to.y, class: 'capture-row-line' }));
+  }
+}
+
+function selectedCaptureInfo() {
+  if (!selectedCapture || selectedCapture.line == null) return null;
+  const rawLines = game.geometry.engine?.lines;
+  const rawLine = arrayLike(rawLines)?.[selectedCapture.line];
+  const indices = arrayLike(rawLine);
+  if (!indices?.length) return null;
+  const mask = selectedCapture.action - 42 - selectedCapture.line * 128;
+  const nodes = indices.map(index => game.geometry.nodes[Number(index)]).filter(Boolean);
+  return { nodes, parts: indices.map((index, bit) => ({ key: game.geometry.nodes[Number(index)]?.key, masked: Boolean(mask & (1 << bit)) })) };
 }
 
 function choosePoint(key) {

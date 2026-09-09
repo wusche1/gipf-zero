@@ -124,7 +124,7 @@ def test_optional_capture_toggle_preserves_the_engine_action_encoding(browser, s
       var createGipfEngine = async function() {{
         const initial = {json.dumps(state.serialize())};
         const actions = {json.dumps(actions)};
-        const geometry = {json.dumps({"rays": GEO["rays"]})};
+        const geometry = {json.dumps({"rays": GEO["rays"], "lines": GEO["lines"]})};
         class State {{
           constructor() {{ Object.assign(this, JSON.parse(JSON.stringify(initial))); }}
           clone() {{ const other = new State(); Object.assign(other, JSON.parse(JSON.stringify(this))); return other; }}
@@ -143,7 +143,11 @@ def test_optional_capture_toggle_preserves_the_engine_action_encoding(browser, s
     try:
         page.goto(site_url, wait_until="domcontentloaded")
         page.get_by_role("button", name="Line 4").click()
-        page.get_by_role("button", name="Double 5").click()
+        page.get_by_role("button", name="Keep D5").click()
+        assert page.locator(".capture-row-line").count() > 0
+        assert page.locator("circle.double-mark").count() >= 1
+        assert page.locator("circle.capture-remove").count() >= 1
+        assert page.get_by_role("button", name="Remove D5").count() == 1
         page.locator("#confirm-capture").click()
         assert page.evaluate("window.captureActions") == [selected]
     finally:
