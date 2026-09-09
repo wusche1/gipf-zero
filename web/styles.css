@@ -82,15 +82,9 @@ button { cursor: pointer; }
 .piece.obsidian { fill: url(#ink-piece); stroke: #111817; }
 .piece-ring { fill: none; stroke: rgba(255,255,255,.62); stroke-width: 1; }
 .piece-ring.dark { stroke: rgba(255,255,255,.18); }
-.double-ring { fill: none; stroke-width: 4; pointer-events: none; }
-.ivory-ring { stroke: #a6533e; }
-.obsidian-ring { stroke: #d1a26d; }
-.double-mark { stroke-width: 1.5; }
-.ivory-mark { fill: #9e4937; stroke: #fff8ee; }
-.obsidian-mark { fill: #e1b477; stroke: #26302f; }
-.double-bar { stroke: none; }
-.ivory-mark.double-bar { fill: #fff8ee; }
-.obsidian-mark.double-bar { fill: #17201f; }
+.double-ring { fill: none; stroke-width: 2; opacity: .72; pointer-events: none; }
+.ivory-ring { stroke: #b7afa5; }
+.obsidian-ring { stroke: #5b6561; }
 .double-label { font: 8px var(--mono); font-weight: 600; fill: var(--muted); paint-order: stroke; stroke: rgba(243,238,231,.9); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
 .double-label.capture-remove { fill: var(--rust-dark); }
 .double-label.capture-keep { fill: #557d62; }
