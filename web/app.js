@@ -104,14 +104,21 @@ function renderPieces() {
     const kind = value.kind || (value.double || value.isGipf ? 'double' : 'single');
     const capturePart = captureInfo?.parts.find(part => part.key === key);
     const captureClass = kind === 'double' && capturePart ? (capturePart.masked ? ' capture-remove' : ' capture-keep') : '';
-    const stack = kind === 'double' ? [-4, 0] : [0];
+    const stack = kind === 'double' ? [-8, 0] : [0];
     for (const offset of stack) {
       const cy = node.y + offset;
       els.pieces.appendChild(svg('ellipse', { cx: node.x + 1, cy: cy + 3, rx: 17, ry: 6, class: 'piece-shadow' }));
       if (kind === 'double' && offset === 0) els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 20, class: `double-ring ${owner === 'white' ? 'ivory-ring' : 'obsidian-ring'}${captureClass}` }));
       els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 16, class: `piece ${kind === 'double' ? 'double-piece' : 'single-piece'} ${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}${captureClass}` }));
       els.pieces.appendChild(svg('circle', { cx: node.x - 1, cy: cy - 1, r: 12, class: `piece-ring ${owner === 'white' ? '' : 'dark'}` }));
-      if (kind === 'double' && offset === 0) els.pieces.appendChild(svg('circle', { cx: node.x, cy: cy - 1, r: 4, class: `double-mark ${owner === 'white' ? 'ivory-mark' : 'obsidian-mark'}${captureClass}` }));
+      if (kind === 'double' && offset === 0) {
+        const markClass = `${owner === 'white' ? 'ivory-mark' : 'obsidian-mark'}${captureClass}`;
+        els.pieces.appendChild(svg('circle', { cx: node.x, cy: cy - 1, r: 5, class: `double-mark ${markClass}` }));
+        els.pieces.append(
+          svg('rect', { x: node.x - 5, y: cy - 4, width: 10, height: 2, rx: 1, class: `double-bar ${markClass}` }),
+          svg('rect', { x: node.x - 5, y: cy + 1, width: 10, height: 2, rx: 1, class: `double-bar ${markClass}` }),
+        );
+      }
       if (kind === 'double' && offset === 0 && capturePart) els.pieces.appendChild(svg('text', { x: node.x + 22, y: cy + 3, class: `double-label${captureClass}` }, `D${capturePart.bit + 1}`));
     }
   }
