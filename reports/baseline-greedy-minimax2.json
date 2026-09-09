@@ -1,0 +1,36 @@
+{
+  "a_losses": 26,
+  "a_win_rate_decisive": 0.3157894736842105,
+  "a_win_rate_decisive_wilson": [
+    0.19084603675596182,
+    0.4745575989060954
+  ],
+  "a_wins": 12,
+  "baseline_version": "v1.2-paired-seeds",
+  "confidence": 0.95,
+  "config": {
+    "confidence": 0.95,
+    "games": 40,
+    "max_decisions": 2000,
+    "max_insertion_plies": 240,
+    "move_seconds": 0.05,
+    "seed": 20260909
+  },
+  "cutoffs": 2,
+  "decisive_games": 38,
+  "draws": 0,
+  "errors": 0,
+  "games_recorded": 40,
+  "heartbeat_path": "runs/baseline-greedy-minimax2.jsonl",
+  "kind": "summary",
+  "players": {
+    "A": {
+      "name": "greedy"
+    },
+    "B": {
+      "depth": 2,
+      "name": "minimax"
+    }
+  },
+  "tie_breaking": "seeded_random_among_equal_root_values_per_colour_balanced_pair"
+}

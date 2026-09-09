@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f0e9" />
+    <meta name="description" content="GIPF — a quiet, strategic hex board for two." />
+    <title>GIPF · Board study</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="GIPF home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span><strong>GIPF</strong><small>board study</small></span>
+        </a>
+        <div class="topbar-meta">
+          <span class="status-dot"></span>
+          <span id="engine-status">Local table ready</span>
+          <button class="icon-button" id="rules-open" type="button" aria-label="Open rules">?</button>
+        </div>
+      </header>
+
+      <section class="game-layout" aria-label="GIPF game">
+        <aside class="player-panel player-panel-light" data-player="white">
+          <div class="player-heading">
+            <span class="player-token token-light" aria-hidden="true"></span>
+            <div><p class="eyebrow">Player one</p><h2>Ivory</h2></div>
+            <span class="turn-pip" id="turn-white" aria-label="Ivory's turn"></span>
+          </div>
+          <div class="reserve-block">
+            <div class="reserve-label"><span>Reserve</span><strong id="reserve-white">12</strong></div>
+            <div class="reserve-track"><span id="reserve-bar-white"></span></div>
+            <p class="reserve-note">Pieces in reserve</p>
+          </div>
+          <div class="piece-key"><span class="mini-piece mini-single"></span><span>single</span><span class="mini-piece mini-double"></span><span>GIPF</span></div>
+        </aside>
+
+        <section class="board-stage">
+          <div class="board-caption">
+            <div><span class="eyebrow">Round <span id="round-number">01</span></span><h1 id="phase-title">Place a piece</h1></div>
+            <div class="phase-badge" id="phase-badge">Ivory to move</div>
+          </div>
+          <div class="board-wrap">
+            <div class="board-halo" aria-hidden="true"></div>
+            <svg id="board" viewBox="0 0 800 800" role="img" aria-labelledby="board-title board-desc">
+              <title id="board-title">GIPF board</title>
+              <desc id="board-desc">A hexagonal board with points, incoming arrows, and pieces.</desc>
+              <defs>
+                <filter id="soft-shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceAlpha" stdDeviation="5"/><feOffset dy="4"/><feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                <radialGradient id="board-fill" cx="45%" cy="35%" r="75%"><stop offset="0" stop-color="#e9dfd2"/><stop offset="1" stop-color="#d1c3b2"/></radialGradient>
+                <linearGradient id="edge-fill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4eee6"/><stop offset="1" stop-color="#d9cbbb"/></linearGradient>
+                <linearGradient id="ivory-piece" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffdfa"/><stop offset="1" stop-color="#dcd5cc"/></linearGradient>
+                <linearGradient id="ink-piece" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#323738"/><stop offset="1" stop-color="#0d1415"/></linearGradient>
+                <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6.8" refY="3.8" orient="auto"><path d="M0 0 L7 3.8 L0 7 z" fill="#a3988b"/></marker>
+              </defs>
+              <g id="board-base"></g>
+              <g id="ray-layer" aria-hidden="true"></g>
+              <g id="grid-layer"></g>
+              <g id="piece-layer"></g>
+              <g id="outer-layer" aria-hidden="true"></g>
+              <g id="interaction-layer"></g>
+            </svg>
+          </div>
+          <p class="board-hint" id="board-hint"><span class="hint-dot"></span>Select an open point to place your piece</p>
+        </section>
+
+        <aside class="right-rail">
+          <section class="player-panel player-panel-dark" data-player="black">
+            <div class="player-heading">
+              <span class="player-token token-dark" aria-hidden="true"></span>
+              <div><p class="eyebrow">Player two</p><h2>Obsidian</h2></div>
+              <span class="turn-pip" id="turn-black" aria-label="Obsidian's turn"></span>
+            </div>
+            <div class="reserve-block">
+              <div class="reserve-label"><span>Reserve</span><strong id="reserve-black">12</strong></div>
+              <div class="reserve-track"><span id="reserve-bar-black"></span></div>
+              <p class="reserve-note">Pieces in reserve</p>
+            </div>
+          </section>
+          <section class="control-card">
+            <div class="card-heading"><span class="eyebrow">Table</span><span class="mono-label" id="move-count">MOVE 00</span></div>
+            <div class="control-row"><label for="mode-select">Mode</label><select id="mode-select"><option value="local">Local hotseat</option><option value="ai">Play the machine</option></select></div>
+            <div class="control-row ai-only"><label for="ai-color">Machine plays</label><select id="ai-color"><option value="black">Obsidian</option><option value="white">Ivory</option></select></div>
+            <div class="control-row ai-only"><label for="difficulty">Tempo</label><select id="difficulty"><option value="casual">Casual · 250ms</option><option value="focused">Focused · 1s</option><option value="deep">Deep · 3s</option></select></div>
+            <div class="button-row"><button class="button button-primary" id="new-game" type="button">New game</button><button class="button button-quiet" id="undo" type="button" disabled>Undo</button></div>
+          </section>
+
+          <section class="capture-card" id="capture-card" hidden>
+            <div class="card-heading"><span class="eyebrow">Capture</span><span class="capture-count">SELECT</span></div>
+            <h3>Choose a row to remove</h3>
+            <p>Several rows were completed. Select one, then continue your turn.</p>
+            <div class="capture-options" id="capture-options"></div>
+            <div class="capture-toggles" id="capture-toggles" hidden></div>
+            <button class="button button-primary full" id="confirm-capture" type="button" disabled>Confirm capture</button>
+          </section>
+
+          <section class="notes-card">
+            <div class="card-heading"><span class="eyebrow">How it works</span><span class="line-icon">↗</span></div>
+            <p id="explanation">Click an arrow at the board’s edge to push a piece inward. Occupied pieces shift toward the first empty point.</p>
+            <button class="text-button" id="rules-open-secondary" type="button">Read the short rules <span>→</span></button>
+          </section>
+        </aside>
+      </section>
+
+      <footer class="footer"><span>GIPF / PROJECT GIPF</span><span>37 points · 42 incoming rays</span><span id="ai-status">No machine connected</span></footer>
+    </main>
+
+    <dialog id="rules-dialog">
+      <div class="dialog-inner">
+        <button class="dialog-close" id="rules-close" type="button" aria-label="Close rules">×</button>
+        <p class="eyebrow">The short rules</p>
+        <h2>Place. Push. Resolve.</h2>
+        <p>Each player begins with twelve GIPF pieces. On a turn, add one piece to an incoming arrow. It travels along the ray and pushes any occupied pieces until it reaches an empty point or the edge.</p>
+        <p>Whenever four or more pieces of one colour form a straight row, the row is removed. If more than one row is available, choose which capture to resolve first.</p>
+        <div class="rules-legend"><span class="mini-piece mini-single"></span><span>single piece</span><span class="mini-piece mini-double"></span><span>GIPF piece (two stacked)</span></div>
+        <button class="button button-primary full" id="rules-done" type="button">Back to the board</button>
+      </div>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="gipf_engine.js"></script>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

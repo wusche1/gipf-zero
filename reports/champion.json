@@ -1,0 +1,13 @@
+{
+  "name": "MCTS baseline",
+  "kind": "baseline",
+  "description": "128-simulation UCT with fixed heuristic evaluation",
+  "evaluation": {
+    "opponent": "random",
+    "wins": 200,
+    "losses": 0,
+    "cutoffs": 0,
+    "games": 200
+  },
+  "updated_utc": "2026-09-09T15:55:00Z"
+}

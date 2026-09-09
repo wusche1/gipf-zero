@@ -1,0 +1,356 @@
+{
+  "checkpoint": "runs/smoke/latest.pt",
+  "checkpoint_sha256": "d27361c9c2829438ca1ac9d72541358966a780744fd53d3e5772e4244ee0f38e",
+  "model_games": 496,
+  "model_iteration": 59,
+  "opponent": "random",
+  "requested_games": 40,
+  "finished_games": 40,
+  "wins": 31,
+  "losses": 9,
+  "cutoffs": 0,
+  "unfinished": 0,
+  "win_rate_all_finished": 0.775,
+  "win_rate_decisive": 0.775,
+  "wilson_95_all_finished": [
+    0.6249690325769,
+    0.8768390867645925
+  ],
+  "elapsed_seconds": 0.19351514801383018,
+  "config": {
+    "checkpoint": "runs/smoke/latest.pt",
+    "opponent": "random",
+    "games": 40,
+    "batch": 32,
+    "simulations": 0,
+    "move_seconds": 0.05,
+    "max_ply": 240,
+    "seed": 91823,
+    "opening_plies": 4,
+    "output": "reports/smoke-policy-vs-random.json",
+    "device": "cuda",
+    "seconds": 60
+  },
+  "records": [
+    {
+      "game": 3,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 20
+    },
+    {
+      "game": 22,
+      "neural_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "ply": 24,
+      "decisions": 20
+    },
+    {
+      "game": 21,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21
+    },
+    {
+      "game": 24,
+      "neural_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "ply": 24,
+      "decisions": 21
+    },
+    {
+      "game": 2,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22
+    },
+    {
+      "game": 4,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22
+    },
+    {
+      "game": 5,
+      "neural_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 25,
+      "decisions": 22
+    },
+    {
+      "game": 6,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22
+    },
+    {
+      "game": 12,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22
+    },
+    {
+      "game": 19,
+      "neural_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 25,
+      "decisions": 22
+    },
+    {
+      "game": 30,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22
+    },
+    {
+      "game": 14,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23
+    },
+    {
+      "game": 16,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23
+    },
+    {
+      "game": 25,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 29
+    },
+    {
+      "game": 17,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31
+    },
+    {
+      "game": 20,
+      "neural_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "ply": 32,
+      "decisions": 31
+    },
+    {
+      "game": 9,
+      "neural_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 33,
+      "decisions": 32
+    },
+    {
+      "game": 31,
+      "neural_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 33,
+      "decisions": 32
+    },
+    {
+      "game": 28,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 34
+    },
+    {
+      "game": 27,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 36,
+      "decisions": 36
+    },
+    {
+      "game": 10,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 39,
+      "decisions": 39
+    },
+    {
+      "game": 11,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 39
+    },
+    {
+      "game": 29,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 40,
+      "decisions": 40
+    },
+    {
+      "game": 35,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22
+    },
+    {
+      "game": 39,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21
+    },
+    {
+      "game": 34,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23
+    },
+    {
+      "game": 15,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 44,
+      "decisions": 45
+    },
+    {
+      "game": 13,
+      "neural_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 47,
+      "decisions": 50
+    },
+    {
+      "game": 18,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 47,
+      "decisions": 50
+    },
+    {
+      "game": 1,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 48,
+      "decisions": 51
+    },
+    {
+      "game": 32,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32
+    },
+    {
+      "game": 7,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 50,
+      "decisions": 53
+    },
+    {
+      "game": 8,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 50,
+      "decisions": 53
+    },
+    {
+      "game": 26,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 51,
+      "decisions": 55
+    },
+    {
+      "game": 38,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 34
+    },
+    {
+      "game": 23,
+      "neural_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 53,
+      "decisions": 57
+    },
+    {
+      "game": 37,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 39
+    },
+    {
+      "game": 33,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 43
+    },
+    {
+      "game": 0,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 59,
+      "decisions": 64
+    },
+    {
+      "game": 36,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 45,
+      "decisions": 46
+    }
+  ]
+}

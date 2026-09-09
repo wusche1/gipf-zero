@@ -1,0 +1,1851 @@
+{
+  "checkpoint": "checkpoints/intermediate-flat.pt",
+  "checkpoint_sha256": "74d2ebbd767360edca72c0f2599803f0f29fee1de5ee5fd3afb799193a5cb4cb",
+  "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0",
+  "model_games": 1065,
+  "model_iteration": 33,
+  "opponent": "random",
+  "requested_games": 200,
+  "finished_games": 200,
+  "wins": 200,
+  "losses": 0,
+  "cutoffs": 0,
+  "unfinished": 0,
+  "win_rate_all_finished": 1.0,
+  "win_rate_decisive": 1.0,
+  "wilson_95_all_finished": [
+    0.9811546736227335,
+    1.0
+  ],
+  "neural_root_simulations": {
+    "count": 3527,
+    "mean": 128.0,
+    "min": 128,
+    "max": 128
+  },
+  "neural_batch_search_seconds": {
+    "count": 131,
+    "mean": 0.29493112765423213,
+    "min": 0.0020212046802043915,
+    "max": 0.4513101801276207
+  },
+  "elapsed_seconds": 39.02379052340984,
+  "config": {
+    "checkpoint": "checkpoints/intermediate-flat.pt",
+    "opponent": "random",
+    "games": 200,
+    "batch": 64,
+    "simulations": 128,
+    "move_seconds": 0.05,
+    "max_ply": 240,
+    "seed": 73191,
+    "opening_plies": 4,
+    "output": "reports/intermediate-flat-vs-random-200.json",
+    "device": "cuda",
+    "seconds": 100,
+    "resume": false,
+    "neural_budget_ms": 0
+  },
+  "records": [
+    {
+      "game": 51,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 20,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 59,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 20,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 9,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 23,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 29,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 63,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 5,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 14,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 19,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 33,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 34,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 39,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 40,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 55,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 10,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 30,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 32,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 38,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 48,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 52,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 58,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 28,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 24,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 4,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 26,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 7,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 29,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 57,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 29,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 13,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 18,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 49,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 61,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 62,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 3,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 15,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 56,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 0,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 17,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 22,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 43,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 60,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 37,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 44,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 31,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 2,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 6,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 16,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 36,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 53,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 36,
+      "decisions": 36,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 35,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 36,
+      "decisions": 37,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 21,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 39,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 50,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 39,
+      "decisions": 40,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 54,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 39,
+      "decisions": 40,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 11,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 40,
+      "decisions": 41,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 24,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 39,
+      "decisions": 41,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 41,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 40,
+      "decisions": 41,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 65,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 67,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 20,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 42,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 41,
+      "decisions": 42,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 1,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 43,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 45,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 43,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 64,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 27,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 44,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 74,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 77,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 79,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 83,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 12,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43,
+      "decisions": 45,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 47,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 45,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 70,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 85,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 86,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 21,
+      "decisions": 20,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 8,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 49,
+      "decisions": 52,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 25,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 48,
+      "decisions": 52,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 68,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 92,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 75,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 80,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 72,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 84,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 99,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 103,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 20,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 49,
+      "decisions": 55,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 66,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 71,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 81,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 105,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 108,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 88,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 110,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 91,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 113,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 87,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 117,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 102,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 94,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 107,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 97,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 104,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 106,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 69,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 43,
+      "decisions": 46,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 46,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 61,
+      "decisions": 68,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 100,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 36,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 101,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 36,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 130,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 114,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 119,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 29,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 123,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 28,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 135,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 93,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 44,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 116,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 78,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 49,
+      "decisions": 52,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 82,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 49,
+      "decisions": 52,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 112,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 127,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 138,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 139,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 124,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 132,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 142,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 26,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 69,
+      "decisions": 77,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 90,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43,
+      "decisions": 47,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 109,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 40,
+      "decisions": 41,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 118,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 36,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 125,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 126,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 128,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 76,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 53,
+      "decisions": 57,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 146,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 24,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 111,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 40,
+      "decisions": 42,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 96,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 46,
+      "decisions": 51,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 137,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 29,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 150,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 24,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 152,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 73,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 56,
+      "decisions": 62,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 131,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 39,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 120,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 41,
+      "decisions": 42,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 129,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 40,
+      "decisions": 41,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 115,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 44,
+      "decisions": 46,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 144,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 143,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 148,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 159,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 140,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 145,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 161,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 165,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 89,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 54,
+      "decisions": 60,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 122,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 45,
+      "decisions": 47,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 153,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 28,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 164,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 133,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 39,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 141,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 36,
+      "decisions": 37,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 167,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 136,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 39,
+      "decisions": 41,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 154,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 29,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 169,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 166,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 24,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 157,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 95,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 60,
+      "decisions": 66,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 172,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 174,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 179,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 151,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 38,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 158,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 155,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 39,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 188,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 23,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 190,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 134,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 49,
+      "decisions": 52,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 147,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 46,
+      "decisions": 49,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 168,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 121,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 58,
+      "decisions": 63,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 195,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 22,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 197,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 24,
+      "decisions": 21,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 173,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 32,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 178,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 177,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 186,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 98,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 69,
+      "decisions": 77,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 175,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 156,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43,
+      "decisions": 46,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 180,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 34,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 163,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 43,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 189,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 149,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 50,
+      "decisions": 53,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 176,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 37,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 181,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 171,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38,
+      "decisions": 39,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 191,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 32,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 170,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 39,
+      "decisions": 40,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 192,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33,
+      "decisions": 33,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 198,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 31,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 199,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30,
+      "decisions": 30,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 194,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 162,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 47,
+      "decisions": 51,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 196,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 35,
+      "decisions": 35,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 160,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 51,
+      "decisions": 54,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 187,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42,
+      "decisions": 42,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 184,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43,
+      "decisions": 44,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 182,
+      "neural_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43,
+      "decisions": 46,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 183,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 44,
+      "decisions": 46,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 193,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 48,
+      "decisions": 51,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    },
+    {
+      "game": 185,
+      "neural_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 56,
+      "decisions": 61,
+      "evaluation_key": "17052d77d4b1632ee595b9656a34309fb087d750a05eb17fb5b857620f4f83f0"
+    }
+  ]
+}

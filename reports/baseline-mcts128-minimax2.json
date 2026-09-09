@@ -1,0 +1,37 @@
+{
+  "a_losses": 16,
+  "a_win_rate_decisive": 0.6,
+  "a_win_rate_decisive_wilson": [
+    0.4459589366034619,
+    0.7365167431570807
+  ],
+  "a_wins": 24,
+  "baseline_version": "v1.2-paired-seeds",
+  "confidence": 0.95,
+  "config": {
+    "confidence": 0.95,
+    "games": 40,
+    "max_decisions": 2000,
+    "max_insertion_plies": 240,
+    "move_seconds": 0.05,
+    "seed": 20260909
+  },
+  "cutoffs": 0,
+  "decisive_games": 40,
+  "draws": 0,
+  "errors": 0,
+  "games_recorded": 40,
+  "heartbeat_path": "runs/baseline-mcts128-minimax2.jsonl",
+  "kind": "summary",
+  "players": {
+    "A": {
+      "name": "mcts",
+      "simulations": 128
+    },
+    "B": {
+      "depth": 2,
+      "name": "minimax"
+    }
+  },
+  "tie_breaking": "seeded_random_among_equal_root_values_per_colour_balanced_pair"
+}
