@@ -1,0 +1,6 @@
+{
+  "kind": "transformer",
+  "head": "query",
+  "width": 256,
+  "blocks": 2
+}

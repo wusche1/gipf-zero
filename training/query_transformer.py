@@ -55,7 +55,7 @@ class QueryTransformer(nn.Module):
         self.config = config
         self.token = nn.Linear(PLANES + 3, width)
         self.coordinate = nn.Linear(2, width, bias=False)
-        layer = nn.TransformerEncoderLayer(width, 4, 128, dropout=0.0, activation='gelu', batch_first=True)
+        layer = nn.TransformerEncoderLayer(width, 4, 2 * width, dropout=0.0, activation='gelu', batch_first=True)
         self.encoder = nn.TransformerEncoder(layer, blocks)
         self.register_buffer('coordinates', torch.tensor(COORDS, dtype=torch.float32).div_(3).unsqueeze(0))
         self.push = nn.Linear(width, 42)

@@ -11,3 +11,13 @@ CPU tests cover normalized legal policies, gradients, checkpoint round trips, co
 The optional `--kind transformer --head query --width 64 --blocks 2` training integration is queued after the existing frozen architecture comparison. Its staged patch is `patches/enable_query_transformer.patch`. It does not replace the transformer currently under comparison.
 
 This first implementation constructs queries on CPU and batches row/prefix queries within each position. Additional inference passes and host transfers may be expensive; throughput has not been benchmarked.
+
+## Larger preset for parameter comparisons
+
+`ops/query_transformer_matched_config.json` selects width 256, two layers, four
+attention heads and feed-forward width 512. It contains **1,102,124** trainable
+parameters, between the existing MLP (979,371) and CNN (1,163,523). Feed-forward
+width now scales as twice token width; the original width-64 query model remains
+unchanged at 79,148 parameters. This preset is implemented but untrained and is
+not substituted into the in-progress comparison. Its forward pass, legal-policy
+normalization and finite backward gradients were checked on CPU.
