@@ -7,8 +7,21 @@ const els = {
   status: $('engine-status'), phaseTitle: $('phase-title'), phaseBadge: $('phase-badge'), hint: $('board-hint'), round: $('round-number'), move: $('move-count'), explanation: $('explanation'),
   reserveWhite: $('reserve-white'), reserveBlack: $('reserve-black'), barWhite: $('reserve-bar-white'), barBlack: $('reserve-bar-black'), turnWhite: $('turn-white'), turnBlack: $('turn-black'), toast: $('toast'),
   capture: $('capture-card'), captureOptions: $('capture-options'), captureToggles: $('capture-toggles'), confirmCapture: $('confirm-capture'), mode: $('mode-select'), aiColor: $('ai-color'), difficulty: $('difficulty'), aiStatus: $('ai-status'),
-  undo: $('undo')
+  undo: $('undo'), designsDialog: $('designs-dialog'), designsGallery: $('design-gallery'), designsSelection: $('design-selection-label')
 };
+
+const DESIGNS = [
+  { id: 'natural-stack', name: 'Natural Stack', note: 'Quiet raised discs', stackOffset: -8 },
+  { id: 'tall-stack', name: 'Tall Stack', note: 'A higher silhouette', stackOffset: -11 },
+  { id: 'offset-stack', name: 'Offset Stack', note: 'A gentle overhang', stackOffset: -8 },
+  { id: 'concentric-ring', name: 'Concentric Ring', note: 'Layered inner edge', stackOffset: -8 },
+  { id: 'engraved-ii', name: 'Engraved II', note: 'Subtle GIPF mark', stackOffset: -8 },
+  { id: 'twin-pips', name: 'Twin Pips', note: 'Two quiet points', stackOffset: -8 },
+  { id: 'petite-top', name: 'Petite Top', note: 'A smaller upper disc', stackOffset: -8 },
+  { id: 'hex-outline', name: 'Hex Outline', note: 'Six-sided precision', stackOffset: -8 },
+  { id: 'cut-groove', name: 'Cut Groove', note: 'One fine cut edge', stackOffset: -8 },
+  { id: 'contrast-band', name: 'Contrast Band', note: 'A calm center line', stackOffset: -8 }
+];
 
 let config = { aiEndpoint: '', engineUrl: '', requestTimeoutMs: 5000 };
 let state;
@@ -21,6 +34,7 @@ let aiBlocked = false;
 let gameRevision = 0;
 let aiModelName = '';
 let toastTimer;
+let selectedDesign = loadDesign();
 
 start();
 
@@ -33,10 +47,16 @@ async function start() {
   els.status.textContent = engineInfo.available ? 'Ready to play' : 'Rules engine unavailable';
   if (engineInfo.available) document.querySelector('.status-dot').style.background = '#618d72';
   state = game.newGame();
+  document.body.dataset.pieceDesign = selectedDesign;
   drawBoardGeometry();
   bindControls();
+  setupDesignPicker();
   await checkAiStatus();
   render();
+}
+
+function loadDesign() {
+  try { return DESIGNS.some(design => design.id === localStorage.getItem('gipf-piece-design')) ? localStorage.getItem('gipf-piece-design') : 'natural-stack'; } catch { return 'natural-stack'; }
 }
 
 function drawBoardGeometry() {
@@ -104,16 +124,38 @@ function renderPieces() {
     const kind = value.kind || (value.double || value.isGipf ? 'double' : 'single');
     const capturePart = captureInfo?.parts.find(part => part.key === key);
     const captureClass = kind === 'double' && capturePart ? (capturePart.masked ? ' capture-remove' : ' capture-keep') : '';
-    const stack = kind === 'double' ? [-8, 0] : [0];
-    for (const offset of stack) {
-      const cy = node.y + offset;
-      els.pieces.appendChild(svg('ellipse', { cx: node.x + 1, cy: cy + 3, rx: 17, ry: 6, class: 'piece-shadow' }));
-      if (kind === 'double' && offset === 0) els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 20, class: `double-ring ${owner === 'white' ? 'ivory-ring' : 'obsidian-ring'}${captureClass}` }));
-      els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 16, class: `piece ${kind === 'double' ? 'double-piece' : 'single-piece'} ${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}${captureClass}` }));
-      els.pieces.appendChild(svg('circle', { cx: node.x - 1, cy: cy - 1, r: 12, class: `piece-ring ${owner === 'white' ? '' : 'dark'}` }));
-      if (kind === 'double' && offset === 0 && capturePart) els.pieces.appendChild(svg('text', { x: node.x + 22, y: cy + 3, class: `double-label${captureClass}` }, `D${capturePart.bit + 1}`));
-    }
+    pieceElements({ x: node.x, y: node.y, owner, kind, captureClass, capturePart }).forEach(element => els.pieces.appendChild(element));
   }
+}
+
+function pieceElements({ x, y, owner, kind, captureClass = '', capturePart = null, preview = false, designId = selectedDesign }) {
+  const design = DESIGNS.find(item => item.id === designId) || DESIGNS[0];
+  const className = `piece-design-${design.id}`;
+  const offsets = kind === 'double' ? [design.stackOffset || -8, 0] : [0];
+  const elements = [];
+  offsets.forEach(offset => {
+    const cy = y + offset;
+    const shift = kind === 'double' && offset !== 0 && design.id === 'offset-stack' ? 4 : 0;
+    const radius = kind === 'double' && offset !== 0 && design.id === 'petite-top' ? 13 : 16;
+    elements.push(svg('ellipse', { cx: x + shift + 1, cy: cy + 3, rx: radius, ry: Math.max(4, radius * .36), class: `piece-shadow ${className}` }));
+    if (kind === 'double' && offset === 0) elements.push(svg('circle', { cx: x, cy, r: radius + 4, class: `double-ring ${owner === 'white' ? 'ivory-ring' : 'obsidian-ring'}${captureClass} ${className}` }));
+    elements.push(svg('circle', { cx: x + shift, cy, r: radius, class: `${preview ? 'preview-piece' : 'piece'} ${kind === 'double' ? 'double-piece' : 'single-piece'} ${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}${captureClass} ${className}` }));
+    elements.push(svg('circle', { cx: x + shift - 1, cy: cy - 1, r: radius - 4, class: `piece-ring ${owner === 'white' ? '' : 'dark'} ${className}` }));
+    if (kind === 'double' && offset === 0) elements.push(...designDetails({ x, y: cy, owner, captureClass, className, design }));
+    if (kind === 'double' && offset === 0 && capturePart) elements.push(svg('text', { x: x + 22, y: cy + 3, class: `double-label${captureClass} ${className}` }, `D${capturePart.bit + 1}`));
+  });
+  return elements;
+}
+
+function designDetails({ x, y, owner, captureClass, className, design }) {
+  const ink = owner === 'white' ? 'ivory-detail' : 'obsidian-detail';
+  if (design.id === 'concentric-ring') return [svg('circle', { cx: x, cy: y, r: 13, class: `design-detail ${ink}${captureClass} ${className}` })];
+  if (design.id === 'engraved-ii') return [svg('rect', { x: x - 5, y: y - 4, width: 10, height: 2, rx: 1, class: `design-detail ${ink}${captureClass} ${className}` }), svg('rect', { x: x - 5, y: y + 1, width: 10, height: 2, rx: 1, class: `design-detail ${ink}${captureClass} ${className}` })];
+  if (design.id === 'twin-pips') return [svg('circle', { cx: x - 4, cy: y, r: 2, class: `design-detail ${ink}${captureClass} ${className}` }), svg('circle', { cx: x + 4, cy: y, r: 2, class: `design-detail ${ink}${captureClass} ${className}` })];
+  if (design.id === 'hex-outline') return [svg('polygon', { points: hexPointsAt(x, y, 18), class: `design-detail ${ink}${captureClass} ${className}` })];
+  if (design.id === 'cut-groove') return [svg('path', { d: `M ${x - 10} ${y + 7} Q ${x} ${y + 12} ${x + 10} ${y + 7}`, class: `design-detail ${ink}${captureClass} ${className}` })];
+  if (design.id === 'contrast-band') return [svg('rect', { x: x - 13, y: y - 1, width: 26, height: 3, rx: 1.5, class: `design-detail ${ink}${captureClass} ${className}` })];
+  return [];
 }
 
 function renderMeta() {
@@ -274,6 +316,38 @@ function bindControls() {
   [$('rules-close'), $('rules-done')].forEach(button => button.addEventListener('click', () => dialog.close()));
 }
 
+function setupDesignPicker() {
+  els.designsGallery.replaceChildren();
+  DESIGNS.forEach((design, index) => {
+    const card = document.createElement('button');
+    card.type = 'button'; card.className = 'design-card'; card.dataset.design = design.id;
+    card.innerHTML = `<span class="design-number">${String(index + 1).padStart(2, '0')}</span><span class="design-preview-wrap"></span><strong>${design.name}</strong><small>${design.note}</small>`;
+    const preview = svg('svg', { viewBox: '0 0 154 88', class: `design-preview design-preview-${design.id}`, 'aria-hidden': 'true' });
+    pieceElements({ x: 43, y: 49, owner: 'white', kind: 'single', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
+    pieceElements({ x: 111, y: 49, owner: 'black', kind: 'double', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
+    card.querySelector('.design-preview-wrap').appendChild(preview);
+    card.addEventListener('click', () => { selectedDesign = design.id; persistDesign(); updateDesignGallery(); });
+    els.designsGallery.appendChild(card);
+  });
+  updateDesignGallery();
+  $('designs-open').addEventListener('click', () => els.designsDialog.showModal());
+  $('designs-close').addEventListener('click', () => els.designsDialog.close());
+  $('designs-done').addEventListener('click', () => els.designsDialog.close());
+  if (new URLSearchParams(window.location.search).get('designs') === '1') els.designsDialog.showModal();
+}
+
+function persistDesign() {
+  document.body.dataset.pieceDesign = selectedDesign;
+  try { localStorage.setItem('gipf-piece-design', selectedDesign); } catch { /* private browsing */ }
+  renderPieces();
+}
+
+function updateDesignGallery() {
+  const chosen = DESIGNS.find(design => design.id === selectedDesign) || DESIGNS[0];
+  els.designsSelection.textContent = `${chosen.name} selected`;
+  els.designsGallery.querySelectorAll('.design-card').forEach(card => card.classList.toggle('selected', card.dataset.design === selectedDesign));
+}
+
 async function maybeAiMove() {
   if (els.mode.value !== 'ai' || aiThinking || aiBlocked || winnerOf(state) !== 0 || currentPlayer() !== els.aiColor.value) return;
   const revision = gameRevision;
@@ -409,4 +483,5 @@ function rayHitTarget(ray) {
 }
 function svg(tag, attrs, text = '') { const element = document.createElementNS(svgNS, tag); Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value)); if (text) element.appendChild(document.createTextNode(text)); return element; }
 function hexPoints(radius) { return Array.from({ length: 6 }, (_, i) => { const angle = (-90 + i * 60) * Math.PI / 180; return `${400 + Math.cos(angle) * radius},${400 + Math.sin(angle) * radius}`; }).join(' '); }
+function hexPointsAt(x, y, radius) { return Array.from({ length: 6 }, (_, i) => { const angle = (-90 + i * 60) * Math.PI / 180; return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`; }).join(' '); }
 function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2400); }

@@ -92,6 +92,7 @@
             <div class="control-row ai-only"><label for="ai-color">Machine plays</label><select id="ai-color"><option value="black">Obsidian</option><option value="white">Ivory</option></select></div>
             <div class="control-row ai-only"><label for="difficulty">Tempo</label><select id="difficulty"><option value="casual">Casual · 250ms</option><option value="focused">Focused · 1s</option><option value="deep">Deep · 3s</option></select></div>
             <div class="button-row"><button class="button button-primary" id="new-game" type="button">New game</button><button class="button button-quiet" id="undo" type="button" disabled>Undo</button></div>
+            <button class="designs-button" id="designs-open" type="button"><span class="designs-swatch" aria-hidden="true"><i></i><i></i></span><span><strong>Piece designs</strong><small>Choose your table set</small></span><span class="designs-arrow">→</span></button>
           </section>
 
           <section class="capture-card" id="capture-card" hidden>
@@ -123,6 +124,16 @@
         <p>Whenever four or more pieces of one colour form a straight row, the row is removed. If more than one row is available, choose which capture to resolve first.</p>
         <div class="rules-legend"><span class="mini-piece mini-single"></span><span>single piece</span><span class="mini-piece mini-double"></span><span>GIPF piece (two stacked)</span></div>
         <button class="button button-primary full" id="rules-done" type="button">Back to the board</button>
+      </div>
+    </dialog>
+    <dialog id="designs-dialog" class="designs-dialog">
+      <div class="designs-dialog-inner">
+        <button class="dialog-close" id="designs-close" type="button" aria-label="Close piece designs">×</button>
+        <p class="eyebrow">Table customisation</p>
+        <h2>Choose a piece design</h2>
+        <p class="designs-intro">Ten quiet studies for the same standard GIPF pieces. Your choice is saved on this device.</p>
+        <div class="design-gallery" id="design-gallery"></div>
+        <div class="designs-footer"><span id="design-selection-label">Natural Stack selected</span><button class="button button-primary" id="designs-done" type="button">Play with this design</button></div>
       </div>
     </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
