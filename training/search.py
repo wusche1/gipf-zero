@@ -2,6 +2,7 @@
 import math,time
 import numpy as np
 import torch
+import gipf_engine as ge
 from .model import encode
 
 class Node:
@@ -32,7 +33,9 @@ class BatchedMCTS:
         self.evaluations=0
     @torch.inference_mode()
     def evaluate(self,nodes):
-        x=torch.from_numpy(np.stack([encode(n.state) for n in nodes])).to(self.device)
+        states=[n.state for n in nodes]
+        encoded=ge.encode_batch(states) if hasattr(ge,'encode_batch') else np.stack([encode(state) for state in states])
+        x=torch.from_numpy(encoded).to(self.device)
         logits,values=self.model(x)
         logits=logits.float().cpu().numpy();values=values.float().cpu().numpy()
         self.evaluations+=len(nodes)

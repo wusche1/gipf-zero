@@ -72,6 +72,21 @@ def test_search_rejects_terminal_roots():
         from training.search import choose_action
         choose_action(model,Terminal(),'cpu',1,50)
 
+def test_native_encode_batch_matches_python_encoder_on_legal_states():
+    rng=random.Random(9182)
+    states=[];state=ge.State()
+    for _ in range(320):
+        states.append(state.clone())
+        if state.winner:
+            state=ge.State()
+        else:
+            state.apply(rng.choice(state.legal_actions()))
+    native=ge.encode_batch(states)
+    python=np.stack([encode(state) for state in states])
+    assert native.dtype==np.float32
+    assert native.shape==(len(states),9,7,7)
+    np.testing.assert_array_equal(native,python)
+
 
 def test_evaluation_settles_an_opening_capture_and_delays_insertion_cutoff():
     class Opening:

@@ -1,5 +1,6 @@
 #ifndef GIPF_WASM
 #include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
 #include <pybind11/stl.h>
 #else
 #include <emscripten/bind.h>
@@ -417,6 +418,41 @@ PYBIND11_MODULE(gipf_engine, m) {
       .def_property_readonly("winner", &State::winner)
       .def_property_readonly("ply", &State::ply);
   m.def("geometry", &State::geometry);
+  m.def("encode_batch", [](const std::vector<State>& states) {
+    constexpr py::ssize_t kPlanes = 9;
+    constexpr py::ssize_t kSide = 7;
+    constexpr py::ssize_t kPlaneCells = kSide * kSide;
+    py::array_t<float> output({static_cast<py::ssize_t>(states.size()), kPlanes, kSide, kSide});
+    float* data = output.mutable_data();
+    std::fill(data, data + states.size() * kPlanes * kPlaneCells, 0.0F);
+    const auto& coordinates = geometry_data().coordinates;
+    for (size_t batch = 0; batch < states.size(); ++batch) {
+      const State& state = states[batch];
+      const int player = state.current_player();
+      const int mine = colour_index(player);
+      const int theirs = colour_index(-player);
+      const float own_reserve = static_cast<float>(state.reserves()[mine]) / 18.0F;
+      const float opponent_reserve = static_cast<float>(state.reserves()[theirs]) / 18.0F;
+      const bool capture = state.phase() == "capture";
+      const bool mover_owns_decision = state.turn_player() == player;
+      for (int cell = 0; cell < kBoardCells; ++cell) {
+        const int row = coordinates[cell][1] + 3;
+        const int column = coordinates[cell][0] + 3;
+        const size_t offset = batch * kPlanes * kPlaneCells + row * kSide + column;
+        const int relative_piece = state.board()[cell] * player;
+        if (relative_piece == 1) data[offset] = 1.0F;
+        else if (relative_piece == 2) data[kPlaneCells + offset] = 1.0F;
+        else if (relative_piece == -1) data[2 * kPlaneCells + offset] = 1.0F;
+        else if (relative_piece == -2) data[3 * kPlaneCells + offset] = 1.0F;
+        data[4 * kPlaneCells + offset] = 1.0F;
+        data[5 * kPlaneCells + offset] = own_reserve;
+        data[6 * kPlaneCells + offset] = opponent_reserve;
+        data[7 * kPlaneCells + offset] = capture ? 1.0F : 0.0F;
+        data[8 * kPlaneCells + offset] = mover_owns_decision ? 1.0F : 0.0F;
+      }
+    }
+    return output;
+  }, py::arg("states"), "Encode states into float32 [B,9,7,7] training planes.");
   m.attr("PUSH_ACTIONS") = py::make_tuple(0, 41);
   m.attr("CAPTURE_BASE") = kCaptureBase;
   m.attr("CAPTURE_LINE_STRIDE") = kCaptureStride;
