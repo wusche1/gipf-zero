@@ -15,6 +15,14 @@ def capture_state():
     return ge.State.from_dict({'board':board,'reserves':[8,10],'captured':[18-8-used[0],18-10-used[1]],'current_player':1,'turn_player':1,'phase':'capture','winner':0,'ply':1})
 
 
+def black_capture_state():
+    board = [0] * 37; line = ge.geometry()['lines'][9]
+    for cell in line[:4]: board[cell] = -1
+    board[line[4]], board[line[5]] = -2, 2
+    used = [sum(abs(x) for x in board if x > 0), sum(abs(x) for x in board if x < 0)]
+    return ge.State.from_dict({'board':board,'reserves':[10,8],'captured':[18-10-used[0],18-8-used[1]],'current_player':-1,'turn_player':-1,'phase':'capture','winner':0,'ply':2})
+
+
 def test_query_transformer_push_shape_normalization_backward_and_roundtrip(tmp_path):
     model = QueryTransformer(ModelConfig('transformer', 64, 2, 'query'))
     logits, values = model([ge.State(), ge.State()]); legal = ge.State().legal_actions()
@@ -65,3 +73,20 @@ def test_query_capture_conditions_each_double_in_line_order():
     logits, _ = model([state]); both = 42 + 3 * 128 + (1 << 4) + (1 << 5)
     expected = torch.nn.functional.logsigmoid(torch.tensor(.25)) + torch.nn.functional.logsigmoid(torch.tensor(-.75))
     torch.testing.assert_close(logits[0, both], expected)
+
+
+def test_query_packed_capture_matches_reference_and_gradients():
+    states = [capture_state(), black_capture_state()]
+    config = ModelConfig('transformer', 64, 2, 'query')
+    packed = QueryTransformer(config).eval()
+    reference = QueryTransformer(config).eval(); reference.load_state_dict(packed.state_dict())
+    packed_logits, packed_values = packed(states)
+    reference_logits, reference_values = reference.forward_reference(states)
+    torch.testing.assert_close(packed_logits, reference_logits, rtol=1e-5, atol=1e-6)
+    torch.testing.assert_close(packed_values, reference_values, rtol=1e-5, atol=1e-6)
+    legal = [state.legal_actions() for state in states]
+    packed_loss = sum(-packed_logits[i, actions].mean() + packed_values[i].square() for i, actions in enumerate(legal))
+    reference_loss = sum(-reference_logits[i, actions].mean() + reference_values[i].square() for i, actions in enumerate(legal))
+    packed_loss.backward(); reference_loss.backward()
+    for left, right in zip(packed.parameters(), reference.parameters()):
+        torch.testing.assert_close(left.grad, right.grad, rtol=1e-5, atol=1e-6)

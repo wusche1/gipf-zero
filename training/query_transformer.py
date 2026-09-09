@@ -102,7 +102,7 @@ class QueryTransformer(nn.Module):
                 start = end + 1
         return board, result
 
-    def _capture(self, state):
+    def _capture_reference(self, state):
         board, rows = self._segments(state)
         legal = state.legal_actions(); masks = {}
         for action in legal:
@@ -141,6 +141,51 @@ class QueryTransformer(nn.Module):
                 output[42 + line_id * 128 + mask] = value
         return output
 
+    def _capture_batch(self, states):
+        """Pack every row and hypothetical double-prefix query across states."""
+        grouped, row_features = [], []
+        for state_index, state in enumerate(states):
+            board, rows = self._segments(state); masks = {}
+            for action in state.legal_actions():
+                if action >= 42: masks.setdefault((action - 42) // 128, []).append((action - 42) % 128)
+            contexts = []
+            reserve = state.reserves[0 if state.current_player == 1 else 1]
+            for row_index, (line_id, segment) in enumerate(rows):
+                line = GEO['lines'][line_id]; allowed = masks[line_id]
+                doubles = [(line.index(cell), cell) for cell in segment if abs(board[cell]) == 2 and any(mask & (1 << line.index(cell)) for mask in allowed)]
+                contexts.append({'row':row_index,'line':line_id,'segment':segment,'allowed':allowed,'doubles':doubles,'reserve':reserve})
+                row_features.append(self._feature(state, board, row_cells=segment))
+            grouped.append((state, board, contexts))
+        row_scores = self.take(self._embed(row_features)).squeeze(1)
+        cursor = 0; row_logs = {}
+        for state_index, (_, _, contexts) in enumerate(grouped):
+            row_logs.update({(state_index, context['row']): score for context, score in zip(contexts, F.log_softmax(row_scores[cursor:cursor + len(contexts)], 0))})
+            cursor += len(contexts)
+        queries = []
+        for state_index, (state, board, contexts) in enumerate(grouped):
+            for context in contexts:
+                doubles = context['doubles']
+                for depth in range(len(doubles)):
+                    earlier = sum(1 << pos for pos, _ in doubles[:depth])
+                    for prefix in {mask & earlier for mask in context['allowed']}:
+                        temp, own = self._temporary_board(board, context['segment'], doubles, prefix, depth, context['reserve'])
+                        queries.append((state_index, context['row'], depth, prefix, self._feature(state, temp, own, context['segment'], doubles[depth][1], True)))
+        scores = self.take(self._embed([query[4] for query in queries])).squeeze(1) if queries else []
+        take_scores = {(state_index, row, depth, prefix): score for (state_index, row, depth, prefix, _), score in zip(queries, scores)}
+        outputs = []
+        for state_index, (_, _, contexts) in enumerate(grouped):
+            output = torch.full((ACTIONS,), -1e9, device=self._device())
+            for context in contexts:
+                for mask in context['allowed']:
+                    value, prefix = row_logs[state_index, context['row']], 0
+                    for depth, (pos, _) in enumerate(context['doubles']):
+                        score = take_scores[state_index, context['row'], depth, prefix]
+                        chosen = bool(mask & (1 << pos)); value = value + F.logsigmoid(score if chosen else -score)
+                        if chosen: prefix |= 1 << pos
+                    output[42 + context['line'] * 128 + mask] = value
+            outputs.append(output)
+        return outputs
+
     @staticmethod
     def _temporary_board(board, segment, doubles, prefix, depth, reserve):
         """Apply mandatory singles and earlier binary GIPF choices to a query board."""
@@ -155,12 +200,17 @@ class QueryTransformer(nn.Module):
                 temp[cell] = 0
         return temp, own
 
-    def forward(self, states):
-        """Return [B,2730] legal-action log-probs and [B] values for engine states."""
+    @staticmethod
+    def _coerce_states(states):
         if isinstance(states, torch.Tensor):
             if states.ndim != 4 or tuple(states.shape[1:]) != (9, 7, 7): raise ValueError('expected [B,9,7,7] input')
-            states = [_EncodedState(x) for x in states.detach().cpu().numpy()]
+            return [_EncodedState(x) for x in states.detach().cpu().numpy()]
         elif not isinstance(states, (list, tuple)): states = [states]
+        return states
+
+    def forward_reference(self, states):
+        """Unpacked capture evaluation retained to check the packed forward path."""
+        states = self._coerce_states(states)
         base = self._embed([self._feature(state) for state in states])
         values = self.value(base).squeeze(1)
         output = torch.full((len(states), ACTIONS), -1e9, device=self._device())
@@ -168,5 +218,21 @@ class QueryTransformer(nn.Module):
             if state.phase == 'push':
                 actions = torch.tensor(state.legal_actions(), device=self._device())
                 output[index, actions] = F.log_softmax(self.push(base[index])[actions], 0)
-            else: output[index] = self._capture(state)
+            else: output[index] = self._capture_reference(state)
+        return output, values
+
+    def forward(self, states):
+        """Return [B,2730] legal-action log-probs and [B] values for engine states."""
+        states = self._coerce_states(states)
+        base = self._embed([self._feature(state) for state in states])
+        values = self.value(base).squeeze(1)
+        output = torch.full((len(states), ACTIONS), -1e9, device=self._device())
+        captures = []
+        for index, state in enumerate(states):
+            if state.phase == 'push':
+                actions = torch.tensor(state.legal_actions(), device=self._device())
+                output[index, actions] = F.log_softmax(self.push(base[index])[actions], 0)
+            else: captures.append((index, state))
+        if captures:
+            for (index, _), policy in zip(captures, self._capture_batch([state for _, state in captures])): output[index] = policy
         return output, values
