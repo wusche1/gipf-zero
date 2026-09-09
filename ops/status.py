@@ -8,6 +8,15 @@ for p in (ROOT/'runs').glob('*/heartbeat.json'):
     try:
         d=json.loads(p.read_text());report['runs'][p.parent.name]={k:d.get(k) for k in ('event','games','updates','cutoffs','elapsed','policy_loss','value_loss')};report['runs'][p.parent.name]['heartbeat_age']=round(time.time()-d['time'])
     except (ValueError,OSError):pass
+    if '--brief' in sys.argv:
+        try:
+            for line in reversed((p.parent/'metrics.jsonl').read_text()[-65536:].splitlines()):
+                try: latest=json.loads(line)
+                except ValueError: continue
+                if latest.get('event')=='train':
+                    report['runs'][p.parent.name].update({k:round(latest[k],4) for k in ('policy_loss','value_loss')})
+                    break
+        except (OSError,KeyError):pass
 for p in ([] if '--brief' in sys.argv else (ROOT/'reports').glob('pilot_*.json')):
     try:
         d=json.loads(p.read_text());report['evaluations'][p.stem]=[d.get('wins'),d.get('losses'),d.get('cutoffs')]

@@ -1,0 +1,25 @@
+{
+  "checkpoint_sha256": "72fc31d851c17e66e311cc610ac32ded90f1a7c469cc3d05599c904ca3bbb9b4",
+  "roots": 128,
+  "simulations": 128,
+  "seconds": {
+    "eager": [
+      0.5821385979652405,
+      0.5441716387867928,
+      0.5666007176041603
+    ],
+    "cuda_graph": [
+      0.5069401636719704,
+      0.4983198717236519,
+      0.46754511818289757
+    ]
+  },
+  "median_seconds": {
+    "eager": 0.5666007176041603,
+    "cuda_graph": 0.4983198717236519
+  },
+  "argmax_agreement": 1.0,
+  "exact_policy_agreement": 1.0,
+  "graph_active": true,
+  "speedup": 1.137022121241784
+}

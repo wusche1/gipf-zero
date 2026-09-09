@@ -77,3 +77,19 @@ optimization; model weights, optimizer, RNG and replay were restored. In-flight
 unlabelled games are not checkpointed and restart from the opening, so recovery
 preserves learning state but not an identical uninterrupted self-play trajectory.
 The CPU inference service also adopted the faster selector. No game rules changed.
+
+An additional opt-in static CUDA-graph backend was tested. It matches eager
+inference on the same padded batch; changing batch shape can introduce small
+floating-point differences, so it is not generally bit-identical to unpadded
+eager inference. Tests verify fresh optimizer weights and recapture after
+parameter-storage replacement. A normal-game 45-second smoke completed 1,801
+self-play games and repeated updates without new cutoffs.
+
+The minimal prototype suggested a 29% gain, but the full implementation,
+including safety checks, measured only **1.14×** after optimization
+([benchmark](cuda-graph-benchmark.json)). That was below the chosen 20% keep
+threshold. The residual training job briefly used it around 16:59–17:04 UTC,
+then checkpointed and returned to ordinary inference. It remains available
+behind `--cuda-graph-batch 128`, default off. The verified native PUCT selector
+remains enabled. Reproduce the graph comparison with
+`python -m ops.benchmark_cuda_graph CHECKPOINT --output FILE`.

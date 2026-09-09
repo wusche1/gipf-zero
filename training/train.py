@@ -27,7 +27,11 @@ def main():
     p.add_argument('--batch-size',type=int,default=256);p.add_argument('--lr',type=float,default=.001)
     p.add_argument('--max-ply',type=int,default=240);p.add_argument('--replay-size',type=int,default=100000)
     p.add_argument('--seed',type=int,default=1);p.add_argument('--resume');p.add_argument('--device',default='cuda')
+    p.add_argument('--cuda-graph-batch',type=int,default=0,
+                   help='opt-in fixed CUDA-graph inference batch (0 keeps eager inference)')
     args=p.parse_args();out=Path(args.run);out.mkdir(parents=True,exist_ok=True)
+    if args.cuda_graph_batch<0:p.error('--cuda-graph-batch must be non-negative')
+    effective_cuda_graph_batch=args.cuda_graph_batch if args.device.startswith('cuda') else 0
     torch.set_num_threads(4);torch.manual_seed(args.seed);np.random.seed(args.seed);random.seed(args.seed)
     if args.device.startswith('cuda'):torch.backends.cuda.matmul.allow_tf32=True;torch.backends.cudnn.allow_tf32=True
     rng=np.random.default_rng(args.seed)
@@ -47,15 +51,16 @@ def main():
         if 'python_rng' in data:random.setstate(data['python_rng'])
         rp=Path(args.resume).parent/'replay.pt'
         if rp.exists():replay.extend(torch.load(rp,map_location='cpu',weights_only=False))
-    (out/'config.json').write_text(json.dumps({**vars(args),'effective_model':asdict(config)},indent=2)+'\n')
+    (out/'config.json').write_text(json.dumps({**vars(args),'effective_model':asdict(config),
+                                                'effective_cuda_graph_batch':effective_cuda_graph_batch},indent=2)+'\n')
     start=time.monotonic();end=start+args.seconds
     if args.deadline:end=min(end,start+args.deadline-time.time())
-    search=BatchedMCTS(model,args.device,seed=args.seed)
+    search=BatchedMCTS(model,args.device,seed=args.seed,cuda_graph_batch=effective_cuda_graph_batch)
     if resume_data is not None and 'search_rng' in resume_data:search.rng.bit_generator.state=resume_data['search_rng']
     roots=[Node(ge.State()) for _ in range(args.games)];histories=[[] for _ in roots]
     last_heartbeat=0;last_checkpoint=start;last_replay_save=0;session_games=0;start_decisions=decisions
     def log(event,**kw):
-        record={'event':event,'time':time.time(),'elapsed':round(time.monotonic()-start,2),'iteration':iteration,'games':finished,'session_games':session_games,'decisions':decisions,'updates':updates,'replay':len(replay),'cutoffs':cutoffs,**kw}
+        record={'inference_backend':'cuda_graph' if search.inference is not None and search.inference.graph is not None and not search.inference.disabled else 'eager','event':event,'time':time.time(),'elapsed':round(time.monotonic()-start,2),'iteration':iteration,'games':finished,'session_games':session_games,'decisions':decisions,'updates':updates,'replay':len(replay),'cutoffs':cutoffs,**kw}
         with (out/'metrics.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
         (out/'heartbeat.json').write_text(json.dumps(record)+'\n')
         print(json.dumps(record),flush=True)

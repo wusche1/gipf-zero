@@ -1,9 +1,11 @@
 """Batched PUCT. Values are backed up via absolute colour, never blind negation."""
 import math,time
+from contextlib import nullcontext
 import numpy as np
 import torch
 import gipf_engine as ge
 from .model import encode
+from .inference import CudaGraphInference
 
 class Node:
     __slots__=('state','actions','p','n','w','children','actor')
@@ -31,15 +33,20 @@ class Node:
         return self.n/self.n.sum()
 
 class BatchedMCTS:
-    def __init__(self,model,device='cuda',cpuct=1.5,seed=0):
+    def __init__(self,model,device='cuda',cpuct=1.5,seed=0,cuda_graph_batch=0):
         self.model=model;self.device=device;self.cpuct=cpuct;self.rng=np.random.default_rng(seed)
         self.evaluations=0
+        self.inference=(CudaGraphInference(model,device,cuda_graph_batch)
+                        if cuda_graph_batch and str(device).startswith('cuda') else None)
     @torch.inference_mode()
     def evaluate(self,nodes):
         states=[n.state for n in nodes]
         encoded=ge.encode_batch(states) if hasattr(ge,'encode_batch') else np.stack([encode(state) for state in states])
-        x=torch.from_numpy(encoded).to(self.device)
-        logits,values=self.model(x)
+        x=torch.from_numpy(encoded)
+        if self.inference is None:
+            logits,values=self.model(x.to(self.device))
+        else:
+            logits,values=self.inference.forward(x)
         logits=logits.float().cpu().numpy();values=values.float().cpu().numpy()
         self.evaluations+=len(nodes)
         for n,p in zip(nodes,logits):n.expand(p)
@@ -47,26 +54,28 @@ class BatchedMCTS:
     def search(self,roots,simulations=64,noise=False,deadline=None):
         if any(r.state.winner for r in roots):
             raise ValueError('cannot search from a terminal root')
-        missing=[r for r in roots if r.actions is None and not r.state.winner]
-        if missing:self.evaluate(missing)
-        if noise:
-            for r in roots:
-                if r.actions is not None:
-                    eta=self.rng.dirichlet(np.full(len(r.actions),10/len(r.actions)))
-                    r.p=.75*r.p+.25*eta
-        for simulation in range(simulations):
-            if deadline is not None and time.monotonic()>=deadline:break
-            pending=[];paths=[]
-            for root in roots:
-                node=root;path=[]
-                while node.actions is not None and not node.state.winner:
-                    i,child=node.select(self.cpuct);path.append((node,i));node=child
-                if node.state.winner:
-                    self.backup(path,float(node.state.winner))
-                else:pending.append(node);paths.append(path)
-            if pending:
-                values=self.evaluate(pending)
-                for node,path,value in zip(pending,paths,values):self.backup(path,float(value)*node.actor)
+        scope=self.inference.search_scope() if self.inference is not None else nullcontext()
+        with scope:
+            missing=[r for r in roots if r.actions is None and not r.state.winner]
+            if missing:self.evaluate(missing)
+            if noise:
+                for r in roots:
+                    if r.actions is not None:
+                        eta=self.rng.dirichlet(np.full(len(r.actions),10/len(r.actions)))
+                        r.p=.75*r.p+.25*eta
+            for simulation in range(simulations):
+                if deadline is not None and time.monotonic()>=deadline:break
+                pending=[];paths=[]
+                for root in roots:
+                    node=root;path=[]
+                    while node.actions is not None and not node.state.winner:
+                        i,child=node.select(self.cpuct);path.append((node,i));node=child
+                    if node.state.winner:
+                        self.backup(path,float(node.state.winner))
+                    else:pending.append(node);paths.append(path)
+                if pending:
+                    values=self.evaluate(pending)
+                    for node,path,value in zip(pending,paths,values):self.backup(path,float(value)*node.actor)
         return [r.policy() for r in roots]
     @staticmethod
     def backup(path,white_value):
