@@ -33,3 +33,8 @@
 {"game": 23, "neural_color": -1, "winner": 1, "outcome": "loss", "ply": 83, "decisions": 97, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
 {"game": 12, "neural_color": 1, "winner": -1, "outcome": "loss", "ply": 84, "decisions": 98, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
 {"game": 1, "neural_color": -1, "winner": 1, "outcome": "loss", "ply": 87, "decisions": 101, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
+{"game": 8, "neural_color": 1, "winner": 1, "outcome": "win", "ply": 97, "decisions": 114, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
+{"game": 9, "neural_color": -1, "winner": 1, "outcome": "loss", "ply": 105, "decisions": 123, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
+{"game": 38, "neural_color": 1, "winner": -1, "outcome": "loss", "ply": 88, "decisions": 100, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
+{"game": 34, "neural_color": 1, "winner": 1, "outcome": "win", "ply": 105, "decisions": 123, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
+{"game": 37, "neural_color": -1, "winner": -1, "outcome": "win", "ply": 100, "decisions": 119, "evaluation_key": "e74d2d8273078cb33755eaeed8f5eff77ae501bb7cc863991dedb4cfb771a774"}
