@@ -202,3 +202,8 @@ but the recorded repeat measured only **1.04× MLP / 0.96× residual**
 ([report](native-forest-graph-benchmark.json)); graphs remain disabled. A short
 combined smoke verified graph inference through optimizer updates, but functional
 correctness alone is insufficient reason to enable a slower backend.
+
+At 20:04 UTC, the 67,076-game MLP became champion after a **60–20** win
+over the 41,008-game MLP at equal 128 simulations and a **40–0** greedy gate.
+Neither match had cutoffs. The 21,295-game residual checkpoint had previously
+lost **30–50**, without cutoffs, against the 41,008-game MLP at equal CPU time.
