@@ -42,18 +42,18 @@ def main():
         for g in optimizer.param_groups:g['lr']=args.lr
         iteration=data.get('iteration',0);updates=data.get('updates',0);finished=data.get('games',0)
         decisions=data.get('decisions',0);cutoffs=data.get('cutoffs',0)
-        if 'torch_rng' in data:torch.set_rng_state(data['torch_rng'])
+        if 'torch_rng' in data:torch.set_rng_state(data['torch_rng'].cpu())
         if 'numpy_rng' in data:rng.bit_generator.state=data['numpy_rng']
         if 'python_rng' in data:random.setstate(data['python_rng'])
         rp=Path(args.resume).parent/'replay.pt'
         if rp.exists():replay.extend(torch.load(rp,map_location='cpu',weights_only=False))
-    (out/'config.json').write_text(json.dumps(vars(args),indent=2)+'\n')
+    (out/'config.json').write_text(json.dumps({**vars(args),'effective_model':asdict(config)},indent=2)+'\n')
     start=time.monotonic();end=start+args.seconds
     if args.deadline:end=min(end,start+args.deadline-time.time())
     search=BatchedMCTS(model,args.device,seed=args.seed)
     if resume_data is not None and 'search_rng' in resume_data:search.rng.bit_generator.state=resume_data['search_rng']
     roots=[Node(ge.State()) for _ in range(args.games)];histories=[[] for _ in roots]
-    last_heartbeat=0;last_checkpoint=start;last_replay_save=0;session_games=0
+    last_heartbeat=0;last_checkpoint=start;last_replay_save=0;session_games=0;start_decisions=decisions
     def log(event,**kw):
         record={'event':event,'time':time.time(),'elapsed':round(time.monotonic()-start,2),'iteration':iteration,'games':finished,'session_games':session_games,'decisions':decisions,'updates':updates,'replay':len(replay),'cutoffs':cutoffs,**kw}
         with (out/'metrics.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
@@ -97,7 +97,7 @@ def main():
                     roots[i]=Node(ge.State());histories[i]=[]
             now=time.monotonic()
             if now-last_heartbeat>=15:
-                log('selfplay',evaluations=search.evaluations,decisions_per_second=round(decisions/max(.01,now-start),2));last_heartbeat=now
+                log('selfplay',evaluations=search.evaluations,decisions_per_second=round((decisions-start_decisions)/max(.01,now-start),2));last_heartbeat=now
             if finished-last_finished>=args.games_per_iteration and len(replay)>=args.batch_size:
                 model.train();losses=[];gradnorms=[]
                 # Indexable snapshot; avoid rebuilding it for every SGD step.
