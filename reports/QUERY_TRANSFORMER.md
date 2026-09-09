@@ -21,3 +21,10 @@ width now scales as twice token width; the original width-64 query model remains
 unchanged at 79,148 parameters. This preset is implemented but untrained and is
 not substituted into the in-progress comparison. Its forward pass, legal-policy
 normalization and finite backward gradients were checked on CPU.
+
+## Five-layer preset
+
+`ops/query_transformer_deep_config.json` uses five layers, width 164, four heads
+and feed-forward width 328: **1,115,664 parameters**. This is 1.23% above the
+two-layer width-256 preset (1,102,124), retaining approximately the same parameter
+budget while allocating more capacity to depth. Neither preset has been trained.
