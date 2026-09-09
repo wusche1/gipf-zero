@@ -1,0 +1,17 @@
+*** Begin Patch
+*** Update File: training/model.py
+@@
+     def __init__(self,config=ModelConfig()):
+         super().__init__();self.config=config
++        if config.kind=='transformer' and config.head=='query':
++            from .query_transformer import QueryTransformer
++            self.query=QueryTransformer(config);return
+@@
+     def forward(self,x):
++        if hasattr(self,'query'): return self.query(x)
+         h=self.body(x);raw=self.policy(h)
+*** Update File: training/train.py
+@@
+-    p.add_argument('--head',default='flat',choices=['flat','factorized']);p.add_argument('--width',type=int,default=48);p.add_argument('--blocks',type=int,default=3)
++    p.add_argument('--head',default='flat',choices=['flat','factorized','query']);p.add_argument('--width',type=int,default=48);p.add_argument('--blocks',type=int,default=3)
+*** End Patch
