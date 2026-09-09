@@ -1,4 +1,5 @@
 import random
+import types
 from types import SimpleNamespace
 import json
 import numpy as np
@@ -87,6 +88,32 @@ def test_native_encode_batch_matches_python_encoder_on_legal_states():
     assert native.dtype==np.float32
     assert native.shape==(len(states),9,7,7)
     np.testing.assert_array_equal(native,python)
+
+def test_native_puct_selector_matches_numpy_reference_and_search_policy(monkeypatch):
+    def reference(priors,visits,values,cpuct):
+        q=np.divide(values,visits,out=np.zeros_like(values),where=visits>0)
+        return int(np.argmax(q+cpuct*priors*np.sqrt(1+int(visits.sum()))/(1+visits)))
+    rng=np.random.default_rng(1812)
+    cases=[
+        (np.zeros(8),np.zeros(8,dtype=np.int32),np.zeros(8),1.5),
+        (np.array([.5,.5]),np.array([0,0],dtype=np.int32),np.zeros(2),1.5),
+        (np.array([0.,1.,0.]),np.array([4,0,7],dtype=np.int32),np.array([2.,0.,-3.]),.75),
+    ]
+    for _ in range(2000):
+        width=int(rng.integers(1,129));cases.append((rng.random(width),rng.integers(0,1000,width,dtype=np.int32),rng.normal(size=width)*100,.1+rng.random()*4))
+    for priors,visits,values,cpuct in cases:
+        assert ge.puct_select(priors,visits,values,cpuct)==reference(priors,visits,values,cpuct)
+
+    torch.manual_seed(92);model=PolicyValue(ModelConfig('mlp',32,1)).eval()
+    native_roots=[Node(ge.State()) for _ in range(12)]
+    native=BatchedMCTS(model,'cpu',seed=3).search(native_roots,24)
+    native_counts=[root.n.copy() for root in native_roots]
+    monkeypatch.setattr('training.search.ge',types.SimpleNamespace(encode_batch=ge.encode_batch))
+    fallback_roots=[Node(ge.State()) for _ in range(12)]
+    fallback=BatchedMCTS(model,'cpu',seed=3).search(fallback_roots,24)
+    for left,right,left_counts,right_counts in zip(native,fallback,native_counts,[root.n for root in fallback_roots]):
+        np.testing.assert_array_equal(left,right)
+        np.testing.assert_array_equal(left_counts,right_counts)
 
 
 def test_evaluation_settles_an_opening_capture_and_delays_insertion_cutoff():

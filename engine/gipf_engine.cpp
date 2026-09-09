@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <array>
 #include <cstdlib>
+#include <cmath>
+#include <cstdint>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -453,6 +455,36 @@ PYBIND11_MODULE(gipf_engine, m) {
     }
     return output;
   }, py::arg("states"), "Encode states into float32 [B,9,7,7] training planes.");
+  m.def("puct_select", [](py::array_t<double, py::array::c_style | py::array::forcecast> priors,
+                           py::array_t<int32_t, py::array::c_style | py::array::forcecast> visits,
+                           py::array_t<double, py::array::c_style | py::array::forcecast> values,
+                           double cpuct) {
+    const auto p = priors.request();
+    const auto n = visits.request();
+    const auto w = values.request();
+    if (p.ndim != 1 || n.ndim != 1 || w.ndim != 1 || p.shape[0] == 0 ||
+        p.shape[0] != n.shape[0] || p.shape[0] != w.shape[0])
+      throw std::invalid_argument("PUCT arrays must be nonempty, one-dimensional, and equal length");
+    const auto* prior = static_cast<const double*>(p.ptr);
+    const auto* visit = static_cast<const int32_t*>(n.ptr);
+    const auto* value = static_cast<const double*>(w.ptr);
+    int64_t total = 0;
+    for (py::ssize_t i = 0; i < p.shape[0]; ++i) total += visit[i];
+    const double sqrt_total = std::sqrt(1.0 + static_cast<double>(total));
+    py::ssize_t best = 0;
+    double best_score = (visit[0] == 0 ? 0.0 : value[0] / static_cast<double>(visit[0])) +
+        (cpuct * prior[0]) * sqrt_total / (1.0 + static_cast<double>(visit[0]));
+    for (py::ssize_t i = 1; i < p.shape[0]; ++i) {
+      const double score = (visit[i] == 0 ? 0.0 : value[i] / static_cast<double>(visit[i])) +
+          (cpuct * prior[i]) * sqrt_total / (1.0 + static_cast<double>(visit[i]));
+      if (score > best_score) {
+        best = i;
+        best_score = score;
+      }
+    }
+    return static_cast<int>(best);
+  }, py::arg("priors"), py::arg("visits"), py::arg("values"), py::arg("cpuct"),
+  "Return the first PUCT argmax using the search's exact score formula.");
   m.attr("PUSH_ACTIONS") = py::make_tuple(0, 41);
   m.attr("CAPTURE_BASE") = kCaptureBase;
   m.attr("CAPTURE_LINE_STRIDE") = kCaptureStride;

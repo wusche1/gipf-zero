@@ -60,3 +60,20 @@ and publication before midnight in Germany. Running both makes use of otherwise
 idle GPU capacity; the final selection is based on matches, not loss curves.
 The previously proven MLP champion remains available until a replacement passes
 the promotion gate.
+
+## Search implementation improvement during the long run
+
+A native PUCT argmax replaced repeated NumPy allocations while preserving the
+score arithmetic and first-maximum tie rule. It matched 2,003 seeded/random/tie
+cases and complete reference search policies/visit counts. A reproducible
+[trained-residual-network benchmark](native-puct-benchmark.json), with both
+training jobs active, measured median search time **0.875 s → 0.480 s** for
+128 fresh roots and 128 simulations (**1.82× throughput**). This is a search
+microbenchmark, not a claim that complete training accelerates by the same factor.
+The benchmark script is `python -m ops.benchmark_search CHECKPOINT --output FILE`.
+
+Both trainers checkpointed and restarted at approximately 16:48 UTC to adopt the
+optimization; model weights, optimizer, RNG and replay were restored. In-flight
+unlabelled games are not checkpointed and restart from the opening, so recovery
+preserves learning state but not an identical uninterrupted self-play trajectory.
+The CPU inference service also adopted the faster selector. No game rules changed.

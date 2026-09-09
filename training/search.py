@@ -16,9 +16,12 @@ class Node:
         v=logits[self.actions].astype(np.float64);v-=v.max();p=np.exp(v)
         self.p=p/p.sum();self.n=np.zeros(len(p),np.int32);self.w=np.zeros(len(p),np.float64)
     def select(self,cpuct):
-        q=np.divide(self.w,self.n,out=np.zeros_like(self.w),where=self.n>0)
-        score=q+cpuct*self.p*math.sqrt(1+int(self.n.sum()))/(1+self.n)
-        i=int(np.argmax(score))
+        if hasattr(ge,'puct_select'):
+            i=int(ge.puct_select(self.p,self.n,self.w,cpuct))
+        else:
+            q=np.divide(self.w,self.n,out=np.zeros_like(self.w),where=self.n>0)
+            score=q+cpuct*self.p*math.sqrt(1+int(self.n.sum()))/(1+self.n)
+            i=int(np.argmax(score))
         child=self.children.get(i)
         if child is None:
             s=self.state.clone();s.apply(int(self.actions[i]));child=Node(s);self.children[i]=child

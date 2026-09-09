@@ -1,0 +1,31 @@
+{
+  "config": {
+    "checkpoint": "checkpoints/pilot-resnet32-final.pt",
+    "roots": 128,
+    "simulations": 128,
+    "repeats": 3,
+    "device": "cuda",
+    "output": "reports/native-puct-benchmark.json"
+  },
+  "checkpoint_sha256": "72fc31d851c17e66e311cc610ac32ded90f1a7c469cc3d05599c904ca3bbb9b4",
+  "seconds": {
+    "numpy": [
+      0.8815498538315296,
+      0.8442712165415287,
+      0.8751777522265911
+    ],
+    "native": [
+      0.4795588590204716,
+      0.48886076733469963,
+      0.43585551530122757
+    ]
+  },
+  "median_seconds": {
+    "numpy": 0.8751777522265911,
+    "native": 0.4795588590204716
+  },
+  "identical_policies": true,
+  "torch_version": "2.11.0+cu128",
+  "device_name": "NVIDIA A100-SXM4-40GB",
+  "native_speedup": 1.8249642056747641
+}
