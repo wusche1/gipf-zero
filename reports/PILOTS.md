@@ -109,3 +109,11 @@ not a held-out final test or a human skill rating.
 Subsequent league matches use equal CPU time across different architectures
 and equal simulations within the same architecture. Both training families
 continue; training loss alone never triggers promotion.
+
+The promoted 10,084-game checkpoint subsequently won **40–0** against iterative
+minimax (maximum depth 6, capture quiescence), with both players capped at
+250 ms per decision and neural search capped at 1,000 simulations, matching
+the casual serving limit. Twenty paired openings used both colours; there
+were no cutoffs ([report](mlp10084-minimax-cpu250.json)). Neural search averaged
+206.6 ms and 996 simulations. Maximum depth is a search ceiling, not a claim
+that minimax reached six plies within every deadline.
