@@ -166,3 +166,14 @@ greedy. Both sides had 50 ms CPU budgets in that head-to-head match.
 The 41,008-game MLP also beat its older version **60–18 with two cutoffs** at
 equal simulations; a new equal-CPU-time match against the residual champion
 is pending.
+
+The transformer pilot lost **2–77 with one cutoff** against the 23,016-game
+MLP at 50 ms CPU search ([match](transformer-pilot-vs-champion.json)). It learned
+to beat the simple baselines, but did not approach the incumbent under this
+short training and CPU-serving budget. This does not establish that transformers
+are intrinsically worse: architecture size, inference speed and experience all
+differ. Both new pilot checkpoints are preserved for future experiments.
+
+The 41,008-game MLP then beat the 16,694-game residual champion **60–20, no
+cutoffs**, at 50 ms CPU search and passed its greedy gate. It became the served
+champion. No architecture receives promotion based solely on training loss.

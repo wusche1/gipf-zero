@@ -1,31 +1,39 @@
 {
-  "name": "GIPF Zero \u2014 16,694 games",
+  "name": "GIPF Zero \u2014 41,008 games",
   "kind": "rl",
-  "games_trained": 16694,
-  "iteration": 319,
+  "games_trained": 41008,
+  "iteration": 672,
   "architecture": {
-    "kind": "resnet",
-    "width": 32,
+    "kind": "mlp",
+    "width": 256,
     "blocks": 2,
     "head": "flat"
   },
-  "source_checkpoint_sha256": "0a58ec7fdd4fd798254645a7f7a60500c5d40854abadaa4c5f2935b4a5e304c7",
-  "updated_utc": "2026-09-09T19:06:05.429358+00:00",
+  "source_checkpoint_sha256": "dac5c6691075d76068840172180e901c62275f72c6acfa4407d87938b90c254b",
+  "updated_utc": "2026-09-09T19:12:36.072022+00:00",
   "evaluations": [
     {
-      "report": "reports/league-185830-duel.json",
-      "opponent": "/workspace/gipf/checkpoints/league/champion-185830.pt",
-      "wins": 56,
-      "losses": 19,
-      "cutoffs": 5,
+      "report": "reports/alternative-1905-equalcpu.json",
+      "opponent": "checkpoints/league/champion-1906.pt",
+      "wins": 60,
+      "losses": 20,
+      "cutoffs": 0,
       "unfinished": 0
     },
     {
-      "report": "reports/league-185830-greedy.json",
+      "report": "reports/alternative-1905-greedy.json",
       "opponent": "greedy",
       "wins": 40,
       "losses": 0,
       "cutoffs": 0,
+      "unfinished": 0
+    },
+    {
+      "report": "reports/alternative-1905-duel.json",
+      "opponent": "checkpoints/league/champion-1905.pt",
+      "wins": 60,
+      "losses": 18,
+      "cutoffs": 2,
       "unfinished": 0
     }
   ],
