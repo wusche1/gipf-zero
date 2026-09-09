@@ -147,7 +147,13 @@ def test_optional_capture_toggle_preserves_the_engine_action_encoding(browser, s
         assert page.locator(".capture-row-line").count() > 0
         assert page.locator("circle.double-mark").count() >= 1
         assert page.locator("circle.capture-remove").count() >= 1
+        assert page.locator("circle.single-piece.capture-remove").count() == 0
+        assert page.get_by_text("D5").count() >= 1
         assert page.get_by_role("button", name="Remove D5").count() == 1
+        page.get_by_role("button", name="Remove D5").click()
+        assert page.locator("circle.capture-keep").count() >= 1
+        assert page.get_by_role("button", name="Keep D5").count() == 1
+        page.get_by_role("button", name="Keep D5").click()
         page.locator("#confirm-capture").click()
         assert page.evaluate("window.captureActions") == [selected]
     finally:

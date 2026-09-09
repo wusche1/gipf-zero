@@ -88,6 +88,9 @@ button { cursor: pointer; }
 .double-mark { stroke-width: 1.5; }
 .ivory-mark { fill: #9e4937; stroke: #fff8ee; }
 .obsidian-mark { fill: #e1b477; stroke: #26302f; }
+.double-label { font: 8px var(--mono); font-weight: 600; fill: var(--muted); paint-order: stroke; stroke: rgba(243,238,231,.9); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; }
+.double-label.capture-remove { fill: var(--rust-dark); }
+.double-label.capture-keep { fill: #557d62; }
 .capture-row-line { stroke: var(--rust); stroke-width: 11; stroke-linecap: round; opacity: .18; filter: drop-shadow(0 1px 2px rgba(180,87,63,.3)); pointer-events: none; }
 .capture-remove { stroke: #b4573f !important; stroke-width: 3.2 !important; filter: drop-shadow(0 0 4px rgba(180,87,63,.65)); }
 .capture-keep { stroke: #6c9278 !important; stroke-width: 2.5 !important; filter: drop-shadow(0 0 3px rgba(108,146,120,.5)); }

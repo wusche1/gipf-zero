@@ -103,7 +103,7 @@ function renderPieces() {
     const owner = normaliseOwner(value.owner || value.player || value.color);
     const kind = value.kind || (value.double || value.isGipf ? 'double' : 'single');
     const capturePart = captureInfo?.parts.find(part => part.key === key);
-    const captureClass = capturePart ? (capturePart.masked ? ' capture-remove' : ' capture-keep') : '';
+    const captureClass = kind === 'double' && capturePart ? (capturePart.masked ? ' capture-remove' : ' capture-keep') : '';
     const stack = kind === 'double' ? [-4, 0] : [0];
     for (const offset of stack) {
       const cy = node.y + offset;
@@ -112,6 +112,7 @@ function renderPieces() {
       els.pieces.appendChild(svg('circle', { cx: node.x, cy, r: 16, class: `piece ${kind === 'double' ? 'double-piece' : 'single-piece'} ${owner === 'white' ? 'ivory' : 'obsidian'}${offset !== 0 ? ' piece-top' : ''}${captureClass}` }));
       els.pieces.appendChild(svg('circle', { cx: node.x - 1, cy: cy - 1, r: 12, class: `piece-ring ${owner === 'white' ? '' : 'dark'}` }));
       if (kind === 'double' && offset === 0) els.pieces.appendChild(svg('circle', { cx: node.x, cy: cy - 1, r: 4, class: `double-mark ${owner === 'white' ? 'ivory-mark' : 'obsidian-mark'}${captureClass}` }));
+      if (kind === 'double' && offset === 0 && capturePart) els.pieces.appendChild(svg('text', { x: node.x + 22, y: cy + 3, class: `double-label${captureClass}` }, `D${capturePart.bit + 1}`));
     }
   }
 }
@@ -174,7 +175,7 @@ function renderCapture() {
   const bitset = masks.reduce((all, mask) => all | mask, 0);
   if (captureActions.length > 1 && bitset) {
     els.captureToggles.hidden = false;
-    const label = document.createElement('span'); label.className = 'toggle-caption'; label.textContent = 'Optional doubles'; els.captureToggles.appendChild(label);
+    const label = document.createElement('span'); label.className = 'toggle-caption'; label.textContent = 'Optional doubles · green stays · red removed'; els.captureToggles.appendChild(label);
     for (let bit = 0; bit < 7; bit += 1) {
       if (!(bitset & (1 << bit))) continue;
       const currentMask = selectedCapture.action - 42 - selectedCapture.line * 128;
@@ -217,7 +218,7 @@ function selectedCaptureInfo() {
   if (!indices?.length) return null;
   const mask = selectedCapture.action - 42 - selectedCapture.line * 128;
   const nodes = indices.map(index => game.geometry.nodes[Number(index)]).filter(Boolean);
-  return { nodes, parts: indices.map((index, bit) => ({ key: game.geometry.nodes[Number(index)]?.key, masked: Boolean(mask & (1 << bit)) })) };
+  return { nodes, parts: indices.map((index, bit) => ({ key: game.geometry.nodes[Number(index)]?.key, bit, masked: Boolean(mask & (1 << bit)) })) };
 }
 
 function choosePoint(key) {
@@ -407,6 +408,6 @@ function rayHitTarget(ray) {
     .map(point => point.join(',')).join(' ');
   return svg('polygon', { points, class: 'ray-hit', 'data-ray-id': ray.rayId });
 }
-function svg(tag, attrs) { const element = document.createElementNS(svgNS, tag); Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value)); return element; }
+function svg(tag, attrs, text = '') { const element = document.createElementNS(svgNS, tag); Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value)); if (text) element.appendChild(document.createTextNode(text)); return element; }
 function hexPoints(radius) { return Array.from({ length: 6 }, (_, i) => { const angle = (-90 + i * 60) * Math.PI / 180; return `${400 + Math.cos(angle) * radius},${400 + Math.sin(angle) * radius}`; }).join(' '); }
 function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2400); }
