@@ -83,6 +83,10 @@ class TransformerBody(nn.Module):
 class PolicyValue(nn.Module):
     def __init__(self,config=ModelConfig()):
         super().__init__();self.config=config
+        if config.head=='query':
+            if config.kind!='transformer':raise ValueError("query head requires transformer")
+            from .query_transformer import QueryTransformer
+            self.query=QueryTransformer(config);return
         if config.kind=='mlp':
             w=config.width
             layers=[nn.Flatten(),nn.Linear(PLANES*49,w),nn.ReLU()]
@@ -115,6 +119,7 @@ class PolicyValue(nn.Module):
             self.register_buffer('capture_coeff',torch.tensor(coeff))
         self.value=nn.Sequential(nn.Linear(dim,128),nn.ReLU(),nn.Linear(128,1),nn.Tanh())
     def forward(self,x):
+        if hasattr(self,'query'): return self.query(x)
         h=self.body(x);raw=self.policy(h)
         if self.config.head=='factorized':
             captures=raw[:,42:63].repeat_interleave(128,dim=1)+raw[:,63:100]@self.capture_coeff.T
