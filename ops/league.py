@@ -26,11 +26,11 @@ def run(command, log, seconds):
 def main():
     p=argparse.ArgumentParser();p.add_argument('--run',required=True);p.add_argument('--interval',type=int,default=1800);p.add_argument('--deadline',type=float,required=True);a=p.parse_args()
     folder=ROOT/a.run; archive=ROOT/'checkpoints/league';archive.mkdir(parents=True,exist_ok=True)
-    heartbeat=folder/'league-heartbeat.json';last_hash=None;next_check=0
+    heartbeat=folder/'league-heartbeat.json';last_hash=None;next_check=time.time()+a.interval
     def log(event,**kw):
         data={'time':time.time(),'event':event,**kw};heartbeat.write_text(json.dumps(data)+'\n');print(json.dumps(data),flush=True)
     while time.time()<a.deadline:
-        if time.time()<next_check:log('waiting',next_check=next_check);time.sleep(min(30,next_check-time.time()));continue
+        if time.time()<next_check:log('waiting',next_check=next_check);time.sleep(min(30,max(0,next_check-time.time())));continue
         try:
             source=folder/'latest.pt'
             if not source.exists():next_check=time.time()+30;continue

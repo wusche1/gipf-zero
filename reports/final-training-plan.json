@@ -1,0 +1,19 @@
+{
+  "started_utc": "2026-09-09T16:43:10.008334+00:00",
+  "training_stop_utc": "2026-09-09T21:15:00Z",
+  "deadline_utc": "2026-09-09T22:00:00Z",
+  "primary": {
+    "run": "runs/final",
+    "source": "runs/pilot_resnet32/latest.pt",
+    "simulations": 128
+  },
+  "alternative": {
+    "run": "runs/final_mlp",
+    "source": "runs/pilot_mlp256/latest.pt",
+    "simulations": 64
+  },
+  "parallel_games_each": 128,
+  "updates_per_64_games": 64,
+  "learning_rate": 0.001,
+  "selection": "Checkpoint matches against incumbent; cutoff-aware conservative promotion gates, then final held-out evaluation."
+}

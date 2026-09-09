@@ -1,0 +1,20 @@
+{
+  "run": "runs/pilot_mlp256",
+  "kind": "mlp",
+  "head": "flat",
+  "width": 256,
+  "blocks": 2,
+  "seconds": 900,
+  "deadline": 0,
+  "games": 64,
+  "games_per_iteration": 32,
+  "simulations": 64,
+  "updates": 32,
+  "batch_size": 256,
+  "lr": 0.001,
+  "max_ply": 240,
+  "replay_size": 100000,
+  "seed": 101,
+  "resume": null,
+  "device": "cuda"
+}

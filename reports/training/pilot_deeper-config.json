@@ -1,0 +1,20 @@
+{
+  "run": "runs/pilot_deeper",
+  "kind": "resnet",
+  "head": "flat",
+  "width": 48,
+  "blocks": 3,
+  "seconds": 900,
+  "deadline": 0,
+  "games": 128,
+  "games_per_iteration": 64,
+  "simulations": 128,
+  "updates": 64,
+  "batch_size": 256,
+  "lr": 0.001,
+  "max_ply": 240,
+  "replay_size": 100000,
+  "seed": 107,
+  "resume": "runs/pilot_mlp128/latest.pt",
+  "device": "cuda"
+}

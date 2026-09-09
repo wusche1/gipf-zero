@@ -1,0 +1,26 @@
+{
+  "run": "runs/pilot_resnet32",
+  "kind": "resnet",
+  "head": "flat",
+  "width": 32,
+  "blocks": 2,
+  "seconds": 900,
+  "deadline": 0,
+  "games": 64,
+  "games_per_iteration": 32,
+  "simulations": 32,
+  "updates": 32,
+  "batch_size": 256,
+  "lr": 0.001,
+  "max_ply": 240,
+  "replay_size": 100000,
+  "seed": 101,
+  "resume": null,
+  "device": "cuda",
+  "effective_model": {
+    "kind": "resnet",
+    "width": 32,
+    "blocks": 2,
+    "head": "flat"
+  }
+}
