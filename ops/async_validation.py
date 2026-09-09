@@ -32,6 +32,8 @@ def main():
         if summary['status']!='running':break
         if time.monotonic()>end:raise TimeoutError('architecture comparison still running')
         emit('waiting_for_isolated_gpu',training=len(summary['training']),duels=len(summary['duels']));time.sleep(30)
+    child('query-apply-check',['git','apply','--check','patches/enable_query_transformer.patch'],15)
+    child('query-apply',['git','apply','patches/enable_query_transformer.patch'],15)
     child('apply-check',['git','apply','--check','ops/enable_async_training.patch'],15)
     child('apply',['git','apply','ops/enable_async_training.patch'],15)
     child('benchmark',[sys.executable,'benchmarks/benchmark_async_selfplay.py'],180)
