@@ -3,25 +3,12 @@ import * as game from './game.js';
 const $ = (id) => document.getElementById(id);
 const svgNS = 'http://www.w3.org/2000/svg';
 const els = {
-  board: $('board'), base: $('board-base'), rays: $('ray-layer'), grid: $('grid-layer'), captureLayer: $('capture-layer'), pieces: $('piece-layer'), outer: $('outer-layer'), interaction: $('interaction-layer'),
+  board: $('board'), base: $('board-base'), rays: $('ray-layer'), grid: $('grid-layer'), captureLayer: $('capture-layer'), pieces: $('piece-layer'), removals: $('removal-layer'), outer: $('outer-layer'), interaction: $('interaction-layer'),
   status: $('engine-status'), phaseTitle: $('phase-title'), phaseBadge: $('phase-badge'), hint: $('board-hint'), round: $('round-number'), move: $('move-count'), explanation: $('explanation'),
   reserveWhite: $('reserve-white'), reserveBlack: $('reserve-black'), barWhite: $('reserve-bar-white'), barBlack: $('reserve-bar-black'), turnWhite: $('turn-white'), turnBlack: $('turn-black'), toast: $('toast'),
   capture: $('capture-card'), captureOptions: $('capture-options'), captureToggles: $('capture-toggles'), confirmCapture: $('confirm-capture'), mode: $('mode-select'), aiColor: $('ai-color'), difficulty: $('difficulty'), aiStatus: $('ai-status'),
-  undo: $('undo'), designsDialog: $('designs-dialog'), designsGallery: $('design-gallery'), designsSelection: $('design-selection-label')
+  undo: $('undo')
 };
-
-const DESIGNS = [
-  { id: 'solid-open', name: 'Solid / Open', note: 'A filled disc or a clean donut' },
-  { id: 'one-two-lobes', name: 'One / Two Lobes', note: 'Connected lobes count the piece' },
-  { id: 'full-split', name: 'Full / Split', note: 'One face or two parted halves' },
-  { id: 'bowl-dome', name: 'Bowl / Dome', note: 'Concave single, convex double' },
-  { id: 'thin-tall', name: 'Thin / Tall', note: 'Puck versus raised cylinder' },
-  { id: 'one-two-pips', name: 'One / Two Pips', note: 'A quiet count in the center' },
-  { id: 'plain-scallop', name: 'Plain / Scallop', note: 'Smooth rim or crowned edge' },
-  { id: 'one-two-rings', name: 'One / Two Rings', note: 'Flat outlines carry the count' },
-  { id: 'one-two-bars', name: 'One / Two Bars', note: 'A single capsule or parallel pair' },
-  { id: 'diamond-star', name: 'Diamond / Star', note: 'Four points replace the disc' }
-];
 
 let config = { aiEndpoint: '', engineUrl: '', requestTimeoutMs: 5000 };
 let state;
@@ -34,7 +21,8 @@ let aiBlocked = false;
 let gameRevision = 0;
 let aiModelName = '';
 let toastTimer;
-let selectedDesign = loadDesign();
+let activeMotion = null;
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 start();
 
@@ -47,16 +35,10 @@ async function start() {
   els.status.textContent = engineInfo.available ? 'Ready to play' : 'Rules engine unavailable';
   if (engineInfo.available) document.querySelector('.status-dot').style.background = '#618d72';
   state = game.newGame();
-  document.body.dataset.pieceDesign = selectedDesign;
   drawBoardGeometry();
   bindControls();
-  setupDesignPicker();
   await checkAiStatus();
   render();
-}
-
-function loadDesign() {
-  try { return DESIGNS.some(design => design.id === localStorage.getItem('gipf-piece-design')) ? localStorage.getItem('gipf-piece-design') : 'natural-stack'; } catch { return 'natural-stack'; }
 }
 
 function drawBoardGeometry() {
@@ -86,7 +68,8 @@ function drawBoardGeometry() {
   }
 }
 
-function render() {
+function render(transition = null) {
+  cancelMotion();
   const actions = game.legalActions(state) || [];
   legal = actions;
   legalByPoint = new Map();
@@ -104,6 +87,7 @@ function render() {
   renderCapture();
   renderCaptureHighlight();
   renderPieces();
+  if (transition) animateBoardChange(transition);
   els.undo.disabled = !canUndo();
   if (winnerOf(state) !== 0) {
     aiThinking = false;
@@ -124,69 +108,124 @@ function renderPieces() {
     const kind = value.kind || (value.double || value.isGipf ? 'double' : 'single');
     const capturePart = captureInfo?.parts.find(part => part.key === key);
     const captureClass = kind === 'double' && capturePart ? (capturePart.masked ? ' capture-remove' : ' capture-keep') : '';
-    pieceElements({ x: node.x, y: node.y, owner, kind, captureClass, capturePart }).forEach(element => els.pieces.appendChild(element));
+    const stone = svg('g', { class: 'stone', 'data-key': key });
+    pieceElements({ x: node.x, y: node.y, owner, kind, captureClass, capturePart }).forEach(element => stone.appendChild(element));
+    els.pieces.appendChild(stone);
   }
 }
 
-function pieceElements({ x, y, owner, kind, captureClass = '', capturePart = null, preview = false, designId = selectedDesign }) {
-  const design = DESIGNS.find(item => item.id === designId) || DESIGNS[0];
-  const className = `piece-design-${design.id}`;
+function cancelMotion() {
+  const previous = activeMotion;
+  activeMotion = null;
+  previous?.animations.forEach(animation => animation.cancel());
+  els.removals.replaceChildren();
+  els.board.setAttribute('aria-busy', 'false');
+}
+
+function animateBoardChange({ before, action, previousStones, actor, player }) {
+  if (reducedMotion.matches) return;
+  const after = readBoard(state);
+  const signature = value => value ? `${normaliseOwner(value.owner || value.player || value.color)}:${value.kind || (value.double || value.isGipf ? 'double' : 'single')}` : '';
+  const keys = new Set([...Object.keys(before), ...Object.keys(after)]);
+  if (![...keys].some(key => signature(before[key]) !== signature(after[key]))) return;
+
+  const animations = [];
+  const stones = new Map([...els.pieces.children].map(stone => [stone.dataset.key, stone]));
+  const rayId = typeof action === 'number' && action < 42 ? action : action?.rayId;
+  const ray = game.geometry.rays.find(candidate => candidate.rayId === rayId);
+  if (ray) {
+    const indices = arrayLike(arrayLike(game.geometry.engine?.rays)?.[rayId]);
+    const nodes = indices?.map(index => game.geometry.nodes[Number(index)]).filter(Boolean) || [];
+    let from = ray.outer;
+    // Every stone in the occupied prefix travels one step, including adjacent
+    // stones of the same color. Comparing colors alone cannot track that motion.
+    for (const node of nodes) {
+      const stone = stones.get(node.key);
+      if (stone) animations.push(stone.animate([
+        { transform: `translate(${from.x - node.x}px, ${from.y - node.y}px)` },
+        { transform: 'translate(0px, 0px)' }
+      ], { duration: 440, easing: 'cubic-bezier(.22, .61, .36, 1)' }));
+      if (!before[node.key]) break;
+      from = node;
+    }
+  }
+
+  const removed = Object.entries(before).filter(([key, value]) => value && !after[key]);
+  const removalTiming = { delay: actor === 'ai' ? 650 : 180, duration: 420, easing: 'cubic-bezier(.4, 0, 1, 1)', fill: 'forwards' };
+  if (removed.length && typeof action === 'number' && action >= 42) {
+    const lineId = Math.floor((action - 42) / 128);
+    const indices = arrayLike(arrayLike(game.geometry.engine?.lines)?.[lineId]);
+    const nodes = indices?.map(index => game.geometry.nodes[Number(index)]).filter(Boolean) || [];
+    if (nodes.length > 1) {
+      const from = nodes[0];
+      const to = nodes[nodes.length - 1];
+      const line = svg('line', { x1: from.x, y1: from.y, x2: to.x, y2: to.y, class: 'removal-row-line' });
+      els.removals.appendChild(line);
+      animations.push(line.animate([{ opacity: 1 }, { opacity: 0 }], removalTiming));
+    }
+  }
+  for (const [key] of removed) {
+    const previous = previousStones.get(key);
+    if (!previous) continue;
+    const ghost = previous.cloneNode(true);
+    ghost.classList.add('stone-removing');
+    ghost.querySelectorAll('.semantic-piece, .double-label').forEach(element => element.remove());
+    els.removals.appendChild(ghost);
+    animations.push(ghost.animate([
+      { opacity: 1, transform: 'scale(1)' },
+      { opacity: 0, transform: 'scale(.35)' }
+    ], removalTiming));
+  }
+  if (!animations.length) return;
+  const motion = { animations };
+  activeMotion = motion;
+  clearPreview();
+  els.board.setAttribute('aria-busy', 'true');
+  const playerName = player === 'white' ? 'Ivory' : 'Obsidian';
+  if (removed.length) {
+    const returned = removed.filter(([, value]) => normaliseOwner(value.owner || value.player || value.color) === player).length;
+    const captured = removed.length - returned;
+    const counts = [captured && `${captured} captured`, returned && `${returned} returned`].filter(Boolean);
+    els.hint.textContent = `${playerName} removes ${removed.length} ${removed.length === 1 ? 'stone' : 'stones'} · ${counts.join(' · ')}`;
+  } else {
+    els.hint.textContent = `${playerName} pushes a stone onto the board`;
+  }
+  renderCapture();
+  Promise.allSettled(animations.map(animation => animation.finished)).then(() => {
+    if (activeMotion !== motion) return;
+    cancelMotion();
+    renderMeta();
+    renderCapture();
+    maybeAiMove();
+  });
+}
+
+function playAction(action, actor) {
+  const previous = clone(state);
+  const before = readBoard(previous);
+  const previousStones = new Map([...els.pieces.children].map(stone => [stone.dataset.key, stone]));
+  past.push({ state: previous, actor });
+  state = game.applyAction(state, action) || state;
+  selectedCapture = null;
+  render({ before, action, previousStones, actor, player: currentPlayer(previous) });
+}
+
+function pieceElements({ x, y, owner, kind, captureClass = '', capturePart = null }) {
+  const color = owner === 'white' ? 'ivory' : 'obsidian';
+  const stateClass = `${color}${captureClass}`;
   const elements = [];
-  const stateClass = `${owner === 'white' ? 'ivory' : 'obsidian'}${captureClass} ${className}`;
-  // Keep two coincident semantic markers for a GIPF piece so board inspection still
-  // distinguishes a double, while the visible design controls its own encoding.
-  const semanticTag = preview ? 'preview-piece' : 'piece';
+  // Coincident semantic markers retain the unit count used by board inspection.
   const semanticCount = kind === 'double' ? 2 : 1;
   for (let index = 0; index < semanticCount; index += 1) {
-    elements.push(svg('circle', { cx: x, cy: y, r: 1, class: `${semanticTag} ${kind === 'double' ? 'double-piece' : 'single-piece'} ${stateClass} semantic-piece` }));
+    elements.push(svg('circle', { cx: x, cy: y, r: 1, class: `piece ${kind === 'double' ? 'double-piece' : 'single-piece'} ${stateClass} semantic-piece` }));
   }
   if (kind === 'double') elements.push(svg('circle', { cx: x, cy: y, r: 1, class: `double-ring ${stateClass} semantic-piece` }));
-  elements.push(...designShapes({ x, y, owner, kind, captureClass, className, design }));
-  if (kind === 'double' && capturePart) elements.push(svg('text', { x: x + 22, y: y + 3, class: `double-label${captureClass} ${className}` }, `D${capturePart.bit + 1}`));
-  return elements;
-}
-
-function designShapes({ x, y, owner, kind, captureClass, className, design }) {
-  const ink = owner === 'white' ? 'ivory-detail' : 'obsidian-detail';
-  const visualClass = `piece-visual design-shape design-${design.id} ${owner === 'white' ? 'ivory' : 'obsidian'}${captureClass} ${className}`;
-  const detailClass = `design-detail ${ink}${captureClass} ${className}`;
-  const shapes = [];
-  const radius = 18;
-  const full = { cx: x, cy: y, r: radius, class: visualClass };
-  if (design.id === 'solid-open') {
-    if (kind === 'single') shapes.push(svg('circle', full));
-    else { shapes.push(svg('circle', { ...full, class: `${visualClass} open-face` })); shapes.push(svg('circle', { cx: x, cy: y, r: 9, class: `design-hole ${className}` })); }
-  } else if (design.id === 'one-two-lobes') {
-    if (kind === 'single') shapes.push(svg('path', { d: lobePath(x, y, 0), class: visualClass }));
-    else shapes.push(svg('path', { d: `${lobePath(x - 8, y, -1)} ${lobePath(x + 8, y, 1)}`, class: visualClass }));
-  } else if (design.id === 'full-split') {
-    if (kind === 'single') shapes.push(svg('circle', full));
-    else shapes.push(svg('path', { d: splitDiscPath(x, y, radius), class: visualClass }));
-  } else if (design.id === 'bowl-dome') {
-    shapes.push(svg('circle', full));
-    shapes.push(svg('ellipse', { cx: x, cy: y + (kind === 'single' ? 3 : -3), rx: 11, ry: 7, class: `design-shade ${kind === 'single' ? 'bowl-shade' : 'dome-shade'} ${className}` }));
-  } else if (design.id === 'thin-tall') {
-    if (kind === 'single') shapes.push(svg('ellipse', { cx: x, cy: y, rx: 18, ry: 11, class: visualClass }));
-    else { shapes.push(svg('rect', { x: x - 18, y: y - 13, width: 36, height: 26, rx: 5, class: visualClass })); shapes.push(svg('ellipse', { cx: x, cy: y - 13, rx: 18, ry: 6, class: `design-top ${className}` })); }
-  } else if (design.id === 'one-two-pips') {
-    shapes.push(svg('circle', full));
-    shapes.push(svg('circle', { cx: x - (kind === 'double' ? 5 : 0), cy: y, r: 3.4, class: `design-pip ${className}` }));
-    if (kind === 'double') shapes.push(svg('circle', { cx: x + 5, cy: y, r: 3.4, class: `design-pip ${className}` }));
-  } else if (design.id === 'plain-scallop') {
-    shapes.push(svg(kind === 'single' ? 'circle' : 'polygon', kind === 'single' ? full : { points: scallopPointsAt(x, y, 19, 12), class: visualClass }));
-  } else if (design.id === 'one-two-rings') {
-    shapes.push(svg('circle', { cx: x, cy: y, r: 16, class: visualClass }));
-    shapes.push(svg('circle', { cx: x, cy: y, r: kind === 'single' ? 10 : 7, class: `flat-ring ${className}` }));
-    if (kind === 'double') shapes.push(svg('circle', { cx: x, cy: y, r: 12, class: `flat-ring ${className}` }));
-  } else if (design.id === 'one-two-bars') {
-    shapes.push(svg('rect', { x: x - 16, y: y - (kind === 'double' ? 7 : 4), width: 32, height: kind === 'double' ? 6 : 8, rx: 3, class: visualClass }));
-    if (kind === 'double') shapes.push(svg('rect', { x: x - 16, y: y + 1, width: 32, height: 6, rx: 3, class: visualClass }));
-  } else if (design.id === 'diamond-star') {
-    shapes.push(svg('polygon', { points: kind === 'single' ? diamondPointsAt(x, y, 19) : starPointsAt(x, y, 20, 9), class: visualClass }));
+  elements.push(svg('circle', { cx: x, cy: y, r: 18, class: `piece-visual ${stateClass}` }));
+  if (kind === 'double') {
+    elements.push(svg('circle', { cx: x, cy: y, r: 9, class: `piece-center ${owner === 'white' ? 'obsidian' : 'ivory'}` }));
+    if (capturePart) elements.push(svg('text', { x: x + 22, y: y + 3, class: `double-label${captureClass}` }, `D${capturePart.bit + 1}`));
   }
-  if (design.id === 'bowl-dome') shapes.push(svg('path', { d: kind === 'single' ? `M ${x - 10} ${y + 5} Q ${x} ${y + 12} ${x + 10} ${y + 5}` : `M ${x - 10} ${y - 6} Q ${x} ${y - 14} ${x + 10} ${y - 6}`, class: detailClass }));
-  if (design.id === 'full-split') shapes.push(svg('line', { x1: x, y1: y - 13, x2: x, y2: y + 13, class: detailClass }));
-  return shapes;
+  return elements;
 }
 
 function renderMeta() {
@@ -236,7 +275,7 @@ function renderCapture() {
   const aiCapture = els.mode.value === 'ai' && currentPlayer() === els.aiColor.value;
   choices.forEach((choice, index) => {
     const button = document.createElement('button');
-    button.type = 'button'; button.disabled = aiCapture; button.className = `capture-option${selectedCapture?.id === choice.id ? ' selected' : ''}`;
+    button.type = 'button'; button.disabled = aiCapture || Boolean(activeMotion); button.className = `capture-option${selectedCapture?.id === choice.id ? ' selected' : ''}`;
     button.textContent = choice.label || `Row ${index + 1}`;
     button.addEventListener('click', () => { selectedCapture = choice; refreshCaptureView(); });
     els.captureOptions.appendChild(button);
@@ -255,17 +294,18 @@ function renderCapture() {
       const targetAction = captureActions.find(action => action - 42 - selectedCapture.line * 128 === targetMask);
       const toggle = document.createElement('button');
       const removing = Boolean(currentMask & (1 << bit));
-      toggle.type = 'button'; toggle.className = `capture-toggle${removing ? ' selected' : ''}`; toggle.textContent = removing ? `Remove D${bit + 1}` : `Keep D${bit + 1}`; toggle.disabled = aiCapture || !targetAction;
+      toggle.type = 'button'; toggle.className = `capture-toggle${removing ? ' selected' : ''}`; toggle.textContent = removing ? `Remove D${bit + 1}` : `Keep D${bit + 1}`; toggle.disabled = aiCapture || Boolean(activeMotion) || !targetAction;
       toggle.addEventListener('click', () => { if (targetAction) { selectedCapture = { ...selectedCapture, action: targetAction }; refreshCaptureView(); } });
       els.captureToggles.appendChild(toggle);
     }
   } else {
     els.captureToggles.hidden = true;
   }
-  els.confirmCapture.disabled = !selectedCapture || aiCapture;
+  els.confirmCapture.disabled = !selectedCapture || aiCapture || Boolean(activeMotion);
 }
 
 function refreshCaptureView() {
+  if (activeMotion) return;
   renderCapture();
   renderCaptureHighlight();
   renderPieces();
@@ -294,31 +334,24 @@ function selectedCaptureInfo() {
 }
 
 function choosePoint(key) {
-  if (aiThinking || winnerOf(state) !== 0 || captureChoices().length || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
+  if (activeMotion || aiThinking || winnerOf(state) !== 0 || captureChoices().length || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
   const actions = legalByPoint.get(key) || [];
   if (actions.length !== 1) { showToast(actions.length > 1 ? 'Choose an incoming arrow' : 'That point is not open'); return; }
   const action = actions[0];
   const nextAction = typeof action === 'object' ? { ...action } : action;
-  past.push({ state: clone(state), actor: 'human' });
-  state = game.applyAction(state, nextAction) || state;
-  render();
+  playAction(nextAction, 'human');
 }
 
 function chooseRay(rayId) {
-  if (aiThinking || winnerOf(state) !== 0 || captureChoices().length || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
+  if (activeMotion || aiThinking || winnerOf(state) !== 0 || captureChoices().length || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
   const action = legal.find(candidate => candidate === rayId);
   if (action == null) { showToast('That incoming arrow is unavailable'); return; }
-  past.push({ state: clone(state), actor: 'human' });
-  state = game.applyAction(state, action) || state;
-  render();
+  playAction(action, 'human');
 }
 
 function chooseCapture() {
-  if (!selectedCapture || winnerOf(state) !== 0 || aiThinking || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
-  past.push({ state: clone(state), actor: 'human' });
-  state = game.applyAction(state, selectedCapture.action || { type: 'capture', row: selectedCapture.id || selectedCapture }) || state;
-  selectedCapture = null;
-  render();
+  if (activeMotion || !selectedCapture || winnerOf(state) !== 0 || aiThinking || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
+  playAction(selectedCapture.action || { type: 'capture', row: selectedCapture.id || selectedCapture }, 'human');
 }
 
 function bindControls() {
@@ -347,45 +380,8 @@ function bindControls() {
   [$('rules-close'), $('rules-done')].forEach(button => button.addEventListener('click', () => dialog.close()));
 }
 
-function setupDesignPicker() {
-  els.designsGallery.replaceChildren();
-  DESIGNS.forEach((design, index) => {
-    const card = document.createElement('button');
-    card.type = 'button'; card.className = 'design-card'; card.dataset.design = design.id;
-    card.innerHTML = `<span class="design-number">${String(index + 1).padStart(2, '0')}</span><span class="design-preview-wrap"></span><strong>${design.name}</strong><small>${design.note}</small>`;
-    const preview = svg('svg', { viewBox: '0 0 260 118', class: `design-preview design-preview-${design.id}`, 'aria-hidden': 'true' });
-    preview.appendChild(svg('text', { x: 64, y: 14, class: 'design-preview-group' }, 'IVORY'));
-    preview.appendChild(svg('text', { x: 196, y: 14, class: 'design-preview-group' }, 'OBSIDIAN'));
-    pieceElements({ x: 34, y: 58, owner: 'white', kind: 'single', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
-    pieceElements({ x: 94, y: 58, owner: 'white', kind: 'double', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
-    pieceElements({ x: 166, y: 58, owner: 'black', kind: 'single', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
-    pieceElements({ x: 226, y: 58, owner: 'black', kind: 'double', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
-    [['single', 34], ['double', 94], ['single', 166], ['double', 226]].forEach(([label, x]) => preview.appendChild(svg('text', { x, y: 108, class: 'design-preview-label' }, label)));
-    card.querySelector('.design-preview-wrap').appendChild(preview);
-    card.addEventListener('click', () => { selectedDesign = design.id; persistDesign(); updateDesignGallery(); });
-    els.designsGallery.appendChild(card);
-  });
-  updateDesignGallery();
-  $('designs-open').addEventListener('click', () => els.designsDialog.showModal());
-  $('designs-close').addEventListener('click', () => els.designsDialog.close());
-  $('designs-done').addEventListener('click', () => els.designsDialog.close());
-  if (new URLSearchParams(window.location.search).get('designs') === '1') els.designsDialog.showModal();
-}
-
-function persistDesign() {
-  document.body.dataset.pieceDesign = selectedDesign;
-  try { localStorage.setItem('gipf-piece-design', selectedDesign); } catch { /* private browsing */ }
-  renderPieces();
-}
-
-function updateDesignGallery() {
-  const chosen = DESIGNS.find(design => design.id === selectedDesign) || DESIGNS[0];
-  els.designsSelection.textContent = `${chosen.name} selected`;
-  els.designsGallery.querySelectorAll('.design-card').forEach(card => card.classList.toggle('selected', card.dataset.design === selectedDesign));
-}
-
 async function maybeAiMove() {
-  if (els.mode.value !== 'ai' || aiThinking || aiBlocked || winnerOf(state) !== 0 || currentPlayer() !== els.aiColor.value) return;
+  if (activeMotion || els.mode.value !== 'ai' || aiThinking || aiBlocked || winnerOf(state) !== 0 || currentPlayer() !== els.aiColor.value) return;
   const revision = gameRevision;
   aiThinking = true; els.aiStatus.textContent = 'Machine thinking…'; els.hint.innerHTML = '<span class="hint-dot"></span>Machine is considering the position';
   const budget = { casual: 250, focused: 1000, deep: 2500 }[els.difficulty.value] || 250;
@@ -409,11 +405,11 @@ async function maybeAiMove() {
     els.aiStatus.textContent = config.aiEndpoint ? 'Machine unavailable · local mode' : 'No machine connected';
   } else {
     aiModelName = responseModel || aiModelName;
-    past.push({ state: clone(state), actor: 'ai' }); state = game.applyAction(state, action) || state;
   }
   aiThinking = false;
   if (endpointSucceeded) els.aiStatus.textContent = aiModelName ? `${aiModelName} ready` : 'Machine endpoint ready';
-  render();
+  if (isLegal) playAction(action, 'ai');
+  else render();
 }
 
 async function checkAiStatus() {
@@ -430,6 +426,7 @@ async function checkAiStatus() {
 
 function showPreview(key) {
   clearPreview();
+  if (activeMotion) return;
   if (!legalByPoint.has(key)) return;
   const node = game.geometry.byKey[key];
   const action = legalByPoint.get(key)[0];
@@ -439,6 +436,7 @@ function showPreview(key) {
 }
 function showPreviewRay(rayId) {
   clearPreview();
+  if (activeMotion) return;
   if (!legal.includes(rayId)) return;
   const ray = game.geometry.rays[rayId];
   if (ray) els.interaction.appendChild(svg('line', { x1: ray.outer.x, y1: ray.outer.y, x2: ray.inner.x, y2: ray.inner.y, class: 'push-preview' }));
@@ -519,12 +517,4 @@ function rayHitTarget(ray) {
 }
 function svg(tag, attrs, text = '') { const element = document.createElementNS(svgNS, tag); Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value)); if (text) element.appendChild(document.createTextNode(text)); return element; }
 function hexPoints(radius) { return Array.from({ length: 6 }, (_, i) => { const angle = (-90 + i * 60) * Math.PI / 180; return `${400 + Math.cos(angle) * radius},${400 + Math.sin(angle) * radius}`; }).join(' '); }
-function hexPointsAt(x, y, radius) { return Array.from({ length: 6 }, (_, i) => { const angle = (-90 + i * 60) * Math.PI / 180; return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`; }).join(' '); }
-function octagonPointsAt(x, y, radius) { return Array.from({ length: 8 }, (_, i) => { const angle = (22.5 + i * 45) * Math.PI / 180; return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`; }).join(' '); }
-function gemPointsAt(x, y, radius) { return Array.from({ length: 8 }, (_, i) => { const angle = (-90 + i * 45) * Math.PI / 180; const scale = i % 2 ? .72 : 1; return `${x + Math.cos(angle) * radius * scale},${y + Math.sin(angle) * radius * scale}`; }).join(' '); }
-function diamondPointsAt(x, y, radius) { return `${x},${y - radius} ${x + radius},${y} ${x},${y + radius} ${x - radius},${y}`; }
-function starPointsAt(x, y, outer, inner) { return Array.from({ length: 8 }, (_, i) => { const angle = (-90 + i * 45) * Math.PI / 180; const radius = i % 2 ? inner : outer; return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`; }).join(' '); }
-function scallopPointsAt(x, y, radius, lobes) { return Array.from({ length: lobes * 2 }, (_, i) => { const angle = (-90 + i * 360 / (lobes * 2)) * Math.PI / 180; const r = i % 2 ? radius - 3 : radius; return `${x + Math.cos(angle) * r},${y + Math.sin(angle) * r}`; }).join(' '); }
-function lobePath(x, y, direction) { const shift = direction * 8; return `M ${x - 10 + shift} ${y} A 10 10 0 1 1 ${x + 10 + shift} ${y} A 10 10 0 1 1 ${x - 10 + shift} ${y} Z`; }
-function splitDiscPath(x, y, radius) { const gap = 2; return `M ${x - gap} ${y - radius} A ${radius} ${radius} 0 0 0 ${x - gap} ${y + radius} L ${x - gap} ${y + radius} L ${x - gap} ${y - radius} Z M ${x + gap} ${y - radius} A ${radius} ${radius} 0 0 1 ${x + gap} ${y + radius} L ${x + gap} ${y + radius} L ${x + gap} ${y - radius} Z`; }
 function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2400); }
