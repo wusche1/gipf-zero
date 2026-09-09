@@ -4,16 +4,16 @@ from test_browser_mapping import browser, block_external_fonts, site_url
 
 
 DESIGN_IDS = [
-    "natural-stack",
-    "tall-stack",
-    "offset-stack",
-    "concentric-ring",
-    "engraved-ii",
-    "twin-pips",
-    "petite-top",
-    "hex-outline",
-    "cut-groove",
-    "contrast-band",
+    "minimal-flat",
+    "bevel-checker",
+    "geometric-hex",
+    "ceramic-square",
+    "frosted-glass",
+    "warm-wood",
+    "go-pebble",
+    "faceted-gem",
+    "graphic-donut",
+    "sculpted-puck",
 ]
 
 
@@ -38,12 +38,11 @@ def test_gallery_shows_ten_designs_and_applies_each_to_the_board(browser, site_u
         assert page.locator("#designs-dialog").is_visible()
         assert page.locator(".design-card").count() == 10
         first_preview = page.locator(".design-card").first.locator(".design-preview")
-        assert first_preview.locator(".preview-piece").count() == 6
+        assert first_preview.locator(".piece-visual").count() == 6
         assert first_preview.locator(".design-preview-group").all_text_contents() == ["IVORY", "OBSIDIAN"]
         assert first_preview.locator(".design-preview-label").all_text_contents() == ["single", "double", "single", "double"]
-        engraved = page.locator('.design-card[data-design="engraved-ii"] .design-detail')
-        assert engraved.count() == 4
-        assert engraved.evaluate_all("elements => elements.every(element => element.getAttribute('height') === '10')")
+        shape_tags = page.locator(".design-preview .piece-visual").evaluate_all("elements => [...new Set(elements.map(element => element.tagName))]")
+        assert len(shape_tags) >= 4
         for design_id in DESIGN_IDS:
             page.locator(f'.design-card[data-design="{design_id}"]').click()
             assert page.locator("body").get_attribute("data-piece-design") == design_id
@@ -56,11 +55,11 @@ def test_gallery_shows_ten_designs_and_applies_each_to_the_board(browser, site_u
 def test_selected_design_persists_after_reload(browser, site_url):
     page = design_page(browser, site_url)
     try:
-        page.locator('.design-card[data-design="hex-outline"]').click()
+        page.locator('.design-card[data-design="geometric-hex"]').click()
         page.get_by_role("button", name="Play with this design").click()
         page.reload(wait_until="domcontentloaded")
         page.locator("#engine-status").wait_for(state="visible")
-        assert page.locator("body").get_attribute("data-piece-design") == "hex-outline"
-        assert page.locator("#piece-layer .piece-design-hex-outline").count() > 0
+        assert page.locator("body").get_attribute("data-piece-design") == "geometric-hex"
+        assert page.locator("#piece-layer .piece-design-geometric-hex").count() > 0
     finally:
         page.close()

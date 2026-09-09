@@ -176,6 +176,41 @@ dialog::backdrop { background: rgba(37,31,27,.34); backdrop-filter: blur(3px); }
   .control-card, .capture-card { padding: 16px; }
 }
 
+/* Each selected design changes the silhouette as well as its surface treatment. */
+.semantic-piece { opacity: 0; pointer-events: none; }
+.piece-visual { stroke: rgba(32,39,40,.34); stroke-width: 1.7; filter: url(#soft-shadow); pointer-events: none; }
+.piece-visual.ivory { fill: url(#ivory-piece); }
+.piece-visual.obsidian { fill: url(#ink-piece); stroke: #101716; }
+.double-outline { fill: none; stroke-width: 2.4; opacity: .8; pointer-events: none; }
+.ivory-outline { stroke: #a59d92; }
+.obsidian-outline { stroke: #69736e; }
+.design-bevel-checker.ivory { fill: #f3eee5; stroke: #a59f96; }
+.design-bevel-checker.obsidian { fill: #27302f; stroke: #111817; }
+.design-geometric-hex.ivory { fill: #e8e0d4; stroke: #928a80; }
+.design-geometric-hex.obsidian { fill: #273230; stroke: #0d1313; }
+.design-ceramic-square.ivory { fill: #faf5eb; stroke: #b8aea1; }
+.design-ceramic-square.obsidian { fill: #293533; stroke: #121a19; }
+.design-frosted-glass.ivory { fill: rgba(251,250,246,.78); stroke: #b7c1bb; stroke-width: 2.6; }
+.design-frosted-glass.obsidian { fill: rgba(43,55,53,.82); stroke: #869692; stroke-width: 2.6; }
+.design-warm-wood.ivory { fill: #cda77b; stroke: #977052; }
+.design-warm-wood.obsidian { fill: #4a3028; stroke: #261b18; }
+.design-go-pebble.ivory { fill: #eee7dd; stroke: #a69c8f; }
+.design-go-pebble.obsidian { fill: #171d1d; stroke: #090d0d; }
+.design-faceted-gem.ivory { fill: #d7e1dc; stroke: #718983; }
+.design-faceted-gem.obsidian { fill: #203d3b; stroke: #101d1c; }
+.design-graphic-donut.ivory { fill: #fcf8ef; stroke: #202827; stroke-width: 2.6; }
+.design-graphic-donut.obsidian { fill: #182120; stroke: #cbbd9e; stroke-width: 2.6; }
+.design-sculpted-puck.ivory { fill: #ddd3c8; stroke: #91867a; }
+.design-sculpted-puck.obsidian { fill: #303b39; stroke: #111918; }
+.design-detail { fill: none; stroke-width: 2; opacity: .9; pointer-events: none; }
+.ivory-detail { stroke: #887d71; fill: #887d71; }
+.obsidian-detail { stroke: #cfb980; fill: #cfb980; }
+.design-donut-hole { fill: var(--paper); stroke: none; opacity: .95; pointer-events: none; }
+.capture-remove { stroke: #b4573f !important; stroke-width: 3.2 !important; filter: drop-shadow(0 0 4px rgba(180,87,63,.65)); }
+.capture-keep { stroke: #6c9278 !important; stroke-width: 2.8 !important; filter: drop-shadow(0 0 3px rgba(108,146,120,.5)); }
+.design-detail.capture-remove { fill: #b4573f !important; }
+.design-detail.capture-keep { fill: #6c9278 !important; }
+
 .designs-button { width: 100%; display: flex; align-items: center; gap: 11px; margin-top: 9px; padding: 11px 10px; color: var(--ink); text-align: left; border: 1px solid var(--line); border-radius: 7px; background: rgba(255,253,249,.36); transition: border-color .18s, background .18s, transform .18s; }
 .designs-button:hover { border-color: rgba(180,87,63,.5); background: rgba(255,250,245,.9); }
 .designs-button:active { transform: translateY(1px); }
