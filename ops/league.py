@@ -11,20 +11,27 @@ from ops.promote import promote
 ROOT=Path(__file__).resolve().parents[1]
 
 def run(command, log, seconds):
+    import signal
     with log.open('w') as stream:
         process=subprocess.Popen([sys.executable,'-u',*command],cwd=ROOT,stdout=stream,stderr=subprocess.STDOUT,start_new_session=True)
         start=time.monotonic()
-        while process.poll() is None:
-            if time.monotonic()-start>seconds:
-                import signal
+        try:
+            while process.poll() is None:
+                if time.monotonic()-start>seconds:raise TimeoutError(str(command))
+                time.sleep(5)
+            if process.returncode:raise RuntimeError(f'Command failed ({process.returncode}); see {log}')
+        finally:
+            if process.poll() is None:
                 os.killpg(process.pid,signal.SIGTERM)
                 try:process.wait(timeout=15)
-                except subprocess.TimeoutExpired:os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=10)
-                raise TimeoutError(str(command))
-            time.sleep(5)
-        if process.returncode:raise RuntimeError(f'Command failed ({process.returncode}); see {log}')
+                except subprocess.TimeoutExpired:
+                    os.killpg(process.pid,signal.SIGKILL);process.wait(timeout=10)
+
 
 def main():
+    import signal
+    def stop(*_):raise SystemExit(0)
+    signal.signal(signal.SIGTERM,stop)
     p=argparse.ArgumentParser();p.add_argument('--run',required=True);p.add_argument('--interval',type=int,default=1800);p.add_argument('--deadline',type=float,required=True);a=p.parse_args()
     folder=ROOT/a.run; archive=ROOT/'checkpoints/league';archive.mkdir(parents=True,exist_ok=True)
     heartbeat=folder/'league-heartbeat.json';last_hash=None;next_check=time.time()+a.interval

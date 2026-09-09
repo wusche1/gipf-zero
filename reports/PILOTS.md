@@ -152,8 +152,9 @@ Batch scaling also showed residual search throughput improving from about
 32,000 root-simulations/s at 128 roots to 40,600 at 512 roots; the MLP showed
 little gain above 128 ([measurements](search-batch-scaling.json)). Both trainers
 checkpointed and restarted to adopt native expansion. Residual self-play now
-uses 512 concurrent games; MLP remains at 128. Training targets and update
-ratio per completed game are unchanged. The batch and native-expansion gains
+uses 512 concurrent games; MLP remains at 128. Training targets, the 64-completed-game update threshold and the 64 updates
+per training iteration are unchanged; larger batches can overshoot that
+threshold, so the realized updates-per-game ratio can differ. The batch and native-expansion gains
 were measured separately and should not simply be multiplied.
 
 At equal 50 ms CPU search, the 5,666-game hex pilot lost **6–74** to the
