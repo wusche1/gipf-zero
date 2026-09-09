@@ -1,0 +1,720 @@
+{
+  "candidate": "/workspace/gipf/checkpoints/league/candidate-174459.pt",
+  "champion": "/workspace/gipf/checkpoints/league/champion-174459.pt",
+  "hashes": [
+    "836e5efd04e93333822cfada5956631a9e8b1c0e6623089b8c33f66aeb63112a",
+    "5cfd7a74199de914b42e9eaa3d89e4b236884117b6d3e88d9ed66a33a9ecd970"
+  ],
+  "models": [
+    {
+      "games": 9410,
+      "iteration": 206,
+      "config": {
+        "kind": "resnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      }
+    },
+    {
+      "games": 10084,
+      "iteration": 194,
+      "config": {
+        "kind": "mlp",
+        "width": 256,
+        "blocks": 2,
+        "head": "flat"
+      }
+    }
+  ],
+  "wins": 47,
+  "losses": 32,
+  "cutoffs": 1,
+  "unfinished": 0,
+  "win_rate_decisive": 0.5949367088607594,
+  "wilson_95_decisive": [
+    0.4847315399147578,
+    0.6963372173661428
+  ],
+  "candidate_root_simulations": {
+    "count": 3944,
+    "mean": 226.71399594320488,
+    "min": 50,
+    "max": 10000
+  },
+  "champion_root_simulations": {
+    "count": 3869,
+    "mean": 412.96743344533473,
+    "min": 119,
+    "max": 10000
+  },
+  "candidate_search_seconds": {
+    "count": 3944,
+    "mean": 0.05011794672198367,
+    "min": 0.02554900199174881,
+    "max": 0.06776728853583336
+  },
+  "champion_search_seconds": {
+    "count": 3869,
+    "mean": 0.05000766152773571,
+    "min": 0.025121215730905533,
+    "max": 0.09673315659165382
+  },
+  "elapsed_seconds": 391.94085036218166,
+  "config": {
+    "candidate": "/workspace/gipf/checkpoints/league/candidate-174459.pt",
+    "champion": "/workspace/gipf/checkpoints/league/champion-174459.pt",
+    "games": 80,
+    "batch": 1,
+    "simulations": 10000,
+    "seed": 474459,
+    "max_ply": 300,
+    "seconds": 1200,
+    "output": "/workspace/gipf/reports/league-174459-duel.json",
+    "device": "cpu",
+    "threads": 1,
+    "budget_ms": 50.0
+  },
+  "records": [
+    {
+      "game": 0,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 48
+    },
+    {
+      "game": 1,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 140
+    },
+    {
+      "game": 2,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 63
+    },
+    {
+      "game": 3,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 146
+    },
+    {
+      "game": 4,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 79
+    },
+    {
+      "game": 5,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 54
+    },
+    {
+      "game": 6,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 36
+    },
+    {
+      "game": 7,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 70
+    },
+    {
+      "game": 8,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 91
+    },
+    {
+      "game": 9,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 40
+    },
+    {
+      "game": 10,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 56
+    },
+    {
+      "game": 11,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 86
+    },
+    {
+      "game": 12,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 91
+    },
+    {
+      "game": 13,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 169
+    },
+    {
+      "game": 14,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 101
+    },
+    {
+      "game": 15,
+      "candidate_color": -1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 16,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 93
+    },
+    {
+      "game": 17,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 61
+    },
+    {
+      "game": 18,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 103
+    },
+    {
+      "game": 19,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 99
+    },
+    {
+      "game": 20,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 88
+    },
+    {
+      "game": 21,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 91
+    },
+    {
+      "game": 22,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 54
+    },
+    {
+      "game": 23,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 62
+    },
+    {
+      "game": 24,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 50
+    },
+    {
+      "game": 25,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 108
+    },
+    {
+      "game": 26,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 108
+    },
+    {
+      "game": 27,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 62
+    },
+    {
+      "game": 28,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 175
+    },
+    {
+      "game": 29,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 124
+    },
+    {
+      "game": 30,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 36
+    },
+    {
+      "game": 31,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 43
+    },
+    {
+      "game": 32,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 47
+    },
+    {
+      "game": 33,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 62
+    },
+    {
+      "game": 34,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 67
+    },
+    {
+      "game": 35,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 128
+    },
+    {
+      "game": 36,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 91
+    },
+    {
+      "game": 37,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 73
+    },
+    {
+      "game": 38,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 94
+    },
+    {
+      "game": 39,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 136
+    },
+    {
+      "game": 40,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 62
+    },
+    {
+      "game": 41,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 147
+    },
+    {
+      "game": 42,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 50
+    },
+    {
+      "game": 43,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 70
+    },
+    {
+      "game": 44,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 81
+    },
+    {
+      "game": 45,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 73
+    },
+    {
+      "game": 46,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 117
+    },
+    {
+      "game": 47,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 82
+    },
+    {
+      "game": 48,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 81
+    },
+    {
+      "game": 49,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 78
+    },
+    {
+      "game": 50,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 65
+    },
+    {
+      "game": 51,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 59
+    },
+    {
+      "game": 52,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 30
+    },
+    {
+      "game": 53,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 152
+    },
+    {
+      "game": 54,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 52
+    },
+    {
+      "game": 55,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 64
+    },
+    {
+      "game": 56,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 89
+    },
+    {
+      "game": 57,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 64
+    },
+    {
+      "game": 58,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 64
+    },
+    {
+      "game": 59,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 86
+    },
+    {
+      "game": 60,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 57
+    },
+    {
+      "game": 61,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 59
+    },
+    {
+      "game": 62,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 61
+    },
+    {
+      "game": 63,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 39
+    },
+    {
+      "game": 64,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 154
+    },
+    {
+      "game": 65,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 91
+    },
+    {
+      "game": 66,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 47
+    },
+    {
+      "game": 67,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 83
+    },
+    {
+      "game": 68,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 41
+    },
+    {
+      "game": 69,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 61
+    },
+    {
+      "game": 70,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 83
+    },
+    {
+      "game": 71,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 122
+    },
+    {
+      "game": 72,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 70
+    },
+    {
+      "game": 73,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 69
+    },
+    {
+      "game": 74,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 97
+    },
+    {
+      "game": 75,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 136
+    },
+    {
+      "game": 76,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 59
+    },
+    {
+      "game": 77,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 47
+    },
+    {
+      "game": 78,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 57
+    },
+    {
+      "game": 79,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 114
+    }
+  ]
+}
