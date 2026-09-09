@@ -13,6 +13,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -398,6 +399,148 @@ class State {
   }
 };
 
+#ifndef GIPF_WASM
+// Native tree nodes keep rule-state ownership and PUCT traversal out of the
+// Python inner loop.  Neural evaluation remains deliberately in Python, where
+// PyTorch can batch pending leaf states on the GPU.
+struct NativeNode {
+  explicit NativeNode(const State& initial) : state(initial), actor(state.current_player()) {}
+
+  State state;
+  int actor;
+  bool expanded = false;
+  std::vector<int> actions;
+  std::vector<double> priors;
+  std::vector<int32_t> visits;
+  std::vector<double> values;
+  std::vector<std::shared_ptr<NativeNode>> children;
+
+  void expand(const float* logits, py::ssize_t logits_size) {
+    actions = state.legal_actions();
+    if (actions.empty()) throw std::invalid_argument("cannot expand a terminal state");
+    int max_action = 0;
+    for (int action : actions) max_action = std::max(max_action, action);
+    if (logits_size <= max_action) throw std::invalid_argument("logits do not cover every legal action");
+    double maximum = -std::numeric_limits<double>::infinity();
+    for (int action : actions) maximum = std::max(maximum, static_cast<double>(logits[action]));
+    priors.resize(actions.size());
+    double total = 0.0;
+    for (size_t i = 0; i < actions.size(); ++i) {
+      priors[i] = std::exp(static_cast<double>(logits[actions[i]]) - maximum);
+      total += priors[i];
+    }
+    for (double& prior : priors) prior /= total;
+    visits.assign(actions.size(), 0);
+    values.assign(actions.size(), 0.0);
+    children.resize(actions.size());
+    expanded = true;
+  }
+
+  size_t select(double cpuct) const {
+    int64_t total = 0;
+    for (int32_t visit : visits) total += visit;
+    const double sqrt_total = std::sqrt(1.0 + static_cast<double>(total));
+    size_t best = 0;
+    double best_score = (visits[0] == 0 ? 0.0 : values[0] / static_cast<double>(visits[0])) +
+        (cpuct * priors[0]) * sqrt_total / (1.0 + static_cast<double>(visits[0]));
+    for (size_t i = 1; i < actions.size(); ++i) {
+      const double score = (visits[i] == 0 ? 0.0 : values[i] / static_cast<double>(visits[i])) +
+          (cpuct * priors[i]) * sqrt_total / (1.0 + static_cast<double>(visits[i]));
+      if (score > best_score) { best = i; best_score = score; }
+    }
+    return best;
+  }
+
+  std::shared_ptr<NativeNode> child(size_t index) {
+    if (index >= children.size()) throw std::out_of_range("native child index");
+    if (!children[index]) {
+      State next = state.clone();
+      next.apply(actions[index]);
+      children[index] = std::make_shared<NativeNode>(next);
+    }
+    return children[index];
+  }
+
+  std::shared_ptr<NativeNode> existing_child(size_t index) const {
+    if (index >= children.size()) return nullptr;
+    return children[index];
+  }
+
+  void mix_noise(const std::vector<double>& noise) {
+    if (!expanded || noise.size() != priors.size()) throw std::invalid_argument("noise length must match expanded actions");
+    for (size_t i = 0; i < priors.size(); ++i) priors[i] = .75 * priors[i] + .25 * noise[i];
+  }
+};
+
+struct NativePathEntry { std::shared_ptr<NativeNode> node; size_t action; };
+struct NativePending { std::shared_ptr<NativeNode> leaf; std::vector<NativePathEntry> path; };
+
+class NativeForest {
+ public:
+  explicit NativeForest(std::vector<std::shared_ptr<NativeNode>> roots) : roots_(std::move(roots)) {}
+
+  std::vector<State> select_leaves(double cpuct) {
+    pending_.clear();
+    std::vector<State> states;
+    for (const auto& root : roots_) {
+      std::shared_ptr<NativeNode> node = root;
+      std::vector<NativePathEntry> path;
+      while (node->expanded && node->state.winner() == 0) {
+        const size_t choice = node->select(cpuct);
+        path.push_back({node, choice});
+        node = node->child(choice);
+      }
+      if (node->state.winner() != 0) {
+        backup(path, static_cast<double>(node->state.winner()));
+      } else {
+        states.push_back(node->state.clone());
+        pending_.push_back({node, std::move(path)});
+      }
+    }
+    return states;
+  }
+
+  std::vector<State> expand_unexpanded_roots() {
+    pending_.clear();
+    std::vector<State> states;
+    for (const auto& root : roots_) {
+      if (root->state.winner() == 0 && !root->expanded) {
+        states.push_back(root->state.clone());
+        pending_.push_back({root, {}});
+      }
+    }
+    return states;
+  }
+
+  void finish(py::array_t<float, py::array::c_style | py::array::forcecast> logits,
+              py::array_t<float, py::array::c_style | py::array::forcecast> leaf_values) {
+    const auto scores = logits.request();
+    const auto values = leaf_values.request();
+    if (scores.ndim != 2 || values.ndim != 1 || scores.shape[0] != values.shape[0] ||
+        scores.shape[0] != static_cast<py::ssize_t>(pending_.size()))
+      throw std::invalid_argument("native forest logits and values must match pending leaves");
+    const auto* score_data = static_cast<const float*>(scores.ptr);
+    const auto* value_data = static_cast<const float*>(values.ptr);
+    for (size_t i = 0; i < pending_.size(); ++i) {
+      NativePending& pending = pending_[i];
+      pending.leaf->expand(score_data + i * scores.shape[1], scores.shape[1]);
+      backup(pending.path, static_cast<double>(value_data[i]) * pending.leaf->actor);
+    }
+    pending_.clear();
+  }
+
+ private:
+  static void backup(const std::vector<NativePathEntry>& path, double white_value) {
+    for (const auto& entry : path) {
+      ++entry.node->visits[entry.action];
+      entry.node->values[entry.action] += white_value * entry.node->actor;
+    }
+  }
+  std::vector<std::shared_ptr<NativeNode>> roots_;
+  std::vector<NativePending> pending_;
+};
+#endif
+
 }  // namespace
 
 #ifndef GIPF_WASM
@@ -420,6 +563,23 @@ PYBIND11_MODULE(gipf_engine, m) {
       .def_property_readonly("phase", &State::phase)
       .def_property_readonly("winner", &State::winner)
       .def_property_readonly("ply", &State::ply);
+  py::class_<NativeNode, std::shared_ptr<NativeNode>>(m, "NativeNode")
+      .def(py::init<const State&>())
+      .def("child", &NativeNode::child)
+      .def("existing_child", &NativeNode::existing_child)
+      .def("mix_noise", &NativeNode::mix_noise)
+      .def_property_readonly("state", [](NativeNode& node) -> State& { return node.state; }, py::return_value_policy::reference_internal)
+      .def_property_readonly("actor", [](const NativeNode& node) { return node.actor; })
+      .def_property_readonly("expanded", [](const NativeNode& node) { return node.expanded; })
+      .def_property_readonly("actions", [](const NativeNode& node) { return node.actions; })
+      .def_property_readonly("priors", [](const NativeNode& node) { return node.priors; })
+      .def_property_readonly("visits", [](const NativeNode& node) { return node.visits; })
+      .def_property_readonly("values", [](const NativeNode& node) { return node.values; });
+  py::class_<NativeForest>(m, "NativeForest")
+      .def(py::init<std::vector<std::shared_ptr<NativeNode>>>())
+      .def("expand_unexpanded_roots", &NativeForest::expand_unexpanded_roots)
+      .def("select_leaves", &NativeForest::select_leaves, py::arg("cpuct"))
+      .def("finish", &NativeForest::finish, py::arg("logits"), py::arg("values"));
   m.def("geometry", &State::geometry);
   m.def("encode_batch", [](const std::vector<State>& states) {
     constexpr py::ssize_t kPlanes = 9;

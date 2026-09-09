@@ -29,9 +29,15 @@ def main():
     p.add_argument('--seed',type=int,default=1);p.add_argument('--resume');p.add_argument('--device',default='cuda')
     p.add_argument('--cuda-graph-batch',type=int,default=0,
                    help='opt-in fixed CUDA-graph inference batch (0 keeps eager inference)')
+    p.add_argument('--native-forest',action='store_true',
+                   help='opt-in C++ rule-tree traversal and backup for self-play')
     args=p.parse_args();out=Path(args.run);out.mkdir(parents=True,exist_ok=True)
     if args.cuda_graph_batch<0:p.error('--cuda-graph-batch must be non-negative')
     effective_cuda_graph_batch=args.cuda_graph_batch if args.device.startswith('cuda') else 0
+    NodeClass,SearchClass,search_backend=Node,BatchedMCTS,'python'
+    if args.native_forest:
+        from .native_search import NativeNode,NativeBatchedMCTS
+        NodeClass,SearchClass,search_backend=NativeNode,NativeBatchedMCTS,'native_forest'
     torch.set_num_threads(4);torch.manual_seed(args.seed);np.random.seed(args.seed);random.seed(args.seed)
     if args.device.startswith('cuda'):torch.backends.cuda.matmul.allow_tf32=True;torch.backends.cudnn.allow_tf32=True
     rng=np.random.default_rng(args.seed)
@@ -55,12 +61,12 @@ def main():
                                                 'effective_cuda_graph_batch':effective_cuda_graph_batch},indent=2)+'\n')
     start=time.monotonic();end=start+args.seconds
     if args.deadline:end=min(end,start+args.deadline-time.time())
-    search=BatchedMCTS(model,args.device,seed=args.seed,cuda_graph_batch=effective_cuda_graph_batch)
+    search=SearchClass(model,args.device,seed=args.seed,cuda_graph_batch=effective_cuda_graph_batch)
     if resume_data is not None and 'search_rng' in resume_data:search.rng.bit_generator.state=resume_data['search_rng']
-    roots=[Node(ge.State()) for _ in range(args.games)];histories=[[] for _ in roots]
+    roots=[NodeClass(ge.State()) for _ in range(args.games)];histories=[[] for _ in roots]
     last_heartbeat=0;last_checkpoint=start;last_replay_save=0;session_games=0;start_decisions=decisions
     def log(event,**kw):
-        record={'inference_backend':'cuda_graph' if search.inference is not None and search.inference.graph is not None and not search.inference.disabled else 'eager','event':event,'time':time.time(),'elapsed':round(time.monotonic()-start,2),'iteration':iteration,'games':finished,'session_games':session_games,'decisions':decisions,'updates':updates,'replay':len(replay),'cutoffs':cutoffs,**kw}
+        record={'search_backend':search_backend,'inference_backend':'cuda_graph' if search.inference is not None and search.inference.graph is not None and not search.inference.disabled else 'eager','event':event,'time':time.time(),'elapsed':round(time.monotonic()-start,2),'iteration':iteration,'games':finished,'session_games':session_games,'decisions':decisions,'updates':updates,'replay':len(replay),'cutoffs':cutoffs,**kw}
         with (out/'metrics.jsonl').open('a') as f:f.write(json.dumps(record)+'\n')
         (out/'heartbeat.json').write_text(json.dumps(record)+'\n')
         print(json.dumps(record),flush=True)
@@ -90,7 +96,7 @@ def main():
                 histories[i].append((encode(root.state).astype(np.float16),root.actions.astype(np.int16),pi.astype(np.float16),root.actor))
                 child=root.children.get(selected)
                 if child is None:
-                    state=root.state.clone();state.apply(int(root.actions[selected]));child=Node(state)
+                    state=root.state.clone();state.apply(int(root.actions[selected]));child=NodeClass(state)
                 roots[i]=child;decisions+=1
                 terminal=child.state.winner
                 # Do not label a position zero merely because the final allowed
@@ -99,7 +105,7 @@ def main():
                 if terminal or cutoff:
                     finished+=1;session_games+=1;cutoffs+=int(not terminal)
                     for x,actions,policy,actor in histories[i]:replay.append((x,actions,policy,float(terminal*actor)))
-                    roots[i]=Node(ge.State());histories[i]=[]
+                    roots[i]=NodeClass(ge.State());histories[i]=[]
             now=time.monotonic()
             if now-last_heartbeat>=15:
                 log('selfplay',evaluations=search.evaluations,decisions_per_second=round((decisions-start_decisions)/max(.01,now-start),2));last_heartbeat=now
@@ -125,7 +131,7 @@ def main():
                     optimizer.step();updates+=1;losses.append((ploss.item(),vloss.item()));gradnorms.append(float(gn))
                 model.eval();iteration+=1;last_finished=finished
                 # Stale priors/values from old weights must not persist across updates.
-                roots=[Node(r.state) for r in roots]
+                roots=[NodeClass(r.state) for r in roots]
                 means=np.mean(losses,axis=0) if losses else [0,0]
                 log('train',policy_loss=float(means[0]),value_loss=float(means[1]),gradient_norm=float(np.mean(gradnorms)) if gradnorms else 0)
                 checkpoint();last_checkpoint=time.monotonic()
