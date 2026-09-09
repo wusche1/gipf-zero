@@ -1,31 +1,40 @@
 {
-  "name": "GIPF Zero \u2014 first champion",
+  "name": "GIPF Zero \u2014 1,721 games",
   "kind": "rl",
-  "games_trained": 1065,
-  "iteration": 33,
+  "games_trained": 1721,
+  "iteration": 53,
   "architecture": {
     "kind": "mlp",
     "width": 128,
     "blocks": 2
   },
-  "source_checkpoint_sha256": "74d2ebbd767360edca72c0f2599803f0f29fee1de5ee5fd3afb799193a5cb4cb",
-  "updated_utc": "2026-09-09T16:04:28.495584+00:00",
-  "evaluation": {
-    "random": {
-      "wins": 200,
+  "source_checkpoint_sha256": "4c800b2daf50aa543ae852d8f77a22cb85842dbef64866790d438a57a389c28d",
+  "updated_utc": "2026-09-09T16:09:42.119680+00:00",
+  "evaluations": [
+    {
+      "report": "reports/pilot_mlp128-vs-random.json",
+      "opponent": "random",
+      "wins": 40,
       "losses": 0,
-      "cutoffs": 0
+      "cutoffs": 0,
+      "unfinished": 0
     },
-    "greedy": {
-      "wins": 173,
-      "losses": 26,
-      "cutoffs": 1
+    {
+      "report": "reports/pilot_mlp128-vs-greedy.json",
+      "opponent": "greedy",
+      "wins": 39,
+      "losses": 1,
+      "cutoffs": 0,
+      "unfinished": 0
     },
-    "mcts128": {
-      "wins": 27,
-      "losses": 13,
-      "cutoffs": 0
+    {
+      "report": "reports/duel-flat1721-vs-first.json",
+      "opponent": "checkpoints/champion.pt",
+      "wins": 63,
+      "losses": 12,
+      "cutoffs": 5,
+      "unfinished": 0
     }
-  },
-  "evaluation_settings": "128 neural simulations per decision; fixed baselines capped at50ms; paired colors and4 seeded opening plies."
+  ],
+  "evaluation_settings": "See linked reports for fixed simulation counts, baseline time budgets, paired opening seeds, and cutoffs."
 }

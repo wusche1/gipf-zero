@@ -106,3 +106,10 @@ def test_champion_schema_and_loading_metadata(tmp_path, monkeypatch):
     assert result["action"] in ge.State().legal_actions()
     assert result["kind"] == "rl"
     assert api.model_info == {"name": "RL champion", "iteration": 3, "games": 12}
+
+def test_chunked_body_is_bounded():
+    from fastapi.testclient import TestClient
+    from server.app import app
+    with TestClient(app) as client:
+        response=client.post('/api/move',content=iter([b'x'*5000,b'y'*5000]),headers={'content-type':'application/json'})
+        assert response.status_code==413

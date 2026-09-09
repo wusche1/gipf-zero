@@ -1,0 +1,611 @@
+{
+  "candidate": "checkpoints/pilot-flat-final.pt",
+  "champion": "checkpoints/champion.pt",
+  "hashes": [
+    "4c800b2daf50aa543ae852d8f77a22cb85842dbef64866790d438a57a389c28d",
+    "f1307e56ac10a3f970762ac10e397bc81f09e302cc482d253f6a3d4dcd5e8118"
+  ],
+  "models": [
+    {
+      "games": 1721,
+      "iteration": 53,
+      "config": {
+        "kind": "mlp",
+        "width": 128,
+        "blocks": 2
+      }
+    },
+    {
+      "games": 1065,
+      "iteration": 33,
+      "config": {
+        "kind": "mlp",
+        "width": 128,
+        "blocks": 2
+      }
+    }
+  ],
+  "wins": 63,
+  "losses": 12,
+  "cutoffs": 5,
+  "unfinished": 0,
+  "win_rate_decisive": 0.84,
+  "wilson_95_decisive": [
+    0.7408329231474534,
+    0.9060348639642385
+  ],
+  "elapsed_seconds": 93.26417085900903,
+  "config": {
+    "candidate": "checkpoints/pilot-flat-final.pt",
+    "champion": "checkpoints/champion.pt",
+    "games": 80,
+    "batch": 64,
+    "simulations": 128,
+    "seed": 84113,
+    "max_ply": 300,
+    "seconds": 210,
+    "output": "reports/duel-flat1721-vs-first.json"
+  },
+  "records": [
+    {
+      "game": 20,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 25
+    },
+    {
+      "game": 35,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 26
+    },
+    {
+      "game": 17,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 30
+    },
+    {
+      "game": 32,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 29
+    },
+    {
+      "game": 18,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 31
+    },
+    {
+      "game": 62,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 29
+    },
+    {
+      "game": 34,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33
+    },
+    {
+      "game": 42,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 33
+    },
+    {
+      "game": 7,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38
+    },
+    {
+      "game": 29,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 38
+    },
+    {
+      "game": 33,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 42
+    },
+    {
+      "game": 50,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43
+    },
+    {
+      "game": 36,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43
+    },
+    {
+      "game": 10,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 45
+    },
+    {
+      "game": 2,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "ply": 46
+    },
+    {
+      "game": 59,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 50
+    },
+    {
+      "game": 16,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 51
+    },
+    {
+      "game": 27,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 50
+    },
+    {
+      "game": 60,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 51
+    },
+    {
+      "game": 61,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 52
+    },
+    {
+      "game": 48,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 53
+    },
+    {
+      "game": 12,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 55
+    },
+    {
+      "game": 19,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 55
+    },
+    {
+      "game": 51,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 56
+    },
+    {
+      "game": 13,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 57
+    },
+    {
+      "game": 1,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 60
+    },
+    {
+      "game": 56,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 59
+    },
+    {
+      "game": 69,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 34
+    },
+    {
+      "game": 25,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 60
+    },
+    {
+      "game": 26,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "ply": 62
+    },
+    {
+      "game": 49,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 62
+    },
+    {
+      "game": 68,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 37
+    },
+    {
+      "game": 3,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 68
+    },
+    {
+      "game": 24,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 67
+    },
+    {
+      "game": 54,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 69
+    },
+    {
+      "game": 28,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 69
+    },
+    {
+      "game": 52,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 69
+    },
+    {
+      "game": 70,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 43
+    },
+    {
+      "game": 53,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 74
+    },
+    {
+      "game": 63,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 75
+    },
+    {
+      "game": 23,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 75
+    },
+    {
+      "game": 58,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 77
+    },
+    {
+      "game": 38,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 79
+    },
+    {
+      "game": 40,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 81
+    },
+    {
+      "game": 43,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 79
+    },
+    {
+      "game": 22,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 83
+    },
+    {
+      "game": 31,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 82
+    },
+    {
+      "game": 37,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 84
+    },
+    {
+      "game": 44,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 83
+    },
+    {
+      "game": 72,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 53
+    },
+    {
+      "game": 65,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 62
+    },
+    {
+      "game": 74,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 51
+    },
+    {
+      "game": 41,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 90
+    },
+    {
+      "game": 57,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 90
+    },
+    {
+      "game": 45,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 94
+    },
+    {
+      "game": 8,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "ply": 96
+    },
+    {
+      "game": 55,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 98
+    },
+    {
+      "game": 5,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 100
+    },
+    {
+      "game": 9,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 100
+    },
+    {
+      "game": 73,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 70
+    },
+    {
+      "game": 75,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 68
+    },
+    {
+      "game": 76,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 67
+    },
+    {
+      "game": 47,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 109
+    },
+    {
+      "game": 21,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 108
+    },
+    {
+      "game": 4,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "ply": 114
+    },
+    {
+      "game": 77,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 74
+    },
+    {
+      "game": 66,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 91
+    },
+    {
+      "game": 78,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 75
+    },
+    {
+      "game": 14,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 119
+    },
+    {
+      "game": 67,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "ply": 100
+    },
+    {
+      "game": 64,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 107
+    },
+    {
+      "game": 6,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 133
+    },
+    {
+      "game": 79,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 87
+    },
+    {
+      "game": 46,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "ply": 149
+    },
+    {
+      "game": 71,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "ply": 161
+    },
+    {
+      "game": 39,
+      "candidate_color": -1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "ply": 300
+    },
+    {
+      "game": 0,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "ply": 300
+    },
+    {
+      "game": 30,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "ply": 300
+    },
+    {
+      "game": 11,
+      "candidate_color": -1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "ply": 300
+    },
+    {
+      "game": 15,
+      "candidate_color": -1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "ply": 300
+    }
+  ]
+}

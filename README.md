@@ -8,7 +8,7 @@ Play **standard GIPF** in your browser: two people sharing a screen, or a public
 
 This is an active, time-bounded experiment on one NVIDIA A100 40 GB. Baselines, short candidate runs, evaluation, and checkpoint promotion precede the main training run. Published results distinguish wins, losses, and game-length cutoffs. Beating random is a smoke test, not evidence of expert play.
 
-The website starts with a fixed heuristic lookahead opponent. A learned checkpoint is promoted only after evaluation. The current opponent is identified by the API and interface. Local two-player mode runs entirely in your browser; remote AI requires the inference host to remain online.
+The website serves a learned self-play checkpoint. Later checkpoints replace it only after evaluation against the incumbent and a fixed heuristic baseline. The current opponent is identified by the API and interface. Local two-player mode runs entirely in your browser; remote AI requires the inference host to remain online.
 
 ## Run locally
 

@@ -35,8 +35,12 @@ async def bounds(request:Request,call_next):
         try:length=int(request.headers.get('content-length','0'))
         except ValueError:return JSONResponse({'detail':'Invalid length'},400)
         if length>8192:return JSONResponse({'detail':'Request too large'},413)
-        body=await request.body()
-        if len(body)>8192:return JSONResponse({'detail':'Request too large'},413)
+        chunks=[];total=0
+        async for chunk in request.stream():
+            total+=len(chunk)
+            if total>8192:return JSONResponse({'detail':'Request too large'},413)
+            chunks.append(chunk)
+        request._body=b''.join(chunks)
     return await call_next(request)
 
 def validate_state(data):
@@ -85,7 +89,7 @@ def infer(data,budget_ms):
         action=MCTSPlayer(simulations=128,seed=int(time.time_ns())).choose_action(state,time_limit=budget_ms/1000)
         details={'model':'MCTS baseline','kind':'baseline'}
     else:
-        action,stats=choose_action(active,state,'cpu',simulations=800,budget_ms=budget_ms)
+        action,stats=choose_action(active,state,'cpu',simulations=min(10000,max(128,budget_ms*4)),budget_ms=budget_ms)
         details={'model':info.get('name','RL champion'),'kind':'rl',**stats}
     if action not in state.legal_actions():raise RuntimeError('Inference returned illegal action')
     return {'action':action,'elapsed_ms':round((time.monotonic()-start)*1000),**details}

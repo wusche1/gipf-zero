@@ -7,8 +7,12 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 LOG=Path('/var/log/portal/gipf_tunnel.log')
 CONFIG=ROOT/'web/config.json'
+PENDING=ROOT/'ops/endpoint-push-pending.json'
 
 def tick():
+    if PENDING.exists():
+        subprocess.run(['git','push','origin','main'],cwd=ROOT,check=True,timeout=30)
+        PENDING.unlink()
     if not LOG.exists() or not CONFIG.exists():return
     urls=re.findall(r'https://[a-zA-Z0-9-]+\.trycloudflare\.com',LOG.read_text()[-100000:])
     if not urls:return
@@ -22,7 +26,9 @@ def tick():
     temp=CONFIG.with_suffix('.tmp');temp.write_text(json.dumps(config,indent=2)+'\n');temp.replace(CONFIG)
     subprocess.run(['git','add','--','web/config.json'],cwd=ROOT,check=True,timeout=15)
     subprocess.run(['git','commit','--only','web/config.json','-m','Update public inference endpoint after tunnel restart'],cwd=ROOT,check=True,timeout=20)
+    PENDING.write_text(json.dumps({'endpoint':endpoint,'time':time.time()})+'\n')
     subprocess.run(['git','push','origin','main'],cwd=ROOT,check=True,timeout=30)
+    PENDING.unlink()
     print(json.dumps({'event':'endpoint_updated','endpoint':endpoint,'time':time.time()}),flush=True)
 
 if __name__=='__main__':
