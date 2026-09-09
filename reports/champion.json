@@ -1,27 +1,27 @@
 {
-  "name": "GIPF Zero \u2014 67,076 games",
+  "name": "GIPF Zero \u2014 43,869 games",
   "kind": "rl",
-  "games_trained": 67076,
-  "iteration": 1075,
+  "games_trained": 43869,
+  "iteration": 727,
   "architecture": {
-    "kind": "mlp",
-    "width": 256,
+    "kind": "resnet",
+    "width": 32,
     "blocks": 2,
     "head": "flat"
   },
-  "source_checkpoint_sha256": "c6d27870bb1a0c402a3be249c74117b9bcf1e09ffe086ac341828acbb601d9f3",
-  "updated_utc": "2026-09-09T20:05:08.458054+00:00",
+  "source_checkpoint_sha256": "aa533bb8922231a3e0dc53dd2ff947cab6899ef09a9245463c89ac99ea776ef0",
+  "updated_utc": "2026-09-09T21:20:52.781670+00:00",
   "evaluations": [
     {
-      "report": "reports/alternative-2003-duel.json",
-      "opponent": "checkpoints/league/champion-2003.pt",
-      "wins": 60,
-      "losses": 20,
+      "report": "reports/final/20260909T191906Z/final-vs-champion-duel.json",
+      "opponent": "/workspace/gipf/checkpoints/final/20260909T191906Z/champion-before-final-a9b830a90847.pt",
+      "wins": 51,
+      "losses": 29,
       "cutoffs": 0,
       "unfinished": 0
     },
     {
-      "report": "reports/alternative-2003-greedy.json",
+      "report": "reports/final/20260909T191906Z/final-vs-greedy.json",
       "opponent": "greedy",
       "wins": 40,
       "losses": 0,

@@ -1,0 +1,29 @@
+{
+  "run": "/workspace/gipf/runs/final",
+  "kind": "resnet",
+  "head": "flat",
+  "width": 48,
+  "blocks": 3,
+  "seconds": 6070,
+  "deadline": 1788988500.0,
+  "games": 512,
+  "games_per_iteration": 64,
+  "simulations": 128,
+  "updates": 64,
+  "batch_size": 256,
+  "lr": 0.001,
+  "max_ply": 300,
+  "replay_size": 100000,
+  "seed": 1,
+  "resume": "/workspace/gipf/runs/final/latest.pt",
+  "device": "cuda",
+  "cuda_graph_batch": 0,
+  "native_forest": true,
+  "effective_model": {
+    "kind": "resnet",
+    "width": 32,
+    "blocks": 2,
+    "head": "flat"
+  },
+  "effective_cuda_graph_batch": 0
+}

@@ -1,0 +1,68 @@
+{
+  "version": "architecture-comparison-v1-native-forest",
+  "required_benchmark_report": "reports/native-compact-logits-benchmark.json",
+  "training_seconds": 600,
+  "training": {
+    "native_forest": true,
+    "simulations": 32,
+    "games": 64,
+    "games_per_iteration": 32,
+    "updates": 32,
+    "batch_size": 256,
+    "lr": 0.001,
+    "max_ply": 300,
+    "replay_size": 100000,
+    "head": "flat",
+    "device": "cuda"
+  },
+  "architectures": [
+    {
+      "name": "mlp256",
+      "kind": "mlp",
+      "width": 256,
+      "blocks": 2
+    },
+    {
+      "name": "resnet32",
+      "kind": "resnet",
+      "width": 32,
+      "blocks": 2
+    },
+    {
+      "name": "hexresnet32",
+      "kind": "hexresnet",
+      "width": 32,
+      "blocks": 2
+    },
+    {
+      "name": "transformer64",
+      "kind": "transformer",
+      "width": 64,
+      "blocks": 2
+    }
+  ],
+  "seeds": [
+    320101,
+    320102
+  ],
+  "comparisons": {
+    "equal_simulations": {
+      "games": 8,
+      "device": "cuda",
+      "batch": 64,
+      "threads": 2,
+      "simulations": 32,
+      "budget_ms": 0,
+      "seconds": 90
+    },
+    "equal_cpu_time": {
+      "games": 8,
+      "device": "cpu",
+      "batch": 1,
+      "threads": 1,
+      "simulations": 10000,
+      "budget_ms": 50,
+      "seconds": 90
+    }
+  }
+}

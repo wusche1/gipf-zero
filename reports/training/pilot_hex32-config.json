@@ -1,0 +1,28 @@
+{
+  "run": "runs/pilot_hex32",
+  "kind": "hexresnet",
+  "head": "flat",
+  "width": 32,
+  "blocks": 2,
+  "seconds": 900,
+  "deadline": 0,
+  "games": 64,
+  "games_per_iteration": 32,
+  "simulations": 32,
+  "updates": 32,
+  "batch_size": 256,
+  "lr": 0.001,
+  "max_ply": 240,
+  "replay_size": 100000,
+  "seed": 101,
+  "resume": null,
+  "device": "cuda",
+  "cuda_graph_batch": 0,
+  "effective_model": {
+    "kind": "hexresnet",
+    "width": 32,
+    "blocks": 2,
+    "head": "flat"
+  },
+  "effective_cuda_graph_batch": 0
+}

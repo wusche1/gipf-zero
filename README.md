@@ -4,11 +4,32 @@ Play **standard GIPF** in your browser: two people sharing a screen, or a public
 
 **[Play the game](https://wusche1.github.io/gipf-zero/)** · [Official GIPF rules](https://www.gipf.com/gipf/rules/complete_rules.html)
 
+## Original deadline result
+
+The completed 9 September 2026 selection run chose a square 3x3 **ResNet-32
+CNN** trained for 43,869 self-play games. It won its 80-game CPU, one-thread,
+50 ms-per-decision promotion duel 51--29 (Wilson lower bound 0.528), and passed
+the greedy gate 40--0. The later MLP-256 checkpoint trained for 103,668 games
+tied the CNN 40--40 and did not clear that promotion gate.
+
+The frozen CNN then scored 200--0 against random, 200--0 against greedy, 79--1
+against MCTS, and 80--0 against depth-6 minimax, all with no cutoffs. The first
+two are fixed-128-simulation GPU evaluations; MCTS and minimax use CPU, batch 1,
+and equal 50 ms decision budgets. [Raw reports and conditions](reports/RESULTS.md)
+include checkpoint hashes, seeds, actual search measurements, and confidence
+intervals.
+
 ## Current experiment
 
-This is an active, time-bounded experiment on one NVIDIA A100 40 GB. Baselines, short candidate runs, evaluation, and checkpoint promotion precede the main training run. Published results distinguish wins, losses, and game-length cutoffs. Beating random is a smoke test, not evidence of expert play.
+The original selected CNN is the current learned opponent. A separate,
+fresh-start architecture comparison is running as a follow-up without a
+promotion path; its results are pending. Earlier pilot architecture results used
+different allocations or backend revisions and are not used as architecture
+evidence. Published results distinguish wins, losses, and game-length cutoffs.
+Beating random is a smoke test, not evidence of expert play.
 
-The website serves a learned self-play checkpoint. Later checkpoints replace it only after evaluation against the incumbent and a fixed heuristic baseline. The current opponent is identified by the API and interface. Local two-player mode runs entirely in your browser; remote AI requires the inference host to remain online.
+The website serves a learned self-play checkpoint. Local two-player mode runs
+entirely in your browser; remote AI requires the inference host to remain online.
 
 ## Run locally
 
@@ -42,6 +63,7 @@ Training emits JSONL metrics and a heartbeat, writes atomic checkpoints, and sav
 
 - [Rules and action contract](engine/CONTRACT.md)
 - [Fixed baseline definitions](baselines/README.md)
+- [Original deadline results and raw reports](reports/RESULTS.md)
 - `training/`: network, symmetry augmentation, batched PUCT, self-play and evaluation
 - `reports/`: measured experiment results
 - `ops/`: managed service and experiment launch scripts

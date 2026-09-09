@@ -1,0 +1,298 @@
+{"event": "runner_created", "remaining_seconds": 9353.839611530304, "time": 1788981546.1603875}
+{"event": "waiting_for_start", "remaining_seconds": 9353.839230060577, "start_epoch": 1788988500.0, "time": 1788981546.1607695}
+{"event": "waiting_for_start", "remaining_seconds": 9323.838814735413, "start_epoch": 1788988500.0, "time": 1788981576.161184}
+{"event": "waiting_for_start", "remaining_seconds": 9293.838134527206, "start_epoch": 1788988500.0, "time": 1788981606.1618648}
+{"event": "waiting_for_start", "remaining_seconds": 9263.837424993515, "start_epoch": 1788988500.0, "time": 1788981636.162574}
+{"event": "waiting_for_start", "remaining_seconds": 9233.836508274078, "start_epoch": 1788988500.0, "time": 1788981666.1634908}
+{"event": "waiting_for_start", "remaining_seconds": 9203.835512399673, "start_epoch": 1788988500.0, "time": 1788981696.1644866}
+{"event": "waiting_for_start", "remaining_seconds": 9173.834618091583, "start_epoch": 1788988500.0, "time": 1788981726.1653812}
+{"event": "waiting_for_start", "remaining_seconds": 9143.833684921265, "start_epoch": 1788988500.0, "time": 1788981756.166314}
+{"event": "waiting_for_start", "remaining_seconds": 9113.832793235779, "start_epoch": 1788988500.0, "time": 1788981786.1672053}
+{"event": "waiting_for_start", "remaining_seconds": 9083.831853866577, "start_epoch": 1788988500.0, "time": 1788981816.1681452}
+{"event": "waiting_for_start", "remaining_seconds": 9053.83092546463, "start_epoch": 1788988500.0, "time": 1788981846.1690733}
+{"event": "waiting_for_start", "remaining_seconds": 9023.82995223999, "start_epoch": 1788988500.0, "time": 1788981876.1700468}
+{"event": "waiting_for_start", "remaining_seconds": 8993.82898068428, "start_epoch": 1788988500.0, "time": 1788981906.1710181}
+{"event": "waiting_for_start", "remaining_seconds": 8963.82793879509, "start_epoch": 1788988500.0, "time": 1788981936.1720603}
+{"event": "waiting_for_start", "remaining_seconds": 8933.826928377151, "start_epoch": 1788988500.0, "time": 1788981966.1730707}
+{"event": "waiting_for_start", "remaining_seconds": 8903.82594871521, "start_epoch": 1788988500.0, "time": 1788981996.1740503}
+{"event": "waiting_for_start", "remaining_seconds": 8873.8249502182, "start_epoch": 1788988500.0, "time": 1788982026.1750486}
+{"event": "waiting_for_start", "remaining_seconds": 8843.8239300251, "start_epoch": 1788988500.0, "time": 1788982056.176069}
+{"event": "waiting_for_start", "remaining_seconds": 8813.822901248932, "start_epoch": 1788988500.0, "time": 1788982086.1770976}
+{"event": "waiting_for_start", "remaining_seconds": 8783.821862697601, "start_epoch": 1788988500.0, "time": 1788982116.1781363}
+{"event": "waiting_for_start", "remaining_seconds": 8753.8208091259, "start_epoch": 1788988500.0, "time": 1788982146.1791897}
+{"event": "waiting_for_start", "remaining_seconds": 8723.819793462753, "start_epoch": 1788988500.0, "time": 1788982176.1802058}
+{"event": "waiting_for_start", "remaining_seconds": 8693.81906747818, "start_epoch": 1788988500.0, "time": 1788982206.1809318}
+{"event": "waiting_for_start", "remaining_seconds": 8663.817880630493, "start_epoch": 1788988500.0, "time": 1788982236.1821187}
+{"event": "waiting_for_start", "remaining_seconds": 8633.81688451767, "start_epoch": 1788988500.0, "time": 1788982266.1831145}
+{"event": "waiting_for_start", "remaining_seconds": 8603.815825462341, "start_epoch": 1788988500.0, "time": 1788982296.1841736}
+{"event": "waiting_for_start", "remaining_seconds": 8573.81454205513, "start_epoch": 1788988500.0, "time": 1788982326.185457}
+{"event": "waiting_for_start", "remaining_seconds": 8543.81342458725, "start_epoch": 1788988500.0, "time": 1788982356.1865742}
+{"event": "waiting_for_start", "remaining_seconds": 8513.812316417694, "start_epoch": 1788988500.0, "time": 1788982386.1876829}
+{"event": "waiting_for_start", "remaining_seconds": 8483.811401367188, "start_epoch": 1788988500.0, "time": 1788982416.1885977}
+{"event": "waiting_for_start", "remaining_seconds": 8453.810275316238, "start_epoch": 1788988500.0, "time": 1788982446.189724}
+{"event": "waiting_for_start", "remaining_seconds": 8423.809347629547, "start_epoch": 1788988500.0, "time": 1788982476.1906514}
+{"event": "waiting_for_start", "remaining_seconds": 8393.808105230331, "start_epoch": 1788988500.0, "time": 1788982506.191894}
+{"event": "waiting_for_start", "remaining_seconds": 8363.806891441345, "start_epoch": 1788988500.0, "time": 1788982536.1931076}
+{"event": "waiting_for_start", "remaining_seconds": 8333.806013584137, "start_epoch": 1788988500.0, "time": 1788982566.1939855}
+{"event": "waiting_for_start", "remaining_seconds": 8303.80504155159, "start_epoch": 1788988500.0, "time": 1788982596.1949575}
+{"event": "waiting_for_start", "remaining_seconds": 8273.804229736328, "start_epoch": 1788988500.0, "time": 1788982626.1957695}
+{"event": "waiting_for_start", "remaining_seconds": 8243.803385019302, "start_epoch": 1788988500.0, "time": 1788982656.196614}
+{"event": "waiting_for_start", "remaining_seconds": 8213.802503824234, "start_epoch": 1788988500.0, "time": 1788982686.1974955}
+{"event": "waiting_for_start", "remaining_seconds": 8183.801732778549, "start_epoch": 1788988500.0, "time": 1788982716.198266}
+{"event": "waiting_for_start", "remaining_seconds": 8153.800937175751, "start_epoch": 1788988500.0, "time": 1788982746.1990623}
+{"event": "waiting_for_start", "remaining_seconds": 8123.800047636032, "start_epoch": 1788988500.0, "time": 1788982776.1999516}
+{"event": "waiting_for_start", "remaining_seconds": 8093.798713922501, "start_epoch": 1788988500.0, "time": 1788982806.2012856}
+{"event": "waiting_for_start", "remaining_seconds": 8063.797815799713, "start_epoch": 1788988500.0, "time": 1788982836.2021835}
+{"event": "waiting_for_start", "remaining_seconds": 8033.796905517578, "start_epoch": 1788988500.0, "time": 1788982866.2030938}
+{"event": "waiting_for_start", "remaining_seconds": 8003.795822381973, "start_epoch": 1788988500.0, "time": 1788982896.204177}
+{"event": "waiting_for_start", "remaining_seconds": 7973.794494152069, "start_epoch": 1788988500.0, "time": 1788982926.2055047}
+{"event": "waiting_for_start", "remaining_seconds": 7943.793168783188, "start_epoch": 1788988500.0, "time": 1788982956.2068303}
+{"event": "waiting_for_start", "remaining_seconds": 7913.791836261749, "start_epoch": 1788988500.0, "time": 1788982986.2081628}
+{"event": "waiting_for_start", "remaining_seconds": 7883.790299415588, "start_epoch": 1788988500.0, "time": 1788983016.2096999}
+{"event": "waiting_for_start", "remaining_seconds": 7853.788897275925, "start_epoch": 1788988500.0, "time": 1788983046.2111013}
+{"event": "waiting_for_start", "remaining_seconds": 7823.787281990051, "start_epoch": 1788988500.0, "time": 1788983076.2127175}
+{"event": "waiting_for_start", "remaining_seconds": 7793.7861523628235, "start_epoch": 1788988500.0, "time": 1788983106.2138467}
+{"event": "waiting_for_start", "remaining_seconds": 7763.784756660461, "start_epoch": 1788988500.0, "time": 1788983136.2152429}
+{"event": "waiting_for_start", "remaining_seconds": 7733.783638000488, "start_epoch": 1788988500.0, "time": 1788983166.2163615}
+{"event": "waiting_for_start", "remaining_seconds": 7703.7823576927185, "start_epoch": 1788988500.0, "time": 1788983196.217641}
+{"event": "waiting_for_start", "remaining_seconds": 7673.780870676041, "start_epoch": 1788988500.0, "time": 1788983226.2191286}
+{"event": "waiting_for_start", "remaining_seconds": 7643.7792682647705, "start_epoch": 1788988500.0, "time": 1788983256.2207308}
+{"event": "waiting_for_start", "remaining_seconds": 7613.778170585632, "start_epoch": 1788988500.0, "time": 1788983286.221829}
+{"event": "waiting_for_start", "remaining_seconds": 7583.777166128159, "start_epoch": 1788988500.0, "time": 1788983316.222833}
+{"event": "waiting_for_start", "remaining_seconds": 7553.7755925655365, "start_epoch": 1788988500.0, "time": 1788983346.2244067}
+{"event": "waiting_for_start", "remaining_seconds": 7523.774579286575, "start_epoch": 1788988500.0, "time": 1788983376.2254202}
+{"event": "waiting_for_start", "remaining_seconds": 7493.773610591888, "start_epoch": 1788988500.0, "time": 1788983406.2263887}
+{"event": "waiting_for_start", "remaining_seconds": 7463.772364139557, "start_epoch": 1788988500.0, "time": 1788983436.227635}
+{"event": "waiting_for_start", "remaining_seconds": 7433.770761489868, "start_epoch": 1788988500.0, "time": 1788983466.2292376}
+{"event": "waiting_for_start", "remaining_seconds": 7403.769212245941, "start_epoch": 1788988500.0, "time": 1788983496.230787}
+{"event": "waiting_for_start", "remaining_seconds": 7373.767586708069, "start_epoch": 1788988500.0, "time": 1788983526.232412}
+{"event": "waiting_for_start", "remaining_seconds": 7343.765956878662, "start_epoch": 1788988500.0, "time": 1788983556.234042}
+{"event": "waiting_for_start", "remaining_seconds": 7313.7643699646, "start_epoch": 1788988500.0, "time": 1788983586.2356293}
+{"event": "waiting_for_start", "remaining_seconds": 7283.762576818466, "start_epoch": 1788988500.0, "time": 1788983616.237422}
+{"event": "waiting_for_start", "remaining_seconds": 7253.760971784592, "start_epoch": 1788988500.0, "time": 1788983646.2390275}
+{"event": "waiting_for_start", "remaining_seconds": 7223.7592668533325, "start_epoch": 1788988500.0, "time": 1788983676.2407317}
+{"event": "waiting_for_start", "remaining_seconds": 7193.75740647316, "start_epoch": 1788988500.0, "time": 1788983706.2425926}
+{"event": "waiting_for_start", "remaining_seconds": 7163.75572514534, "start_epoch": 1788988500.0, "time": 1788983736.2442741}
+{"event": "waiting_for_start", "remaining_seconds": 7133.7539484500885, "start_epoch": 1788988500.0, "time": 1788983766.2460506}
+{"event": "waiting_for_start", "remaining_seconds": 7103.752230644226, "start_epoch": 1788988500.0, "time": 1788983796.2477684}
+{"event": "waiting_for_start", "remaining_seconds": 7073.750219106674, "start_epoch": 1788988500.0, "time": 1788983826.24978}
+{"event": "waiting_for_start", "remaining_seconds": 7043.7483558654785, "start_epoch": 1788988500.0, "time": 1788983856.2516432}
+{"event": "waiting_for_start", "remaining_seconds": 7013.746517419815, "start_epoch": 1788988500.0, "time": 1788983886.2534814}
+{"event": "waiting_for_start", "remaining_seconds": 6983.74471783638, "start_epoch": 1788988500.0, "time": 1788983916.255281}
+{"event": "waiting_for_start", "remaining_seconds": 6953.742658615112, "start_epoch": 1788988500.0, "time": 1788983946.2573404}
+{"event": "waiting_for_start", "remaining_seconds": 6923.7408673763275, "start_epoch": 1788988500.0, "time": 1788983976.2591317}
+{"event": "waiting_for_start", "remaining_seconds": 6893.738545417786, "start_epoch": 1788988500.0, "time": 1788984006.2614536}
+{"event": "waiting_for_start", "remaining_seconds": 6863.736601114273, "start_epoch": 1788988500.0, "time": 1788984036.263398}
+{"event": "waiting_for_start", "remaining_seconds": 6833.734758853912, "start_epoch": 1788988500.0, "time": 1788984066.26524}
+{"event": "waiting_for_start", "remaining_seconds": 6803.733001232147, "start_epoch": 1788988500.0, "time": 1788984096.2669978}
+{"event": "waiting_for_start", "remaining_seconds": 6773.731204748154, "start_epoch": 1788988500.0, "time": 1788984126.268794}
+{"event": "waiting_for_start", "remaining_seconds": 6743.729416131973, "start_epoch": 1788988500.0, "time": 1788984156.2705834}
+{"event": "waiting_for_start", "remaining_seconds": 6713.728176116943, "start_epoch": 1788988500.0, "time": 1788984186.271823}
+{"event": "waiting_for_start", "remaining_seconds": 6683.726224660873, "start_epoch": 1788988500.0, "time": 1788984216.2737744}
+{"event": "waiting_for_start", "remaining_seconds": 6653.724206447601, "start_epoch": 1788988500.0, "time": 1788984246.2757926}
+{"event": "waiting_for_start", "remaining_seconds": 6623.717383623123, "start_epoch": 1788988500.0, "time": 1788984276.2826152}
+{"event": "waiting_for_start", "remaining_seconds": 6593.714973926544, "start_epoch": 1788988500.0, "time": 1788984306.2850254}
+{"event": "waiting_for_start", "remaining_seconds": 6563.7137722969055, "start_epoch": 1788988500.0, "time": 1788984336.2862267}
+{"event": "waiting_for_start", "remaining_seconds": 6533.711929798126, "start_epoch": 1788988500.0, "time": 1788984366.288069}
+{"event": "waiting_for_start", "remaining_seconds": 6503.705786943436, "start_epoch": 1788988500.0, "time": 1788984396.294212}
+{"event": "waiting_for_start", "remaining_seconds": 6473.703857660294, "start_epoch": 1788988500.0, "time": 1788984426.2961416}
+{"event": "waiting_for_start", "remaining_seconds": 6443.7022404670715, "start_epoch": 1788988500.0, "time": 1788984456.2977586}
+{"event": "waiting_for_start", "remaining_seconds": 6413.70023560524, "start_epoch": 1788988500.0, "time": 1788984486.2997634}
+{"event": "waiting_for_start", "remaining_seconds": 6383.698266506195, "start_epoch": 1788988500.0, "time": 1788984516.301732}
+{"event": "waiting_for_start", "remaining_seconds": 6353.696108341217, "start_epoch": 1788988500.0, "time": 1788984546.3038907}
+{"event": "waiting_for_start", "remaining_seconds": 6323.693997144699, "start_epoch": 1788988500.0, "time": 1788984576.306002}
+{"event": "waiting_for_start", "remaining_seconds": 6293.69199514389, "start_epoch": 1788988500.0, "time": 1788984606.308004}
+{"event": "waiting_for_start", "remaining_seconds": 6263.689559698105, "start_epoch": 1788988500.0, "time": 1788984636.3104389}
+{"event": "waiting_for_start", "remaining_seconds": 6233.687538862228, "start_epoch": 1788988500.0, "time": 1788984666.3124602}
+{"event": "waiting_for_start", "remaining_seconds": 6203.686329603195, "start_epoch": 1788988500.0, "time": 1788984696.3136694}
+{"event": "waiting_for_start", "remaining_seconds": 6173.684458971024, "start_epoch": 1788988500.0, "time": 1788984726.3155403}
+{"event": "waiting_for_start", "remaining_seconds": 6143.683022022247, "start_epoch": 1788988500.0, "time": 1788984756.3169773}
+{"event": "waiting_for_start", "remaining_seconds": 6113.681596279144, "start_epoch": 1788988500.0, "time": 1788984786.318403}
+{"event": "waiting_for_start", "remaining_seconds": 6083.68032169342, "start_epoch": 1788988500.0, "time": 1788984816.3196774}
+{"event": "waiting_for_start", "remaining_seconds": 6053.679004669189, "start_epoch": 1788988500.0, "time": 1788984846.3209944}
+{"event": "waiting_for_start", "remaining_seconds": 6023.677627086639, "start_epoch": 1788988500.0, "time": 1788984876.3223724}
+{"event": "waiting_for_start", "remaining_seconds": 5993.676181793213, "start_epoch": 1788988500.0, "time": 1788984906.3238173}
+{"event": "waiting_for_start", "remaining_seconds": 5963.674966573715, "start_epoch": 1788988500.0, "time": 1788984936.3250327}
+{"event": "waiting_for_start", "remaining_seconds": 5933.67359662056, "start_epoch": 1788988500.0, "time": 1788984966.3264027}
+{"event": "waiting_for_start", "remaining_seconds": 5903.672296047211, "start_epoch": 1788988500.0, "time": 1788984996.327703}
+{"event": "waiting_for_start", "remaining_seconds": 5873.670942544937, "start_epoch": 1788988500.0, "time": 1788985026.3290567}
+{"event": "waiting_for_start", "remaining_seconds": 5843.6695964336395, "start_epoch": 1788988500.0, "time": 1788985056.3304029}
+{"event": "waiting_for_start", "remaining_seconds": 5813.667557954788, "start_epoch": 1788988500.0, "time": 1788985086.332441}
+{"event": "waiting_for_start", "remaining_seconds": 5783.665107965469, "start_epoch": 1788988500.0, "time": 1788985116.334891}
+{"event": "waiting_for_start", "remaining_seconds": 5753.6627995967865, "start_epoch": 1788988500.0, "time": 1788985146.3371997}
+{"event": "waiting_for_start", "remaining_seconds": 5723.660306453705, "start_epoch": 1788988500.0, "time": 1788985176.3396926}
+{"event": "waiting_for_start", "remaining_seconds": 5693.657999038696, "start_epoch": 1788988500.0, "time": 1788985206.3419998}
+{"event": "waiting_for_start", "remaining_seconds": 5663.655779838562, "start_epoch": 1788988500.0, "time": 1788985236.3442194}
+{"event": "waiting_for_start", "remaining_seconds": 5633.6535704135895, "start_epoch": 1788988500.0, "time": 1788985266.3464289}
+{"event": "waiting_for_start", "remaining_seconds": 5603.651412248611, "start_epoch": 1788988500.0, "time": 1788985296.348587}
+{"event": "waiting_for_start", "remaining_seconds": 5573.649774551392, "start_epoch": 1788988500.0, "time": 1788985326.3502245}
+{"event": "waiting_for_start", "remaining_seconds": 5543.648423433304, "start_epoch": 1788988500.0, "time": 1788985356.3515759}
+{"event": "waiting_for_start", "remaining_seconds": 5513.647136211395, "start_epoch": 1788988500.0, "time": 1788985386.352863}
+{"event": "waiting_for_start", "remaining_seconds": 5483.645640850067, "start_epoch": 1788988500.0, "time": 1788985416.354358}
+{"event": "waiting_for_start", "remaining_seconds": 5453.643844842911, "start_epoch": 1788988500.0, "time": 1788985446.3561544}
+{"event": "waiting_for_start", "remaining_seconds": 5423.642264127731, "start_epoch": 1788988500.0, "time": 1788985476.3577352}
+{"event": "waiting_for_start", "remaining_seconds": 5393.640813112259, "start_epoch": 1788988500.0, "time": 1788985506.3591864}
+{"event": "waiting_for_start", "remaining_seconds": 5363.639302968979, "start_epoch": 1788988500.0, "time": 1788985536.3606963}
+{"event": "waiting_for_start", "remaining_seconds": 5333.6376786231995, "start_epoch": 1788988500.0, "time": 1788985566.3623207}
+{"event": "waiting_for_start", "remaining_seconds": 5303.6358416080475, "start_epoch": 1788988500.0, "time": 1788985596.3641577}
+{"event": "waiting_for_start", "remaining_seconds": 5273.6343495845795, "start_epoch": 1788988500.0, "time": 1788985626.36565}
+{"event": "waiting_for_start", "remaining_seconds": 5243.6328983306885, "start_epoch": 1788988500.0, "time": 1788985656.367101}
+{"event": "waiting_for_start", "remaining_seconds": 5213.631332159042, "start_epoch": 1788988500.0, "time": 1788985686.3686671}
+{"event": "waiting_for_start", "remaining_seconds": 5183.629750728607, "start_epoch": 1788988500.0, "time": 1788985716.3702486}
+{"event": "waiting_for_start", "remaining_seconds": 5153.628232002258, "start_epoch": 1788988500.0, "time": 1788985746.3717673}
+{"event": "waiting_for_start", "remaining_seconds": 5123.626708030701, "start_epoch": 1788988500.0, "time": 1788985776.3732908}
+{"event": "waiting_for_start", "remaining_seconds": 5093.624756813049, "start_epoch": 1788988500.0, "time": 1788985806.3752427}
+{"event": "waiting_for_start", "remaining_seconds": 5063.623356819153, "start_epoch": 1788988500.0, "time": 1788985836.376642}
+{"event": "waiting_for_start", "remaining_seconds": 5033.621519327164, "start_epoch": 1788988500.0, "time": 1788985866.37848}
+{"event": "waiting_for_start", "remaining_seconds": 5003.620144844055, "start_epoch": 1788988500.0, "time": 1788985896.3798544}
+{"event": "waiting_for_start", "remaining_seconds": 4973.618668317795, "start_epoch": 1788988500.0, "time": 1788985926.381331}
+{"event": "waiting_for_start", "remaining_seconds": 4943.616932630539, "start_epoch": 1788988500.0, "time": 1788985956.3830667}
+{"event": "waiting_for_start", "remaining_seconds": 4913.615508317947, "start_epoch": 1788988500.0, "time": 1788985986.384491}
+{"event": "waiting_for_start", "remaining_seconds": 4883.613887786865, "start_epoch": 1788988500.0, "time": 1788986016.3861115}
+{"event": "waiting_for_start", "remaining_seconds": 4853.611991882324, "start_epoch": 1788988500.0, "time": 1788986046.3880076}
+{"event": "waiting_for_start", "remaining_seconds": 4823.610329151154, "start_epoch": 1788988500.0, "time": 1788986076.38967}
+{"event": "waiting_for_start", "remaining_seconds": 4793.608791589737, "start_epoch": 1788988500.0, "time": 1788986106.391208}
+{"event": "waiting_for_start", "remaining_seconds": 4763.607327222824, "start_epoch": 1788988500.0, "time": 1788986136.392672}
+{"event": "waiting_for_start", "remaining_seconds": 4733.605703115463, "start_epoch": 1788988500.0, "time": 1788986166.3942964}
+{"event": "waiting_for_start", "remaining_seconds": 4703.604113817215, "start_epoch": 1788988500.0, "time": 1788986196.3958852}
+{"event": "waiting_for_start", "remaining_seconds": 4673.602167129517, "start_epoch": 1788988500.0, "time": 1788986226.3978322}
+{"event": "waiting_for_start", "remaining_seconds": 4643.600527524948, "start_epoch": 1788988500.0, "time": 1788986256.3994715}
+{"event": "waiting_for_start", "remaining_seconds": 4613.598905086517, "start_epoch": 1788988500.0, "time": 1788986286.4010942}
+{"event": "waiting_for_start", "remaining_seconds": 4583.597327709198, "start_epoch": 1788988500.0, "time": 1788986316.4026716}
+{"event": "waiting_for_start", "remaining_seconds": 4553.595701217651, "start_epoch": 1788988500.0, "time": 1788986346.404298}
+{"event": "waiting_for_start", "remaining_seconds": 4523.594108104706, "start_epoch": 1788988500.0, "time": 1788986376.4058912}
+{"event": "waiting_for_start", "remaining_seconds": 4493.5922565460205, "start_epoch": 1788988500.0, "time": 1788986406.407743}
+{"event": "waiting_for_start", "remaining_seconds": 4463.590326309204, "start_epoch": 1788988500.0, "time": 1788986436.409673}
+{"event": "waiting_for_start", "remaining_seconds": 4433.588618993759, "start_epoch": 1788988500.0, "time": 1788986466.4113803}
+{"event": "waiting_for_start", "remaining_seconds": 4403.586966753006, "start_epoch": 1788988500.0, "time": 1788986496.413032}
+{"event": "waiting_for_start", "remaining_seconds": 4373.585306882858, "start_epoch": 1788988500.0, "time": 1788986526.4146926}
+{"event": "waiting_for_start", "remaining_seconds": 4343.5836980342865, "start_epoch": 1788988500.0, "time": 1788986556.4163015}
+{"event": "waiting_for_start", "remaining_seconds": 4313.582020282745, "start_epoch": 1788988500.0, "time": 1788986586.4179792}
+{"event": "waiting_for_start", "remaining_seconds": 4283.580335617065, "start_epoch": 1788988500.0, "time": 1788986616.4196637}
+{"event": "waiting_for_start", "remaining_seconds": 4253.57860660553, "start_epoch": 1788988500.0, "time": 1788986646.4213927}
+{"event": "waiting_for_start", "remaining_seconds": 4223.576793670654, "start_epoch": 1788988500.0, "time": 1788986676.4232056}
+{"event": "waiting_for_start", "remaining_seconds": 4193.574620962143, "start_epoch": 1788988500.0, "time": 1788986706.4253783}
+{"event": "waiting_for_start", "remaining_seconds": 4163.572712182999, "start_epoch": 1788988500.0, "time": 1788986736.4272869}
+{"event": "waiting_for_start", "remaining_seconds": 4133.570786237717, "start_epoch": 1788988500.0, "time": 1788986766.429213}
+{"event": "waiting_for_start", "remaining_seconds": 4103.568918704987, "start_epoch": 1788988500.0, "time": 1788986796.4310803}
+{"event": "waiting_for_start", "remaining_seconds": 4073.5671739578247, "start_epoch": 1788988500.0, "time": 1788986826.4328253}
+{"event": "waiting_for_start", "remaining_seconds": 4043.554791212082, "start_epoch": 1788988500.0, "time": 1788986856.445208}
+{"event": "waiting_for_start", "remaining_seconds": 4013.5526854991913, "start_epoch": 1788988500.0, "time": 1788986886.447313}
+{"event": "waiting_for_start", "remaining_seconds": 3983.5499370098114, "start_epoch": 1788988500.0, "time": 1788986916.450062}
+{"event": "waiting_for_start", "remaining_seconds": 3953.5475437641144, "start_epoch": 1788988500.0, "time": 1788986946.4524555}
+{"event": "waiting_for_start", "remaining_seconds": 3923.544897079468, "start_epoch": 1788988500.0, "time": 1788986976.455102}
+{"event": "waiting_for_start", "remaining_seconds": 3893.5420236587524, "start_epoch": 1788988500.0, "time": 1788987006.4579756}
+{"event": "waiting_for_start", "remaining_seconds": 3863.540141582489, "start_epoch": 1788988500.0, "time": 1788987036.4598572}
+{"event": "waiting_for_start", "remaining_seconds": 3833.537236213684, "start_epoch": 1788988500.0, "time": 1788987066.4627628}
+{"event": "waiting_for_start", "remaining_seconds": 3803.534323692322, "start_epoch": 1788988500.0, "time": 1788987096.465675}
+{"event": "waiting_for_start", "remaining_seconds": 3773.5313606262207, "start_epoch": 1788988500.0, "time": 1788987126.468638}
+{"event": "waiting_for_start", "remaining_seconds": 3743.5278952121735, "start_epoch": 1788988500.0, "time": 1788987156.4721043}
+{"event": "waiting_for_start", "remaining_seconds": 3713.526133775711, "start_epoch": 1788988500.0, "time": 1788987186.4738655}
+{"event": "waiting_for_start", "remaining_seconds": 3683.5242109298706, "start_epoch": 1788988500.0, "time": 1788987216.475788}
+{"event": "waiting_for_start", "remaining_seconds": 3653.521112203598, "start_epoch": 1788988500.0, "time": 1788987246.4788868}
+{"event": "waiting_for_start", "remaining_seconds": 3623.5191464424133, "start_epoch": 1788988500.0, "time": 1788987276.4808528}
+{"event": "waiting_for_start", "remaining_seconds": 3593.5171086788177, "start_epoch": 1788988500.0, "time": 1788987306.4828901}
+{"event": "waiting_for_start", "remaining_seconds": 3563.514191389084, "start_epoch": 1788988500.0, "time": 1788987336.4858077}
+{"event": "waiting_for_start", "remaining_seconds": 3533.5113389492035, "start_epoch": 1788988500.0, "time": 1788987366.4886599}
+{"event": "waiting_for_start", "remaining_seconds": 3503.498143196106, "start_epoch": 1788988500.0, "time": 1788987396.5018559}
+{"event": "waiting_for_start", "remaining_seconds": 3473.4952425956726, "start_epoch": 1788988500.0, "time": 1788987426.5047567}
+{"event": "waiting_for_start", "remaining_seconds": 3443.4932868480682, "start_epoch": 1788988500.0, "time": 1788987456.5067124}
+{"event": "waiting_for_start", "remaining_seconds": 3413.4913187026978, "start_epoch": 1788988500.0, "time": 1788987486.5086808}
+{"event": "waiting_for_start", "remaining_seconds": 3383.4889891147614, "start_epoch": 1788988500.0, "time": 1788987516.51101}
+{"event": "waiting_for_start", "remaining_seconds": 3353.486852645874, "start_epoch": 1788988500.0, "time": 1788987546.5131466}
+{"event": "waiting_for_start", "remaining_seconds": 3323.4849240779877, "start_epoch": 1788988500.0, "time": 1788987576.5150747}
+{"event": "waiting_for_start", "remaining_seconds": 3293.483129501343, "start_epoch": 1788988500.0, "time": 1788987606.5168693}
+{"event": "waiting_for_start", "remaining_seconds": 3263.4812293052673, "start_epoch": 1788988500.0, "time": 1788987636.5187697}
+{"event": "waiting_for_start", "remaining_seconds": 3233.478060245514, "start_epoch": 1788988500.0, "time": 1788987666.5219388}
+{"event": "waiting_for_start", "remaining_seconds": 3203.4748735427856, "start_epoch": 1788988500.0, "time": 1788987696.5251253}
+{"event": "waiting_for_start", "remaining_seconds": 3173.471599340439, "start_epoch": 1788988500.0, "time": 1788987726.5284}
+{"event": "waiting_for_start", "remaining_seconds": 3143.4685575962067, "start_epoch": 1788988500.0, "time": 1788987756.5314417}
+{"event": "waiting_for_start", "remaining_seconds": 3113.458064556122, "start_epoch": 1788988500.0, "time": 1788987786.5419343}
+{"event": "waiting_for_start", "remaining_seconds": 3083.4552090168, "start_epoch": 1788988500.0, "time": 1788987816.5447903}
+{"event": "waiting_for_start", "remaining_seconds": 3053.4515855312347, "start_epoch": 1788988500.0, "time": 1788987846.5484135}
+{"event": "waiting_for_start", "remaining_seconds": 3023.4479784965515, "start_epoch": 1788988500.0, "time": 1788987876.5520205}
+{"event": "waiting_for_start", "remaining_seconds": 2993.4447445869446, "start_epoch": 1788988500.0, "time": 1788987906.555254}
+{"event": "waiting_for_start", "remaining_seconds": 2963.4414801597595, "start_epoch": 1788988500.0, "time": 1788987936.5585191}
+{"event": "waiting_for_start", "remaining_seconds": 2933.438282251358, "start_epoch": 1788988500.0, "time": 1788987966.5617168}
+{"event": "waiting_for_start", "remaining_seconds": 2903.434799671173, "start_epoch": 1788988500.0, "time": 1788987996.5651994}
+{"event": "waiting_for_start", "remaining_seconds": 2873.431536436081, "start_epoch": 1788988500.0, "time": 1788988026.5684626}
+{"event": "waiting_for_start", "remaining_seconds": 2843.4280276298523, "start_epoch": 1788988500.0, "time": 1788988056.5719714}
+{"event": "waiting_for_start", "remaining_seconds": 2813.4245517253876, "start_epoch": 1788988500.0, "time": 1788988086.5754476}
+{"event": "waiting_for_start", "remaining_seconds": 2783.4210102558136, "start_epoch": 1788988500.0, "time": 1788988116.5789888}
+{"event": "waiting_for_start", "remaining_seconds": 2753.4177298545837, "start_epoch": 1788988500.0, "time": 1788988146.5822694}
+{"event": "waiting_for_start", "remaining_seconds": 2723.414363384247, "start_epoch": 1788988500.0, "time": 1788988176.585636}
+{"event": "waiting_for_start", "remaining_seconds": 2693.4111144542694, "start_epoch": 1788988500.0, "time": 1788988206.5888848}
+{"event": "waiting_for_start", "remaining_seconds": 2663.408833503723, "start_epoch": 1788988500.0, "time": 1788988236.591166}
+{"event": "waiting_for_start", "remaining_seconds": 2633.406723022461, "start_epoch": 1788988500.0, "time": 1788988266.5932765}
+{"event": "waiting_for_start", "remaining_seconds": 2603.4042823314667, "start_epoch": 1788988500.0, "time": 1788988296.595716}
+{"event": "waiting_for_start", "remaining_seconds": 2573.400892496109, "start_epoch": 1788988500.0, "time": 1788988326.5991066}
+{"event": "waiting_for_start", "remaining_seconds": 2543.3974657058716, "start_epoch": 1788988500.0, "time": 1788988356.6025336}
+{"event": "waiting_for_start", "remaining_seconds": 2513.3941102027893, "start_epoch": 1788988500.0, "time": 1788988386.6058888}
+{"event": "waiting_for_start", "remaining_seconds": 2483.390444278717, "start_epoch": 1788988500.0, "time": 1788988416.6095548}
+{"event": "waiting_for_start", "remaining_seconds": 2453.3871116638184, "start_epoch": 1788988500.0, "time": 1788988446.6128871}
+{"event": "waiting_for_start", "remaining_seconds": 2423.3835818767548, "start_epoch": 1788988500.0, "time": 1788988476.6164167}
+{"event": "service_stop", "remaining_seconds": 2399.8713698387146, "returncode": 0, "service": "gipf_league", "stderr": "", "stdout": "gipf_league: ERROR (not running)", "time": 1788988500.128629}
+{"event": "service_stop", "remaining_seconds": 2399.738411426544, "returncode": 0, "service": "gipf_final_training", "stderr": "", "stdout": "gipf_final_training: stopped", "time": 1788988500.2615871}
+{"event": "service_stop", "remaining_seconds": 2399.587697982788, "returncode": 0, "service": "gipf_final_mlp", "stderr": "", "stdout": "gipf_final_mlp: stopped", "time": 1788988500.4123006}
+{"event": "snapshot", "label": "final", "path": "checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "remaining_seconds": 2399.526792049408, "sha256": "aa533bb8922231a3e0dc53dd2ff947cab6899ef09a9245463c89ac99ea776ef0", "time": 1788988500.473207}
+{"event": "snapshot", "label": "final_mlp", "path": "checkpoints/final/20260909T191906Z/final_mlp-245c840d5037.pt", "remaining_seconds": 2399.4844858646393, "sha256": "245c840d503758561e2b3045ba607b4821ff58149b8488fd2c2d460f6dd22176", "time": 1788988500.5155125}
+{"event": "snapshot", "label": "champion-initial", "path": "checkpoints/final/20260909T191906Z/champion-initial-a9b830a90847.pt", "remaining_seconds": 2399.471147298813, "sha256": "a9b830a908478ef0e2264c5295f341bf8086465bdaaaef2d58927c968d239f66", "time": 1788988500.5288517}
+{"event": "snapshot", "label": "champion-before-final", "path": "checkpoints/final/20260909T191906Z/champion-before-final-a9b830a90847.pt", "remaining_seconds": 2399.4582200050354, "sha256": "a9b830a908478ef0e2264c5295f341bf8086465bdaaaef2d58927c968d239f66", "time": 1788988500.5417793}
+{"command": ["-m", "training.duel", "--candidate", "/workspace/gipf/checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "--champion", "/workspace/gipf/checkpoints/final/20260909T191906Z/champion-before-final-a9b830a90847.pt", "--games", "80", "--batch", "1", "--device", "cpu", "--threads", "1", "--budget-ms", "50", "--simulations", "10000", "--seed", "941001", "--max-ply", "300", "--output", "/workspace/gipf/reports/final/20260909T191906Z/final-vs-champion-duel.json", "--seconds", "600"], "event": "child_start", "label": "final-duel", "log": "reports/final/20260909T191906Z/final-duel.log", "outer_seconds": 650, "remaining_seconds": 2399.455859899521, "time": 1788988500.5441396}
+{"elapsed_seconds": 30.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2369.4493663311005, "time": 1788988530.550633}
+{"elapsed_seconds": 60.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2339.44584274292, "time": 1788988560.5541565}
+{"elapsed_seconds": 90.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2309.4421865940094, "time": 1788988590.5578127}
+{"elapsed_seconds": 120.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2279.4387776851654, "time": 1788988620.5612216}
+{"elapsed_seconds": 150.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2249.4343712329865, "time": 1788988650.5656276}
+{"elapsed_seconds": 180.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2219.4305069446564, "time": 1788988680.5694923}
+{"elapsed_seconds": 210.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2189.4269466400146, "time": 1788988710.5730526}
+{"elapsed_seconds": 240.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2159.423041820526, "time": 1788988740.5769575}
+{"elapsed_seconds": 270.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2129.418788433075, "time": 1788988770.5812106}
+{"elapsed_seconds": 300.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2099.412936925888, "time": 1788988800.5870621}
+{"elapsed_seconds": 330.0, "event": "child_running", "label": "final-duel", "output_exists": false, "remaining_seconds": 2069.407171010971, "time": 1788988830.5928278}
+{"event": "child_complete", "label": "final-duel", "output": "reports/final/20260909T191906Z/final-vs-champion-duel.json", "remaining_seconds": 2063.4025955200195, "time": 1788988836.5974028}
+{"cutoffs": 0, "event": "duel_gate", "losses": 29, "passed": true, "remaining_seconds": 2063.3911175727844, "time": 1788988836.6088815, "total": 80, "wilson_all_games_lower": 0.5281079450222217, "wins": 51}
+{"command": ["-m", "training.evaluate", "--checkpoint", "/workspace/gipf/checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "--opponent", "greedy", "--games", "40", "--batch", "64", "--device", "cuda", "--threads", "2", "--simulations", "128", "--seed", "1884001", "--max-ply", "300", "--output", "/workspace/gipf/reports/final/20260909T191906Z/final-vs-greedy.json", "--seconds", "600"], "event": "child_start", "label": "final-greedy", "log": "reports/final/20260909T191906Z/final-greedy.log", "outer_seconds": 650, "remaining_seconds": 2063.3876140117645, "time": 1788988836.6123855}
+{"event": "child_complete", "label": "final-greedy", "output": "reports/final/20260909T191906Z/final-vs-greedy.json", "remaining_seconds": 2047.3807001113892, "time": 1788988852.6192977}
+{"event": "greedy_gate", "finalist": "final", "passed": true, "remaining_seconds": 2047.3764448165894, "time": 1788988852.6235528, "wins": 40}
+{"event": "promoted", "finalist": "final", "remaining_seconds": 2047.21737241745, "source_hash": "aa533bb8922231a3e0dc53dd2ff947cab6899ef09a9245463c89ac99ea776ef0", "time": 1788988852.7826257}
+{"event": "snapshot", "label": "champion-before-final_mlp", "path": "checkpoints/final/20260909T191906Z/champion-before-final_mlp-d5a7e3bda296.pt", "remaining_seconds": 2047.1995146274567, "sha256": "d5a7e3bda2966a79d22cf34f131976907260e679683d0e2680d935312f41c2f6", "time": 1788988852.8004847}
+{"command": ["-m", "training.duel", "--candidate", "/workspace/gipf/checkpoints/final/20260909T191906Z/final_mlp-245c840d5037.pt", "--champion", "/workspace/gipf/checkpoints/final/20260909T191906Z/champion-before-final_mlp-d5a7e3bda296.pt", "--games", "80", "--batch", "1", "--device", "cpu", "--threads", "1", "--budget-ms", "50", "--simulations", "10000", "--seed", "941002", "--max-ply", "300", "--output", "/workspace/gipf/reports/final/20260909T191906Z/final_mlp-vs-champion-duel.json", "--seconds", "600"], "event": "child_start", "label": "final_mlp-duel", "log": "reports/final/20260909T191906Z/final_mlp-duel.log", "outer_seconds": 650, "remaining_seconds": 2047.1958034038544, "time": 1788988852.8041961}
+{"elapsed_seconds": 30.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 2017.1890726089478, "time": 1788988882.8109267}
+{"elapsed_seconds": 60.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1987.1849431991577, "time": 1788988912.8150563}
+{"elapsed_seconds": 90.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1957.181092262268, "time": 1788988942.8189065}
+{"elapsed_seconds": 120.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1927.1772990226746, "time": 1788988972.8227005}
+{"elapsed_seconds": 150.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1897.1734602451324, "time": 1788989002.8265393}
+{"elapsed_seconds": 180.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1867.1696412563324, "time": 1788989032.8303585}
+{"elapsed_seconds": 210.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1837.1659789085388, "time": 1788989062.8340206}
+{"elapsed_seconds": 240.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1807.1622695922852, "time": 1788989092.8377297}
+{"elapsed_seconds": 270.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1777.1586186885834, "time": 1788989122.8413806}
+{"elapsed_seconds": 300.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1747.1549291610718, "time": 1788989152.8450701}
+{"elapsed_seconds": 330.0, "event": "child_running", "label": "final_mlp-duel", "output_exists": false, "remaining_seconds": 1717.1509578227997, "time": 1788989182.8490417}
+{"event": "child_complete", "label": "final_mlp-duel", "output": "reports/final/20260909T191906Z/final_mlp-vs-champion-duel.json", "remaining_seconds": 1693.146943807602, "time": 1788989206.853054}
+{"cutoffs": 0, "event": "duel_gate", "losses": 40, "passed": false, "remaining_seconds": 1693.1425344944, "time": 1788989206.8574648, "total": 80, "wilson_all_games_lower": 0.3929741508611972, "wins": 40}
+{"event": "chosen_source", "path": "checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "remaining_seconds": 1693.111930847168, "sha256": "aa533bb8922231a3e0dc53dd2ff947cab6899ef09a9245463c89ac99ea776ef0", "time": 1788989206.888065}
+{"command": ["-m", "training.evaluate", "--checkpoint", "/workspace/gipf/checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "--games", "200", "--seed", "942001", "--max-ply", "300", "--output", "/workspace/gipf/reports/final/20260909T191906Z/heldout-vs-random.json", "--opponent", "random", "--batch", "64", "--device", "cuda", "--threads", "2", "--simulations", "128", "--seconds", "300"], "event": "child_start", "label": "heldout-random", "log": "reports/final/20260909T191906Z/heldout-random.log", "outer_seconds": 330, "remaining_seconds": 1693.1070704460144, "time": 1788989206.8929293}
+{"event": "child_complete", "label": "heldout-random", "output": "reports/final/20260909T191906Z/heldout-vs-random.json", "remaining_seconds": 1671.0993585586548, "time": 1788989228.9006379}
+{"command": ["-m", "training.evaluate", "--checkpoint", "/workspace/gipf/checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "--games", "200", "--seed", "942002", "--max-ply", "300", "--output", "/workspace/gipf/reports/final/20260909T191906Z/heldout-vs-greedy.json", "--opponent", "greedy", "--batch", "64", "--device", "cuda", "--threads", "2", "--simulations", "128", "--seconds", "300"], "event": "child_start", "label": "heldout-greedy", "log": "reports/final/20260909T191906Z/heldout-greedy.log", "outer_seconds": 330, "remaining_seconds": 1671.094732284546, "time": 1788989228.9052672}
+{"elapsed_seconds": 30.0, "event": "child_running", "label": "heldout-greedy", "output_exists": false, "remaining_seconds": 1641.0869598388672, "time": 1788989258.913038}
+{"event": "child_complete", "label": "heldout-greedy", "output": "reports/final/20260909T191906Z/heldout-vs-greedy.json", "remaining_seconds": 1629.0810644626617, "time": 1788989270.9189324}
+{"command": ["-m", "training.evaluate", "--checkpoint", "/workspace/gipf/checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "--games", "80", "--seed", "942003", "--max-ply", "300", "--output", "/workspace/gipf/reports/final/20260909T191906Z/heldout-vs-mcts.json", "--opponent", "mcts", "--batch", "1", "--device", "cpu", "--threads", "1", "--simulations", "10000", "--neural-budget-ms", "50", "--move-seconds", "0.05", "--baseline-simulations", "10000", "--seconds", "600"], "event": "child_start", "label": "heldout-mcts", "log": "reports/final/20260909T191906Z/heldout-mcts.log", "outer_seconds": 630, "remaining_seconds": 1629.07834982872, "time": 1788989270.9216497}
+{"elapsed_seconds": 30.0, "event": "child_running", "label": "heldout-mcts", "output_exists": false, "remaining_seconds": 1599.0714209079742, "time": 1788989300.928578}
+{"elapsed_seconds": 60.0, "event": "child_running", "label": "heldout-mcts", "output_exists": false, "remaining_seconds": 1569.0643968582153, "time": 1788989330.935602}
+{"elapsed_seconds": 90.0, "event": "child_running", "label": "heldout-mcts", "output_exists": false, "remaining_seconds": 1539.0574233531952, "time": 1788989360.9425752}
+{"elapsed_seconds": 120.0, "event": "child_running", "label": "heldout-mcts", "output_exists": false, "remaining_seconds": 1509.0503726005554, "time": 1788989390.9496255}
+{"elapsed_seconds": 150.0, "event": "child_running", "label": "heldout-mcts", "output_exists": false, "remaining_seconds": 1479.0434494018555, "time": 1788989420.9565496}
+{"elapsed_seconds": 180.0, "event": "child_running", "label": "heldout-mcts", "output_exists": false, "remaining_seconds": 1449.0379259586334, "time": 1788989450.962072}
+{"event": "child_complete", "label": "heldout-mcts", "output": "reports/final/20260909T191906Z/heldout-vs-mcts.json", "remaining_seconds": 1439.0317034721375, "time": 1788989460.968293}
+{"command": ["-m", "training.evaluate", "--checkpoint", "/workspace/gipf/checkpoints/final/20260909T191906Z/final-aa533bb89222.pt", "--games", "80", "--seed", "942004", "--max-ply", "300", "--output", "/workspace/gipf/reports/final/20260909T191906Z/heldout-vs-minimax.json", "--opponent", "minimax", "--batch", "1", "--device", "cpu", "--threads", "1", "--simulations", "10000", "--neural-budget-ms", "50", "--move-seconds", "0.05", "--baseline-depth", "6", "--seconds", "600"], "event": "child_start", "label": "heldout-minimax", "log": "reports/final/20260909T191906Z/heldout-minimax.log", "outer_seconds": 630, "remaining_seconds": 1439.0262649059296, "time": 1788989460.9737346}
+{"elapsed_seconds": 30.0, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1409.0180253982544, "time": 1788989490.9819727}
+{"elapsed_seconds": 60.0, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1379.0110456943512, "time": 1788989520.9889526}
+{"elapsed_seconds": 90.0, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1348.998744726181, "time": 1788989551.0012536}
+{"elapsed_seconds": 120.0, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1318.9915835857391, "time": 1788989581.0084147}
+{"elapsed_seconds": 150.0, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1288.9844098091125, "time": 1788989611.0155883}
+{"elapsed_seconds": 180.0, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1258.9774026870728, "time": 1788989641.0225956}
+{"elapsed_seconds": 210.1, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1228.9701085090637, "time": 1788989671.0298898}
+{"elapsed_seconds": 240.1, "event": "child_running", "label": "heldout-minimax", "output_exists": false, "remaining_seconds": 1198.9631834030151, "time": 1788989701.0368147}
+{"event": "child_complete", "label": "heldout-minimax", "output": "reports/final/20260909T191906Z/heldout-vs-minimax.json", "remaining_seconds": 1180.9565660953522, "time": 1788989719.0434303}
+{"completed": true, "event": "runner_finished", "remaining_seconds": 1180.9513320922852, "time": 1788989719.0486674}
