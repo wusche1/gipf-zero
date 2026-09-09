@@ -8,6 +8,7 @@ import gipf_engine as ge
 from training.model import PolicyValue,ModelConfig,encode,SYMMETRIES,ROWS,COLS
 from training.search import Node,BatchedMCTS
 from training import evaluate as training_evaluate
+from training import duel as training_duel
 
 def transformed(s,perm):
     d=s.serialize();b=d['board'];new=[0]*37
@@ -140,6 +141,21 @@ def test_evaluation_outcomes_keep_colours_pairs_and_cutoffs_separate():
     pairs=training_evaluate.paired_opening_summary(records)
     assert pairs['complete_pairs']==3
     assert pairs['neural_sweeps']==1 and pairs['splits']==1 and pairs['pairs_with_cutoff']==1
+
+
+def test_cpu_time_budget_duel_records_search_work_and_explicit_cutoffs(tmp_path,monkeypatch):
+    model=PolicyValue(ModelConfig('mlp',16,1)).eval()
+    payload={'model':model.state_dict(),'config':{'kind':'mlp','width':16,'blocks':1,'head':'flat'},'games':0,'iteration':0}
+    candidate=tmp_path/'candidate.pt';champion=tmp_path/'champion.pt';output=tmp_path/'duel.json'
+    torch.save(payload,candidate);torch.save(payload,champion)
+    monkeypatch.setattr('sys.argv',['duel.py','--candidate',str(candidate),'--champion',str(champion),'--games','2','--batch','1','--device','cpu','--threads','1','--simulations','10000','--budget-ms','50','--max-ply','20','--seconds','30','--output',str(output)])
+    training_duel.main()
+    result=json.loads(output.read_text())
+    assert result['unfinished']==0 and result['wins']+result['losses']+result['cutoffs']==2
+    assert result['config']['budget_ms']==50 and result['config']['device']=='cpu'
+    assert result['candidate_root_simulations']['count']>0 and result['champion_search_seconds']['count']>0
+    for record in result['records']:
+        if record['outcome']=='cutoff':assert record['cutoff_reason'] in ('insertion','decision')
 
 def test_factorized_capture_head_shares_mask_decisions():
     from training.model import ACTIONS

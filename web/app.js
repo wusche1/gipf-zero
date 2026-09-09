@@ -83,7 +83,7 @@ function render() {
   renderPieces();
   renderMeta();
   renderCapture();
-  els.undo.disabled = past.length === 0;
+  els.undo.disabled = !canUndo();
   if (winnerOf(state) !== 0) {
     aiThinking = false;
     aiBlocked = true;
@@ -186,28 +186,28 @@ function renderCapture() {
 }
 
 function choosePoint(key) {
-  if (aiThinking || winnerOf(state) !== 0 || captureChoices().length) return;
+  if (aiThinking || winnerOf(state) !== 0 || captureChoices().length || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
   const actions = legalByPoint.get(key) || [];
   if (actions.length !== 1) { showToast(actions.length > 1 ? 'Choose an incoming arrow' : 'That point is not open'); return; }
   const action = actions[0];
   const nextAction = typeof action === 'object' ? { ...action } : action;
-  past.push(clone(state));
+  past.push({ state: clone(state), actor: 'human' });
   state = game.applyAction(state, nextAction) || state;
   render();
 }
 
 function chooseRay(rayId) {
-  if (aiThinking || winnerOf(state) !== 0 || captureChoices().length) return;
+  if (aiThinking || winnerOf(state) !== 0 || captureChoices().length || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
   const action = legal.find(candidate => candidate === rayId);
   if (action == null) { showToast('That incoming arrow is unavailable'); return; }
-  past.push(clone(state));
+  past.push({ state: clone(state), actor: 'human' });
   state = game.applyAction(state, action) || state;
   render();
 }
 
 function chooseCapture() {
   if (!selectedCapture || winnerOf(state) !== 0 || aiThinking || (els.mode.value === 'ai' && currentPlayer() === els.aiColor.value)) return;
-  past.push(clone(state));
+  past.push({ state: clone(state), actor: 'human' });
   state = game.applyAction(state, selectedCapture.action || { type: 'capture', row: selectedCapture.id || selectedCapture }) || state;
   selectedCapture = null;
   render();
@@ -215,10 +215,24 @@ function chooseCapture() {
 
 function bindControls() {
   $('new-game').addEventListener('click', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; past = []; selectedCapture = null; state = game.newGame(); render(); showToast('A new table is ready'); });
-  els.undo.addEventListener('click', () => { if (past.length) { gameRevision += 1; aiThinking = false; aiBlocked = false; state = past.pop(); selectedCapture = null; render(); } });
+  els.undo.addEventListener('click', () => {
+    if (!canUndo()) return;
+    gameRevision += 1; aiThinking = false; aiBlocked = false;
+    if (els.mode.value === 'ai') {
+      let entry;
+      while (past.length) {
+        entry = past.pop();
+        if (entry.actor === 'human' && currentPlayer(entry.state) !== els.aiColor.value) break;
+      }
+      state = entry?.state || state;
+    } else {
+      state = past.pop().state;
+    }
+    selectedCapture = null; render();
+  });
   els.confirmCapture.addEventListener('click', chooseCapture);
-  els.mode.addEventListener('change', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); if (els.mode.value === 'ai') maybeAiMove(); });
-  els.aiColor.addEventListener('change', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; maybeAiMove(); });
+  els.mode.addEventListener('change', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); render(); });
+  els.aiColor.addEventListener('change', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; render(); });
   els.difficulty.addEventListener('change', maybeAiMove);
   const dialog = $('rules-dialog');
   [$('rules-open'), $('rules-open-secondary')].forEach(button => button.addEventListener('click', () => dialog.showModal()));
@@ -250,7 +264,7 @@ async function maybeAiMove() {
     els.aiStatus.textContent = config.aiEndpoint ? 'Machine unavailable · local mode' : 'No machine connected';
   } else {
     aiModelName = responseModel || aiModelName;
-    past.push(clone(state)); state = game.applyAction(state, action) || state;
+    past.push({ state: clone(state), actor: 'ai' }); state = game.applyAction(state, action) || state;
   }
   aiThinking = false;
   if (endpointSucceeded) els.aiStatus.textContent = aiModelName ? `${aiModelName} ready` : 'Machine endpoint ready';
@@ -300,9 +314,14 @@ function captureChoices() {
   }
   return [];
 }
-function currentPlayer() {
-  const player = state?.currentPlayer ?? state?.current_player ?? state?.turn ?? 'white';
+function currentPlayer(value = state) {
+  const player = value?.currentPlayer ?? value?.current_player ?? value?.turn ?? 'white';
   return player === -1 || player === 'black' || player === 'b' ? 'black' : 'white';
+}
+function canUndo() {
+  if (!past.length) return false;
+  if (els.mode.value !== 'ai') return true;
+  return past.some(entry => entry.actor === 'human' && currentPlayer(entry.state) !== els.aiColor.value);
 }
 function winnerOf(value) {
   const winner = value?.winner ?? 0;

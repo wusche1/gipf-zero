@@ -76,9 +76,16 @@ def expected_board(state):
     }
 
 
+def block_external_fonts(page):
+    """Keep browser tests deterministic when Google Fonts is unavailable."""
+    page.route("https://fonts.googleapis.com/**", lambda route: route.abort())
+    page.route("https://fonts.gstatic.com/**", lambda route: route.abort())
+
+
 def ready_page(browser, site_url):
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
+    block_external_fonts(page)
     page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"","engineUrl":"./gipf_engine.js"}'))
     page.goto(site_url, wait_until="domcontentloaded")
     expect(page.locator("#engine-status")).to_have_text("Ready to play", timeout=5_000)
@@ -130,6 +137,7 @@ def test_optional_capture_toggle_preserves_the_engine_action_encoding(browser, s
     '''
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
+    block_external_fonts(page)
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=fake_engine))
     page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"","engineUrl":"./gipf_engine.js"}'))
     try:
@@ -163,6 +171,7 @@ def test_ai_resolves_every_capture_decision_in_a_chain(browser, site_url):
     calls = []
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
+    block_external_fonts(page)
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=fake_engine))
     page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"https://ai.test","engineUrl":"./gipf_engine.js"}'))
 
@@ -203,6 +212,7 @@ def test_stale_ai_response_cannot_mutate_a_new_game(browser, site_url):
     '''
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
+    block_external_fonts(page)
     page.add_init_script("""
       window.aiResolvers = [];
       const nativeFetch = window.fetch.bind(window);
