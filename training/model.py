@@ -3,6 +3,7 @@ from dataclasses import dataclass, asdict
 import numpy as np
 import torch
 from torch import nn
+from torch.nn import functional as F
 import gipf_engine as ge
 
 ACTIONS = 42 + 21 * 128
@@ -25,6 +26,60 @@ class Residual(nn.Module):
         self.net=nn.Sequential(nn.Conv2d(c,c,3,padding=1),nn.GroupNorm(4,c),nn.ReLU(),nn.Conv2d(c,c,3,padding=1),nn.GroupNorm(4,c))
     def forward(self,x): return torch.relu(x+self.net(x))
 
+
+class HexConv2d(nn.Conv2d):
+    """Axial-grid 3x3 convolution with its two non-neighbour corners masked.
+
+    Rows encode axial ``r`` and columns encode axial ``q``.  The top-left and
+    bottom-right kernel offsets change both q and r in the same direction and
+    are not adjacent hexes.  Multiplication in ``forward`` keeps their effect
+    and gradients zero even if an optimizer stores nonzero weight values.
+    """
+    def __init__(self, in_channels, out_channels, kernel_size=3, **kwargs):
+        if kernel_size != 3:
+            raise ValueError('HexConv2d only represents 3x3 axial kernels')
+        super().__init__(in_channels, out_channels, kernel_size, **kwargs)
+        mask = torch.ones((1, 1, 3, 3), dtype=torch.float32)
+        mask[0, 0, 0, 0] = mask[0, 0, 2, 2] = 0
+        self.register_buffer('hex_mask', mask)
+
+    def forward(self, x):
+        return F.conv2d(x, self.weight * self.hex_mask, self.bias, self.stride,
+                        self.padding, self.dilation, self.groups)
+
+
+class HexResidual(nn.Module):
+    def __init__(self, c):
+        super().__init__()
+        self.net = nn.Sequential(
+            HexConv2d(c, c, 3, padding=1), nn.GroupNorm(4, c), nn.ReLU(),
+            HexConv2d(c, c, 3, padding=1), nn.GroupNorm(4, c))
+
+    def forward(self, x):
+        return torch.relu(x + self.net(x))
+
+
+class TransformerBody(nn.Module):
+    """Noncausal attention over the 37 playable cells and centered axial coords."""
+    def __init__(self, width, blocks, heads=4, feedforward=128):
+        super().__init__()
+        if width % heads:
+            raise ValueError(f'transformer width {width} must be divisible by {heads} heads')
+        self.token = nn.Linear(PLANES, width)
+        self.coordinate = nn.Linear(2, width, bias=False)
+        layer = nn.TransformerEncoderLayer(width, heads, feedforward,
+                                           dropout=0.0, activation='gelu',
+                                           batch_first=True, norm_first=False)
+        self.encoder = nn.TransformerEncoder(layer, blocks)
+        coords = torch.tensor(COORDS, dtype=torch.float32).div_(3).unsqueeze(0)
+        self.register_buffer('coordinates', coords)
+
+    def forward(self, x):
+        # All global feature planes are already present at every board token.
+        tokens = x[:, :, ROWS, COLS].transpose(1, 2)
+        tokens = self.token(tokens) + self.coordinate(self.coordinates)
+        return self.encoder(tokens).flatten(1)
+
 class PolicyValue(nn.Module):
     def __init__(self,config=ModelConfig()):
         super().__init__();self.config=config
@@ -33,10 +88,21 @@ class PolicyValue(nn.Module):
             layers=[nn.Flatten(),nn.Linear(PLANES*49,w),nn.ReLU()]
             for _ in range(config.blocks): layers += [nn.Linear(w,w),nn.ReLU()]
             self.body=nn.Sequential(*layers);dim=w
-        else:
+        elif config.kind=='resnet':
+            # Keep this literal sequence unchanged: existing ResNet checkpoint
+            # keys and tensor shapes remain compatible.
             c=config.width
             self.body=nn.Sequential(nn.Conv2d(PLANES,c,3,padding=1),nn.GroupNorm(4,c),nn.ReLU(),*[Residual(c) for _ in range(config.blocks)],nn.Conv2d(c,8,1),nn.ReLU(),nn.Flatten())
             dim=8*49
+        elif config.kind=='hexresnet':
+            c=config.width
+            self.body=nn.Sequential(HexConv2d(PLANES,c,3,padding=1),nn.GroupNorm(4,c),nn.ReLU(),*[HexResidual(c) for _ in range(config.blocks)],nn.Conv2d(c,8,1),nn.ReLU(),nn.Flatten())
+            dim=8*49
+        elif config.kind=='transformer':
+            self.body=TransformerBody(config.width, config.blocks)
+            dim=37*config.width
+        else:
+            raise ValueError(f'unknown model kind {config.kind!r}')
         self.policy=nn.Linear(dim,ACTIONS if config.head=='flat' else 100)
         if config.head=='factorized':
             # Captures factor into row choice + individual double-removal choices.

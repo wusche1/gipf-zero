@@ -19,7 +19,7 @@ def atomic_save(data,path):
 
 def main():
     p=argparse.ArgumentParser()
-    p.add_argument('--run',required=True);p.add_argument('--kind',default='resnet',choices=['resnet','mlp'])
+    p.add_argument('--run',required=True);p.add_argument('--kind',default='resnet',choices=['resnet','hexresnet','transformer','mlp'])
     p.add_argument('--head',default='flat',choices=['flat','factorized']);p.add_argument('--width',type=int,default=48);p.add_argument('--blocks',type=int,default=3)
     p.add_argument('--seconds',type=int,default=600);p.add_argument('--deadline',type=float,default=0)
     p.add_argument('--games',type=int,default=64);p.add_argument('--games-per-iteration',type=int,default=32)
