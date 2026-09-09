@@ -1,0 +1,72 @@
+{
+  "seed": 38,
+  "opening_plies": 8,
+  "noise": true,
+  "runs_per_backend": 3,
+  "results": {
+    "mlp": {
+      "checkpoint": "checkpoints/pilot-mlp256-final.pt",
+      "checkpoint_sha256": "81704b05484f8f2ad3fb7534659ce899f6666102c93ef5fbcbb32cce87d2d0fd",
+      "model_config": {
+        "kind": "mlp",
+        "width": 256,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "roots": 128,
+      "simulations": 64,
+      "cuda_graph_batch": 128,
+      "seconds": {
+        "0": [
+          0.11285943910479546,
+          0.12250659987330437,
+          0.12065942585468292
+        ],
+        "128": [
+          0.11627080291509628,
+          0.11562368646264076,
+          0.10441587120294571
+        ]
+      },
+      "median_seconds": {
+        "eager": 0.12065942585468292,
+        "cuda_graph": 0.11562368646264076
+      },
+      "speedup": 1.0435528354622152,
+      "exact_policy_identity": true,
+      "exact_visit_identity": true
+    },
+    "resnet": {
+      "checkpoint": "checkpoints/pilot-resnet32-final.pt",
+      "checkpoint_sha256": "72fc31d851c17e66e311cc610ac32ded90f1a7c469cc3d05599c904ca3bbb9b4",
+      "model_config": {
+        "kind": "resnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "roots": 512,
+      "simulations": 128,
+      "cuda_graph_batch": 512,
+      "seconds": {
+        "0": [
+          0.776002611964941,
+          0.7587662413716316,
+          0.7085901983082294
+        ],
+        "512": [
+          0.7894054614007473,
+          0.8116815686225891,
+          0.6752173826098442
+        ]
+      },
+      "median_seconds": {
+        "eager": 0.7587662413716316,
+        "cuda_graph": 0.7894054614007473
+      },
+      "speedup": 0.9611869672465295,
+      "exact_policy_identity": true,
+      "exact_visit_identity": true
+    }
+  }
+}
