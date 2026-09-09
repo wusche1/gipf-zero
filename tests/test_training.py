@@ -107,7 +107,7 @@ def test_evaluation_settles_an_opening_capture_and_delays_insertion_cutoff():
 
 
 def test_evaluation_resume_records_are_keyed_and_reject_mismatch(tmp_path):
-    args=SimpleNamespace(opponent='random',simulations=8,move_seconds=.05,max_ply=240,seed=7,opening_plies=4,neural_budget_ms=0)
+    args=SimpleNamespace(opponent='random',simulations=8,move_seconds=.05,max_ply=240,seed=7,opening_plies=4,neural_budget_ms=0,threads=2,device='cpu',batch=1,baseline_simulations=None,baseline_depth=None)
     key=training_evaluate.evaluation_key(args,'checkpoint-digest')
     path=tmp_path/'evaluation.jsonl'
     path.write_text(json.dumps({'game':0,'evaluation_key':key})+'\n')
@@ -115,11 +115,31 @@ def test_evaluation_resume_records_are_keyed_and_reject_mismatch(tmp_path):
     assert records[0]['game']==0 and completed=={0}
     with pytest.raises(ValueError,match='mismatch'):
         training_evaluate.load_resume_records(path,'other-digest',2)
+    changed=SimpleNamespace(**vars(args));changed.batch=2
+    assert training_evaluate.evaluation_key(changed,'checkpoint-digest')!=key
 
 
 def test_evaluation_measurements_report_empty_and_populated_samples():
     assert training_evaluate.measurement_stats([])=={'count':0,'mean':None,'min':None,'max':None}
     assert training_evaluate.measurement_stats([2,4,6])=={'count':3,'mean':4.0,'min':2,'max':6}
+
+
+def test_evaluation_outcomes_keep_colours_pairs_and_cutoffs_separate():
+    records=[
+        {'game':0,'neural_color':1,'outcome':'win','cutoff_reason':None},
+        {'game':1,'neural_color':-1,'outcome':'loss','cutoff_reason':None},
+        {'game':2,'neural_color':1,'outcome':'win','cutoff_reason':None},
+        {'game':3,'neural_color':-1,'outcome':'win','cutoff_reason':None},
+        {'game':4,'neural_color':1,'outcome':'cutoff','cutoff_reason':'insertion'},
+        {'game':5,'neural_color':-1,'outcome':'loss','cutoff_reason':None},
+        {'game':6,'neural_color':1,'outcome':'win','cutoff_reason':None},
+    ]
+    summary=training_evaluate.outcome_summary(records)
+    assert summary['wins']==4 and summary['losses']==2 and summary['cutoffs']==1
+    assert summary['insertion_cutoffs']==1 and summary['decision_cutoffs']==0
+    pairs=training_evaluate.paired_opening_summary(records)
+    assert pairs['complete_pairs']==3
+    assert pairs['neural_sweeps']==1 and pairs['splits']==1 and pairs['pairs_with_cutoff']==1
 
 def test_factorized_capture_head_shares_mask_decisions():
     from training.model import ACTIONS
