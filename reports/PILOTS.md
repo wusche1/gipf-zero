@@ -117,3 +117,21 @@ the casual serving limit. Twenty paired openings used both colours; there
 were no cutoffs ([report](mlp10084-minimax-cpu250.json)). Neural search averaged
 206.6 ms and 996 simulations. Maximum depth is a search ceiling, not a claim
 that minimax reached six plies within every deadline.
+
+## Geometry-aware pilots requested during the run
+
+Two additional randomly initialized candidates use 15-minute pilots with 64
+parallel games, 32 simulations, 32 updates per 32 completed games, batch 256,
+learning rate .001, and the existing twelve board symmetries.
+
+* **HexResNet32, two blocks:** masks the top-left and bottom-right corners of
+  every 3×3 convolution on the axial grid. The first pilot completed 5,666 games
+  (eight training cutoffs) and scored 40–0 against random and 37–3 against greedy
+  in 40-game fixed-128-simulation tests.
+* **Transformer64, two blocks:** noncausal attention over 37 playable-cell
+  tokens, four heads, feed-forward width 128, learned linear embeddings of
+  centred axial coordinates, flattened policy/value heads. Pilot in progress.
+
+These are practical time-limited comparisons. Different CPU contention and
+search optimizations mean games/hour cannot isolate the effect of geometry.
+Neither architecture has yet displaced the validated MLP champion.
