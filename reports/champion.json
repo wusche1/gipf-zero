@@ -1,13 +1,31 @@
 {
-  "name": "MCTS baseline",
-  "kind": "baseline",
-  "description": "128-simulation UCT with fixed heuristic evaluation",
-  "evaluation": {
-    "opponent": "random",
-    "wins": 200,
-    "losses": 0,
-    "cutoffs": 0,
-    "games": 200
+  "name": "GIPF Zero \u2014 first champion",
+  "kind": "rl",
+  "games_trained": 1065,
+  "iteration": 33,
+  "architecture": {
+    "kind": "mlp",
+    "width": 128,
+    "blocks": 2
   },
-  "updated_utc": "2026-09-09T15:55:00Z"
+  "source_checkpoint_sha256": "74d2ebbd767360edca72c0f2599803f0f29fee1de5ee5fd3afb799193a5cb4cb",
+  "updated_utc": "2026-09-09T16:04:28.495584+00:00",
+  "evaluation": {
+    "random": {
+      "wins": 200,
+      "losses": 0,
+      "cutoffs": 0
+    },
+    "greedy": {
+      "wins": 173,
+      "losses": 26,
+      "cutoffs": 1
+    },
+    "mcts128": {
+      "wins": 27,
+      "losses": 13,
+      "cutoffs": 0
+    }
+  },
+  "evaluation_settings": "128 neural simulations per decision; fixed baselines capped at50ms; paired colors and4 seeded opening plies."
 }
