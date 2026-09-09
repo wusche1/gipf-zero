@@ -204,8 +204,10 @@ dialog::backdrop { background: rgba(37,31,27,.34); backdrop-filter: blur(3px); }
 .design-card:hover { border-color: rgba(180,87,63,.48); background: #fffdfa; transform: translateY(-1px); }
 .design-card.selected { border-color: var(--rust); background: #fffaf5; box-shadow: 0 0 0 2px rgba(180,87,63,.12); }
 .design-number { position: absolute; top: 10px; right: 11px; color: var(--muted); font: 9px var(--mono); letter-spacing: .08em; }
-.design-preview-wrap { display: block; min-height: 78px; margin-bottom: 7px; overflow: hidden; border-radius: 6px; background: linear-gradient(135deg, rgba(233,226,216,.66), rgba(250,247,241,.86)); }
-.design-preview { display: block; width: 100%; height: 78px; overflow: visible; }
+.design-preview-wrap { display: block; min-height: 98px; margin-bottom: 7px; overflow: hidden; border-radius: 6px; background: linear-gradient(135deg, rgba(233,226,216,.66), rgba(250,247,241,.86)); }
+.design-preview { display: block; width: 100%; height: 98px; overflow: visible; }
+.design-preview-group { text-anchor: middle; fill: var(--muted); font: 8px var(--mono); letter-spacing: .13em; }
+.design-preview-label { text-anchor: middle; fill: var(--muted); font: 8px var(--mono); }
 .design-card strong { font-size: 11px; font-weight: 600; }
 .design-card small { margin-top: 3px; color: var(--muted); font-size: 9px; }
 .designs-footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 17px; padding-top: 16px; border-top: 1px solid var(--line); }

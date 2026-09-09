@@ -37,6 +37,13 @@ def test_gallery_shows_ten_designs_and_applies_each_to_the_board(browser, site_u
     try:
         assert page.locator("#designs-dialog").is_visible()
         assert page.locator(".design-card").count() == 10
+        first_preview = page.locator(".design-card").first.locator(".design-preview")
+        assert first_preview.locator(".preview-piece").count() == 6
+        assert first_preview.locator(".design-preview-group").all_text_contents() == ["IVORY", "OBSIDIAN"]
+        assert first_preview.locator(".design-preview-label").all_text_contents() == ["single", "double", "single", "double"]
+        engraved = page.locator('.design-card[data-design="engraved-ii"] .design-detail')
+        assert engraved.count() == 4
+        assert engraved.evaluate_all("elements => elements.every(element => element.getAttribute('height') === '10')")
         for design_id in DESIGN_IDS:
             page.locator(f'.design-card[data-design="{design_id}"]').click()
             assert page.locator("body").get_attribute("data-piece-design") == design_id

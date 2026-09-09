@@ -150,7 +150,7 @@ function pieceElements({ x, y, owner, kind, captureClass = '', capturePart = nul
 function designDetails({ x, y, owner, captureClass, className, design }) {
   const ink = owner === 'white' ? 'ivory-detail' : 'obsidian-detail';
   if (design.id === 'concentric-ring') return [svg('circle', { cx: x, cy: y, r: 13, class: `design-detail ${ink}${captureClass} ${className}` })];
-  if (design.id === 'engraved-ii') return [svg('rect', { x: x - 5, y: y - 4, width: 10, height: 2, rx: 1, class: `design-detail ${ink}${captureClass} ${className}` }), svg('rect', { x: x - 5, y: y + 1, width: 10, height: 2, rx: 1, class: `design-detail ${ink}${captureClass} ${className}` })];
+  if (design.id === 'engraved-ii') return [svg('rect', { x: x - 5, y: y - 5, width: 2, height: 10, rx: 1, class: `design-detail ${ink}${captureClass} ${className}` }), svg('rect', { x: x + 3, y: y - 5, width: 2, height: 10, rx: 1, class: `design-detail ${ink}${captureClass} ${className}` })];
   if (design.id === 'twin-pips') return [svg('circle', { cx: x - 4, cy: y, r: 2, class: `design-detail ${ink}${captureClass} ${className}` }), svg('circle', { cx: x + 4, cy: y, r: 2, class: `design-detail ${ink}${captureClass} ${className}` })];
   if (design.id === 'hex-outline') return [svg('polygon', { points: hexPointsAt(x, y, 18), class: `design-detail ${ink}${captureClass} ${className}` })];
   if (design.id === 'cut-groove') return [svg('path', { d: `M ${x - 10} ${y + 7} Q ${x} ${y + 12} ${x + 10} ${y + 7}`, class: `design-detail ${ink}${captureClass} ${className}` })];
@@ -322,9 +322,14 @@ function setupDesignPicker() {
     const card = document.createElement('button');
     card.type = 'button'; card.className = 'design-card'; card.dataset.design = design.id;
     card.innerHTML = `<span class="design-number">${String(index + 1).padStart(2, '0')}</span><span class="design-preview-wrap"></span><strong>${design.name}</strong><small>${design.note}</small>`;
-    const preview = svg('svg', { viewBox: '0 0 154 88', class: `design-preview design-preview-${design.id}`, 'aria-hidden': 'true' });
-    pieceElements({ x: 43, y: 49, owner: 'white', kind: 'single', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
-    pieceElements({ x: 111, y: 49, owner: 'black', kind: 'double', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
+    const preview = svg('svg', { viewBox: '0 0 260 118', class: `design-preview design-preview-${design.id}`, 'aria-hidden': 'true' });
+    preview.appendChild(svg('text', { x: 64, y: 14, class: 'design-preview-group' }, 'IVORY'));
+    preview.appendChild(svg('text', { x: 196, y: 14, class: 'design-preview-group' }, 'OBSIDIAN'));
+    pieceElements({ x: 34, y: 58, owner: 'white', kind: 'single', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
+    pieceElements({ x: 94, y: 58, owner: 'white', kind: 'double', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
+    pieceElements({ x: 166, y: 58, owner: 'black', kind: 'single', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
+    pieceElements({ x: 226, y: 58, owner: 'black', kind: 'double', preview: true, designId: design.id }).forEach(element => preview.appendChild(element));
+    [['single', 34], ['double', 94], ['single', 166], ['double', 226]].forEach(([label, x]) => preview.appendChild(svg('text', { x, y: 108, class: 'design-preview-label' }, label)));
     card.querySelector('.design-preview-wrap').appendChild(preview);
     card.addEventListener('click', () => { selectedDesign = design.id; persistDesign(); updateDesignGallery(); });
     els.designsGallery.appendChild(card);
