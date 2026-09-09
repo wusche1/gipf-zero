@@ -4,7 +4,8 @@ No external model calls. Every match has a wall-clock timeout and durable logs.
 A replacement needs a >50% Wilson lower bound in a paired 80-game match and
 at least 32/40 wins against the frozen greedy baseline. Cutoffs never count as wins.
 """
-import argparse, datetime, hashlib, json, os, subprocess, sys, time
+import argparse, datetime, hashlib, io, json, os, subprocess, sys, time
+import torch
 from pathlib import Path
 from ops.promote import promote
 ROOT=Path(__file__).resolve().parents[1]
@@ -27,6 +28,9 @@ def main():
     p=argparse.ArgumentParser();p.add_argument('--run',required=True);p.add_argument('--interval',type=int,default=1800);p.add_argument('--deadline',type=float,required=True);a=p.parse_args()
     folder=ROOT/a.run; archive=ROOT/'checkpoints/league';archive.mkdir(parents=True,exist_ok=True)
     heartbeat=folder/'league-heartbeat.json';last_hash=None;next_check=time.time()+a.interval
+    if heartbeat.exists():
+        try:next_check=max(time.time(),float(json.loads(heartbeat.read_text()).get('next_check',next_check)))
+        except (ValueError,TypeError):pass
     def log(event,**kw):
         data={'time':time.time(),'event':event,**kw};heartbeat.write_text(json.dumps(data)+'\n');print(json.dumps(data),flush=True)
     while time.time()<a.deadline:
@@ -38,10 +42,16 @@ def main():
             if digest==last_hash:next_check=time.time()+60;continue
             stamp=datetime.datetime.now(datetime.timezone.utc).strftime('%H%M%S')
             candidate=archive/f'candidate-{stamp}.pt';candidate.write_bytes(raw)
-            champion=archive/f'champion-{stamp}.pt';champion.write_bytes((ROOT/'checkpoints/champion.pt').read_bytes())
+            champion_raw=(ROOT/'checkpoints/champion.pt').read_bytes()
+            champion=archive/f'champion-{stamp}.pt';champion.write_bytes(champion_raw)
+            def architecture(blob):
+                cfg=torch.load(io.BytesIO(blob),map_location='cpu',weights_only=False)['config']
+                return (cfg['kind'],cfg['width'],cfg['blocks'],cfg.get('head','flat'))
+            cross_architecture=architecture(raw)!=architecture(champion_raw)
             duel=ROOT/f'reports/league-{stamp}-duel.json';greedy=ROOT/f'reports/league-{stamp}-greedy.json'
-            log('duel',candidate=str(candidate))
-            run(['-m','training.duel','--candidate',str(candidate),'--champion',str(champion),'--games','80','--seed',str(300000+int(stamp)),'--seconds','600','--output',str(duel)],folder/f'league-{stamp}-duel.log',650)
+            log('duel',candidate=str(candidate),comparison='equal_cpu_50ms' if cross_architecture else 'equal_128_simulations')
+            limits=['--device','cpu','--threads','1','--batch','1','--budget-ms','50','--simulations','10000','--seconds','1200'] if cross_architecture else ['--seconds','600']
+            run(['-m','training.duel','--candidate',str(candidate),'--champion',str(champion),'--games','80','--seed',str(300000+int(stamp)),*limits,'--output',str(duel)],folder/f'league-{stamp}-duel.log',1250 if cross_architecture else 650)
             result=json.loads(duel.read_text());n=result['wins']+result['losses']+result['cutoffs']
             # Treat cutoffs as non-wins for the replacement confidence bound.
             from baselines.evaluate import wilson_interval
@@ -50,6 +60,8 @@ def main():
                 log('baseline_gate',duel_wins=result['wins'],duel_losses=result['losses'])
                 run(['-m','training.evaluate','--checkpoint',str(candidate),'--opponent','greedy','--games','40','--seed',str(600000+int(stamp)),'--seconds','400','--output',str(greedy)],folder/f'league-{stamp}-greedy.log',450)
                 baseline=json.loads(greedy.read_text());gate=not baseline['unfinished'] and baseline['wins']>=32
+                if gate and (ROOT/'checkpoints/champion.pt').read_bytes()!=champion_raw:
+                    log('stale_opponent',reason='Champion changed during evaluation');gate=False
                 if gate:
                     metadata=promote(candidate,f"GIPF Zero — {baseline['model_games']:,} games",[duel,greedy]);log('promoted',games=metadata['games_trained'])
             if not gate:log('retained_champion',wins=result['wins'],losses=result['losses'],cutoffs=result['cutoffs'])

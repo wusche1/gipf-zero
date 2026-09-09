@@ -93,3 +93,19 @@ then checkpointed and returned to ordinary inference. It remains available
 behind `--cuda-graph-batch 128`, default off. The verified native PUCT selector
 remains enabled. Reproduce the graph comparison with
 `python -m ops.benchmark_cuda_graph CHECKPOINT --output FILE`.
+
+## First long-run replacement (17:28 UTC)
+
+The 10,084-game MLP256 checkpoint beat the 6,300-game residual champion
+**61–18 with one cutoff** in 80 paired-opening games with each side receiving
+50 ms of CPU search per decision ([raw report](alternative-1716-equalcpu.json)).
+Mean measured search times were 50.02 and 50.30 ms; the faster MLP searched
+422 versus 153 simulations on average. At equal 128 simulations its margin
+was smaller: 45–32 with three cutoffs. It also won 39/40 against greedy.
+The equal-time result passed the conservative promotion gate, and this exact
+frozen MLP checkpoint became the served champion. This is a selection match,
+not a held-out final test or a human skill rating.
+
+Subsequent league matches use equal CPU time across different architectures
+and equal simulations within the same architecture. Both training families
+continue; training loss alone never triggers promotion.
