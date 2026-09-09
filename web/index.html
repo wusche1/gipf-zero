@@ -66,6 +66,7 @@
               <g id="grid-layer"></g>
               <g id="capture-layer" aria-hidden="true"></g>
               <g id="piece-layer"></g>
+              <g id="removal-layer" aria-hidden="true"></g>
               <g id="outer-layer" aria-hidden="true"></g>
               <g id="interaction-layer"></g>
             </svg>
@@ -92,7 +93,6 @@
             <div class="control-row ai-only"><label for="ai-color">Machine plays</label><select id="ai-color"><option value="black">Obsidian</option><option value="white">Ivory</option></select></div>
             <div class="control-row ai-only"><label for="difficulty">Tempo</label><select id="difficulty"><option value="casual">Casual · 250ms</option><option value="focused">Focused · 1s</option><option value="deep">Deep · 3s</option></select></div>
             <div class="button-row"><button class="button button-primary" id="new-game" type="button">New game</button><button class="button button-quiet" id="undo" type="button" disabled>Undo</button></div>
-            <button class="designs-button" id="designs-open" type="button"><span class="designs-swatch" aria-hidden="true"><i></i><i></i></span><span><strong>Piece designs</strong><small>Choose your table set</small></span><span class="designs-arrow">→</span></button>
           </section>
 
           <section class="capture-card" id="capture-card" hidden>
@@ -122,18 +122,8 @@
         <h2>Place. Push. Resolve.</h2>
         <p>Each player has 18 stone units: three GIPF doubles already on the board and twelve single pieces in reserve. Add a single to an incoming arrow. It pushes the occupied prefix toward the first empty point; a fully occupied ray cannot be used.</p>
         <p>Four or more same-colour singles in a connected straight segment must be removed. Your own returned singles go back to reserve; opponent singles are captured. Doubles are optional to remove. You lose when you have no GIPF double left, or cannot insert a reserve piece.</p>
-        <div class="rules-legend"><span class="mini-piece mini-single"></span><span>single piece</span><span class="mini-piece mini-double"></span><span>GIPF piece (two stacked)</span></div>
+        <div class="rules-legend"><span class="mini-piece mini-single"></span><span>single piece</span><span class="mini-piece mini-double"></span><span>GIPF double (contrasting center)</span></div>
         <button class="button button-primary full" id="rules-done" type="button">Back to the board</button>
-      </div>
-    </dialog>
-    <dialog id="designs-dialog" class="designs-dialog">
-      <div class="designs-dialog-inner">
-        <button class="dialog-close" id="designs-close" type="button" aria-label="Close piece designs">×</button>
-        <p class="eyebrow">Table customisation</p>
-        <h2>Choose a piece design</h2>
-        <p class="designs-intro">Compare ten ways to distinguish singles and doubles. Your choice is saved on this device.</p>
-        <div class="design-gallery" id="design-gallery"></div>
-        <div class="designs-footer"><span id="design-selection-label">Natural Stack selected</span><button class="button button-primary" id="designs-done" type="button">Play with this design</button></div>
       </div>
     </dialog>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
