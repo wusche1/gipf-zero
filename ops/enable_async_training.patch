@@ -1,0 +1,35 @@
+--- a/training/train.py
++++ b/training/train.py
+@@ -31,13 +31,21 @@
+                    help='opt-in fixed CUDA-graph inference batch (0 keeps eager inference)')
+     p.add_argument('--native-forest',action='store_true',
+                    help='opt-in C++ rule-tree traversal and backup for self-play')
++    p.add_argument('--async-workers',type=int,default=0,help='opt-in shared-inference native forest workers')
+     args=p.parse_args();out=Path(args.run);out.mkdir(parents=True,exist_ok=True)
++    if args.async_workers<0:p.error('--async-workers must be non-negative')
++    if args.async_workers and args.cuda_graph_batch:p.error('async inference does not support CUDA graphs')
+     if args.cuda_graph_batch<0:p.error('--cuda-graph-batch must be non-negative')
+     effective_cuda_graph_batch=args.cuda_graph_batch if args.device.startswith('cuda') else 0
+     NodeClass,SearchClass,search_backend=Node,BatchedMCTS,'python'
+     if args.native_forest:
+         from .native_search import NativeNode,NativeBatchedMCTS
+         NodeClass,SearchClass,search_backend=NativeNode,NativeBatchedMCTS,'native_forest'
++    if args.async_workers:
++        from .native_search import NativeNode
++        from .async_selfplay import AsyncNativeForestPool
++        from functools import partial
++        NodeClass,SearchClass,search_backend=NativeNode,partial(AsyncNativeForestPool,workers=args.async_workers),'async_native_forest'
+     torch.set_num_threads(4);torch.manual_seed(args.seed);np.random.seed(args.seed);random.seed(args.seed)
+     if args.device.startswith('cuda'):torch.backends.cuda.matmul.allow_tf32=True;torch.backends.cudnn.allow_tf32=True
+     rng=np.random.default_rng(args.seed)
+@@ -138,6 +146,9 @@
+             elif now-last_checkpoint>=120:
+                 checkpoint();last_checkpoint=now
+     finally:
+-        checkpoint(force_replay=True);log('stopped',reason='signal' if STOP else 'deadline')
++        try:
++            checkpoint(force_replay=True);log('stopped',reason='signal' if STOP else 'deadline')
++        finally:
++            if hasattr(search,'close'):search.close()
+ 
+ if __name__=='__main__':main()
