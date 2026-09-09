@@ -1,0 +1,122 @@
+{
+  "mlp256": {
+    "checkpoint": "checkpoints/pilot-mlp256-final.pt",
+    "model_config": {
+      "kind": "mlp",
+      "width": 256,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "roots": 128,
+    "simulations": 128,
+    "seconds": {
+      "False": [
+        0.22417614609003067,
+        0.21573539078235626,
+        0.1888897903263569
+      ],
+      "True": [
+        0.1579844318330288,
+        0.15115750953555107,
+        0.13039886951446533
+      ]
+    },
+    "median_seconds": {
+      "False": 0.21573539078235626,
+      "True": 0.15115750953555107
+    },
+    "speedup": 1.4272224479301636,
+    "exact_policy_identity": true,
+    "exact_visit_identity": true
+  },
+  "resnet32": {
+    "checkpoint": "checkpoints/pilot-resnet32-final.pt",
+    "model_config": {
+      "kind": "resnet",
+      "width": 32,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "roots": 128,
+    "simulations": 128,
+    "seconds": {
+      "False": [
+        0.31710341572761536,
+        0.25983741879463196,
+        0.30031800270080566
+      ],
+      "True": [
+        0.21251124143600464,
+        0.21233424171805382,
+        0.24490606039762497
+      ]
+    },
+    "median_seconds": {
+      "False": 0.30031800270080566,
+      "True": 0.21251124143600464
+    },
+    "speedup": 1.4131864303811101,
+    "exact_policy_identity": true,
+    "exact_visit_identity": true
+  },
+  "hex32": {
+    "checkpoint": "runs/pilot_hex32/latest.pt",
+    "model_config": {
+      "kind": "hexresnet",
+      "width": 32,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "roots": 128,
+    "simulations": 128,
+    "seconds": {
+      "False": [
+        0.30444397032260895,
+        0.3008395619690418,
+        0.280694130808115
+      ],
+      "True": [
+        0.2482052519917488,
+        0.23900055512785912,
+        0.2296924591064453
+      ]
+    },
+    "median_seconds": {
+      "False": 0.3008395619690418,
+      "True": 0.23900055512785912
+    },
+    "speedup": 1.2587400134200544,
+    "exact_policy_identity": true,
+    "exact_visit_identity": true
+  },
+  "transformer64": {
+    "checkpoint": "runs/pilot_transformer64/latest.pt",
+    "model_config": {
+      "kind": "transformer",
+      "width": 64,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "roots": 128,
+    "simulations": 64,
+    "seconds": {
+      "False": [
+        0.1383325569331646,
+        0.14302466437220573,
+        0.1633334718644619
+      ],
+      "True": [
+        0.1219891905784607,
+        0.12096120789647102,
+        0.11512622609734535
+      ]
+    },
+    "median_seconds": {
+      "False": 0.14302466437220573,
+      "True": 0.12096120789647102
+    },
+    "speedup": 1.1824010925438055,
+    "exact_policy_identity": true,
+    "exact_visit_identity": true
+  }
+}

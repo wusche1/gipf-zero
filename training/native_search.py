@@ -6,7 +6,6 @@ in Python.  ``NativeNode`` mirrors the public fields training uses, including
 ``children.get(action)`` for root reuse after a chosen move.
 """
 from contextlib import nullcontext
-import math
 import time
 
 import numpy as np
@@ -14,7 +13,6 @@ import torch
 import gipf_engine as ge
 
 from .inference import CudaGraphInference
-from .model import encode
 
 
 class _Children:
@@ -53,7 +51,8 @@ class NativeNode:
 
 class NativeBatchedMCTS:
     """Experimental batched MCTS using ``gipf_engine.NativeForest``."""
-    def __init__(self, model, device='cuda', cpuct=1.5, seed=0, cuda_graph_batch=0):
+    def __init__(self, model, device='cuda', cpuct=1.5, seed=0, cuda_graph_batch=0,
+                 compact_logits=True):
         if not hasattr(ge, 'NativeForest'):
             raise RuntimeError('gipf_engine lacks NativeForest; rebuild the native extension')
         self.model = model
@@ -61,21 +60,29 @@ class NativeBatchedMCTS:
         self.cpuct = cpuct
         self.rng = np.random.default_rng(seed)
         self.evaluations = 0
+        self.compact_logits = compact_logits
         self.inference = (CudaGraphInference(model, device, cuda_graph_batch)
                           if cuda_graph_batch and str(device).startswith('cuda') else None)
 
     @torch.inference_mode()
-    def _evaluate(self, forest, leaves):
-        if not leaves:
+    def _evaluate(self, forest, pending_count):
+        if not pending_count:
             return
-        encoded = ge.encode_batch(leaves) if hasattr(ge, 'encode_batch') else np.stack([encode(s) for s in leaves])
+        encoded = forest.encode_pending() if hasattr(forest, 'encode_pending') else None
+        if encoded is None:
+            raise RuntimeError('native forest requires encode_pending')
         features = torch.from_numpy(encoded)
         if self.inference is None:
             logits, values = self.model(features.to(self.device))
         else:
             logits, values = self.inference.forward(features)
-        forest.finish(logits.float().cpu().numpy(), values.float().cpu().numpy())
-        self.evaluations += len(leaves)
+        if self.compact_logits:
+            indices = torch.from_numpy(forest.pending_action_indices()).to(logits.device, dtype=torch.long)
+            selected = torch.gather(logits.float(), 1, indices)
+            forest.finish_selected(selected.cpu().numpy(), values.float().cpu().numpy())
+        else:
+            forest.finish(logits.float().cpu().numpy(), values.float().cpu().numpy())
+        self.evaluations += pending_count
 
     def search(self, roots, simulations=64, noise=False, deadline=None):
         if any(root.state.winner for root in roots):
@@ -83,7 +90,7 @@ class NativeBatchedMCTS:
         forest = ge.NativeForest([root._node for root in roots])
         scope = self.inference.search_scope() if self.inference is not None else nullcontext()
         with scope:
-            self._evaluate(forest, forest.expand_unexpanded_roots())
+            self._evaluate(forest, forest.expand_unexpanded_root_pending())
             if noise:
                 for root in roots:
                     actions = root.actions
@@ -93,5 +100,5 @@ class NativeBatchedMCTS:
             for _ in range(simulations):
                 if deadline is not None and time.monotonic() >= deadline:
                     break
-                self._evaluate(forest, forest.select_leaves(self.cpuct))
+                self._evaluate(forest, forest.select_pending(self.cpuct))
         return [root.policy() for root in roots]

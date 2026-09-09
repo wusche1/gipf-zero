@@ -415,18 +415,22 @@ struct NativeNode {
   std::vector<double> values;
   std::vector<std::shared_ptr<NativeNode>> children;
 
-  void expand(const float* logits, py::ssize_t logits_size) {
-    actions = state.legal_actions();
+  void finish_expand(std::vector<int> next_actions, const float* scores, py::ssize_t scores_size,
+                     bool scores_are_compact) {
+    actions = std::move(next_actions);
     if (actions.empty()) throw std::invalid_argument("cannot expand a terminal state");
     int max_action = 0;
     for (int action : actions) max_action = std::max(max_action, action);
-    if (logits_size <= max_action) throw std::invalid_argument("logits do not cover every legal action");
+    if ((!scores_are_compact && scores_size <= max_action) ||
+        (scores_are_compact && scores_size < static_cast<py::ssize_t>(actions.size())))
+      throw std::invalid_argument("logits do not cover every legal action");
+    auto score = [&](size_t i) { return scores[scores_are_compact ? i : actions[i]]; };
     double maximum = -std::numeric_limits<double>::infinity();
-    for (int action : actions) maximum = std::max(maximum, static_cast<double>(logits[action]));
+    for (size_t i = 0; i < actions.size(); ++i) maximum = std::max(maximum, static_cast<double>(score(i)));
     priors.resize(actions.size());
     double total = 0.0;
     for (size_t i = 0; i < actions.size(); ++i) {
-      priors[i] = std::exp(static_cast<double>(logits[actions[i]]) - maximum);
+      priors[i] = std::exp(static_cast<double>(score(i)) - maximum);
       total += priors[i];
     }
     for (double& prior : priors) prior /= total;
@@ -434,6 +438,10 @@ struct NativeNode {
     values.assign(actions.size(), 0.0);
     children.resize(actions.size());
     expanded = true;
+  }
+
+  void expand(const float* logits, py::ssize_t logits_size) {
+    finish_expand(state.legal_actions(), logits, logits_size, false);
   }
 
   size_t select(double cpuct) const {
@@ -473,43 +481,74 @@ struct NativeNode {
 };
 
 struct NativePathEntry { std::shared_ptr<NativeNode> node; size_t action; };
-struct NativePending { std::shared_ptr<NativeNode> leaf; std::vector<NativePathEntry> path; };
+struct NativePending {
+  std::shared_ptr<NativeNode> leaf;
+  std::vector<NativePathEntry> path;
+  std::vector<int> actions;
+};
 
 class NativeForest {
  public:
   explicit NativeForest(std::vector<std::shared_ptr<NativeNode>> roots) : roots_(std::move(roots)) {}
 
   std::vector<State> select_leaves(double cpuct) {
-    pending_.clear();
-    std::vector<State> states;
-    for (const auto& root : roots_) {
-      std::shared_ptr<NativeNode> node = root;
-      std::vector<NativePathEntry> path;
-      while (node->expanded && node->state.winner() == 0) {
-        const size_t choice = node->select(cpuct);
-        path.push_back({node, choice});
-        node = node->child(choice);
-      }
-      if (node->state.winner() != 0) {
-        backup(path, static_cast<double>(node->state.winner()));
-      } else {
-        states.push_back(node->state.clone());
-        pending_.push_back({node, std::move(path)});
-      }
-    }
-    return states;
+    collect_pending(cpuct, false);
+    return pending_states();
   }
 
   std::vector<State> expand_unexpanded_roots() {
-    pending_.clear();
-    std::vector<State> states;
-    for (const auto& root : roots_) {
-      if (root->state.winner() == 0 && !root->expanded) {
-        states.push_back(root->state.clone());
-        pending_.push_back({root, {}});
+    collect_pending(0.0, true);
+    return pending_states();
+  }
+
+  size_t select_pending(double cpuct) { return collect_pending(cpuct, false); }
+  size_t expand_unexpanded_root_pending() { return collect_pending(0.0, true); }
+
+  py::array_t<float> encode_pending() const {
+    constexpr py::ssize_t kPlanes = 9;
+    constexpr py::ssize_t kSide = 7;
+    constexpr py::ssize_t kPlaneCells = kSide * kSide;
+    py::array_t<float> output({static_cast<py::ssize_t>(pending_.size()), kPlanes, kSide, kSide});
+    float* data = output.mutable_data();
+    std::fill(data, data + pending_.size() * kPlanes * kPlaneCells, 0.0F);
+    const auto& coordinates = geometry_data().coordinates;
+    for (size_t batch = 0; batch < pending_.size(); ++batch) {
+      const State& state = pending_[batch].leaf->state;
+      const int player = state.current_player();
+      const std::vector<int> reserves = state.reserves();
+      const float own_reserve = static_cast<float>(reserves[colour_index(player)]) / 18.0F;
+      const float opponent_reserve = static_cast<float>(reserves[colour_index(-player)]) / 18.0F;
+      const bool capture = state.phase() == "capture";
+      const bool mover_owns_decision = state.turn_player() == player;
+      const auto& board = state.board();
+      for (int cell = 0; cell < kBoardCells; ++cell) {
+        const int row = coordinates[cell][1] + 3, column = coordinates[cell][0] + 3;
+        const size_t offset = batch * kPlanes * kPlaneCells + row * kSide + column;
+        const int piece = board[cell] * player;
+        if (piece == 1) data[offset] = 1.0F;
+        else if (piece == 2) data[kPlaneCells + offset] = 1.0F;
+        else if (piece == -1) data[2 * kPlaneCells + offset] = 1.0F;
+        else if (piece == -2) data[3 * kPlaneCells + offset] = 1.0F;
+        data[4 * kPlaneCells + offset] = 1.0F;
+        data[5 * kPlaneCells + offset] = own_reserve;
+        data[6 * kPlaneCells + offset] = opponent_reserve;
+        data[7 * kPlaneCells + offset] = capture ? 1.0F : 0.0F;
+        data[8 * kPlaneCells + offset] = mover_owns_decision ? 1.0F : 0.0F;
       }
     }
-    return states;
+    return output;
+  }
+
+  py::array_t<int32_t> pending_action_indices() const {
+    size_t width = 0;
+    for (const auto& pending : pending_) width = std::max(width, pending.actions.size());
+    py::array_t<int32_t> result({static_cast<py::ssize_t>(pending_.size()), static_cast<py::ssize_t>(width)});
+    auto* data = result.mutable_data();
+    std::fill(data, data + pending_.size() * width, 0);
+    for (size_t row = 0; row < pending_.size(); ++row)
+      for (size_t column = 0; column < pending_[row].actions.size(); ++column)
+        data[row * width + column] = pending_[row].actions[column];
+    return result;
   }
 
   void finish(py::array_t<float, py::array::c_style | py::array::forcecast> logits,
@@ -523,13 +562,60 @@ class NativeForest {
     const auto* value_data = static_cast<const float*>(values.ptr);
     for (size_t i = 0; i < pending_.size(); ++i) {
       NativePending& pending = pending_[i];
-      pending.leaf->expand(score_data + i * scores.shape[1], scores.shape[1]);
+      pending.leaf->finish_expand(std::move(pending.actions), score_data + i * scores.shape[1], scores.shape[1], false);
+      backup(pending.path, static_cast<double>(value_data[i]) * pending.leaf->actor);
+    }
+    pending_.clear();
+  }
+
+  void finish_selected(py::array_t<float, py::array::c_style | py::array::forcecast> logits,
+                       py::array_t<float, py::array::c_style | py::array::forcecast> leaf_values) {
+    const auto scores = logits.request();
+    const auto values = leaf_values.request();
+    if (scores.ndim != 2 || values.ndim != 1 || scores.shape[0] != values.shape[0] ||
+        scores.shape[0] != static_cast<py::ssize_t>(pending_.size()))
+      throw std::invalid_argument("selected logits and values must match pending leaves");
+    const auto* score_data = static_cast<const float*>(scores.ptr);
+    const auto* value_data = static_cast<const float*>(values.ptr);
+    for (size_t i = 0; i < pending_.size(); ++i) {
+      NativePending& pending = pending_[i];
+      pending.leaf->finish_expand(std::move(pending.actions), score_data + i * scores.shape[1], scores.shape[1], true);
       backup(pending.path, static_cast<double>(value_data[i]) * pending.leaf->actor);
     }
     pending_.clear();
   }
 
  private:
+  size_t collect_pending(double cpuct, bool roots_only) {
+    pending_.clear();
+    for (const auto& root : roots_) {
+      std::shared_ptr<NativeNode> node = root;
+      std::vector<NativePathEntry> path;
+      if (roots_only) {
+        if (node->state.winner() != 0 || node->expanded) continue;
+      } else {
+        while (node->expanded && node->state.winner() == 0) {
+          const size_t choice = node->select(cpuct);
+          path.push_back({node, choice});
+          node = node->child(choice);
+        }
+        if (node->state.winner() != 0) {
+          backup(path, static_cast<double>(node->state.winner()));
+          continue;
+        }
+      }
+      pending_.push_back({node, std::move(path), node->state.legal_actions()});
+    }
+    return pending_.size();
+  }
+
+  std::vector<State> pending_states() const {
+    std::vector<State> states;
+    states.reserve(pending_.size());
+    for (const auto& pending : pending_) states.push_back(pending.leaf->state.clone());
+    return states;
+  }
+
   static void backup(const std::vector<NativePathEntry>& path, double white_value) {
     for (const auto& entry : path) {
       ++entry.node->visits[entry.action];
@@ -578,8 +664,13 @@ PYBIND11_MODULE(gipf_engine, m) {
   py::class_<NativeForest>(m, "NativeForest")
       .def(py::init<std::vector<std::shared_ptr<NativeNode>>>())
       .def("expand_unexpanded_roots", &NativeForest::expand_unexpanded_roots)
+      .def("expand_unexpanded_root_pending", &NativeForest::expand_unexpanded_root_pending)
       .def("select_leaves", &NativeForest::select_leaves, py::arg("cpuct"))
-      .def("finish", &NativeForest::finish, py::arg("logits"), py::arg("values"));
+      .def("select_pending", &NativeForest::select_pending, py::arg("cpuct"))
+      .def("encode_pending", &NativeForest::encode_pending)
+      .def("pending_action_indices", &NativeForest::pending_action_indices)
+      .def("finish", &NativeForest::finish, py::arg("logits"), py::arg("values"))
+      .def("finish_selected", &NativeForest::finish_selected, py::arg("logits"), py::arg("values"));
   m.def("geometry", &State::geometry);
   m.def("encode_batch", [](const std::vector<State>& states) {
     constexpr py::ssize_t kPlanes = 9;
