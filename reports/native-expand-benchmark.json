@@ -1,0 +1,46 @@
+{
+  "resnet": {
+    "checkpoint_sha256": "72fc31d851c17e66e311cc610ac32ded90f1a7c469cc3d05599c904ca3bbb9b4",
+    "seconds": {
+      "False": [
+        0.5677620060741901,
+        0.5684823282063007,
+        0.5281390398740768
+      ],
+      "True": [
+        0.42976558953523636,
+        0.4906998351216316,
+        0.42736322060227394
+      ]
+    },
+    "median_seconds": {
+      "False": 0.5677620060741901,
+      "True": 0.42976558953523636
+    },
+    "speedup": 1.3210969419124226,
+    "exact_policy_agreement": true,
+    "exact_visit_agreement": true
+  },
+  "mlp": {
+    "checkpoint_sha256": "81704b05484f8f2ad3fb7534659ce899f6666102c93ef5fbcbb32cce87d2d0fd",
+    "seconds": {
+      "False": [
+        0.464148823171854,
+        0.47369108721613884,
+        0.46900665014982224
+      ],
+      "True": [
+        0.3900996744632721,
+        0.32888150587677956,
+        0.32522037625312805
+      ]
+    },
+    "median_seconds": {
+      "False": 0.46900665014982224,
+      "True": 0.32888150587677956
+    },
+    "speedup": 1.4260657463832664,
+    "exact_policy_agreement": true,
+    "exact_visit_agreement": true
+  }
+}

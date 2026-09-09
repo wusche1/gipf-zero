@@ -135,3 +135,22 @@ learning rate .001, and the existing twelve board symmetries.
 These are practical time-limited comparisons. Different CPU contention and
 search optimizations mean games/hour cannot isolate the effect of geometry.
 Neither architecture has yet displaced the validated MLP champion.
+
+## Second measured search improvement (18:59 UTC)
+
+Profiling found repeated legal-action extraction, NumPy reductions and small
+array allocations in node expansion. A combined native policy expansion
+helper preserves action order and double-precision softmax. Seeded comparison
+tests matched full search policies and visit counts, including noisy roots.
+A three-repeat complete-search benchmark measured **1.32× residual / 1.43× MLP**
+speedups ([report](native-expand-benchmark.json)). GPU-to-CPU synchronization
+time in the profile includes waiting for GPU computation; it is not purely
+data-transfer overhead.
+
+Batch scaling also showed residual search throughput improving from about
+32,000 root-simulations/s at 128 roots to 40,600 at 512 roots; the MLP showed
+little gain above 128 ([measurements](search-batch-scaling.json)). Both trainers
+checkpointed and restarted to adopt native expansion. Residual self-play now
+uses 512 concurrent games; MLP remains at 128. Training targets and update
+ratio per completed game are unchanged. The batch and native-expansion gains
+were measured separately and should not simply be multiplied.

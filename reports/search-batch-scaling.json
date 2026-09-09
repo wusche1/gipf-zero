@@ -1,0 +1,122 @@
+[
+  {
+    "architecture": {
+      "kind": "mlp",
+      "width": 256,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 32,
+    "seconds": [
+      0.242305189371109,
+      0.09656019136309624,
+      0.08933583274483681
+    ],
+    "root_simulations_per_second": 21209.568571575066
+  },
+  {
+    "architecture": {
+      "kind": "mlp",
+      "width": 256,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 128,
+    "seconds": [
+      0.2019723616540432,
+      0.19344457238912582,
+      0.25453953817486763
+    ],
+    "root_simulations_per_second": 40560.00500718019
+  },
+  {
+    "architecture": {
+      "kind": "mlp",
+      "width": 256,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 256,
+    "seconds": [
+      0.47510847449302673,
+      0.44143709912896156,
+      0.38556547835469246
+    ],
+    "root_simulations_per_second": 37115.14059948453
+  },
+  {
+    "architecture": {
+      "kind": "mlp",
+      "width": 256,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 512,
+    "seconds": [
+      0.8064186871051788,
+      0.8409829512238503,
+      0.7689086422324181
+    ],
+    "root_simulations_per_second": 40633.97900367129
+  },
+  {
+    "architecture": {
+      "kind": "resnet",
+      "width": 32,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 32,
+    "seconds": [
+      0.2509326748549938,
+      0.12491537258028984,
+      0.12356673926115036
+    ],
+    "root_simulations_per_second": 16395.099799935673
+  },
+  {
+    "architecture": {
+      "kind": "resnet",
+      "width": 32,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 128,
+    "seconds": [
+      0.2558009885251522,
+      0.2445799484848976,
+      0.28875990211963654
+    ],
+    "root_simulations_per_second": 32024.89578805714
+  },
+  {
+    "architecture": {
+      "kind": "resnet",
+      "width": 32,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 256,
+    "seconds": [
+      0.4325285591185093,
+      0.4550055116415024,
+      0.40587522834539413
+    ],
+    "root_simulations_per_second": 37879.57963606033
+  },
+  {
+    "architecture": {
+      "kind": "resnet",
+      "width": 32,
+      "blocks": 2,
+      "head": "flat"
+    },
+    "batch": 512,
+    "seconds": [
+      0.8654889725148678,
+      0.8066196851432323,
+      0.7860278859734535
+    ],
+    "root_simulations_per_second": 40623.85359983044
+  }
+]
