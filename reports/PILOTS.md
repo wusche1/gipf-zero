@@ -177,3 +177,27 @@ differ. Both new pilot checkpoints are preserved for future experiments.
 The 41,008-game MLP then beat the 16,694-game residual champion **60–20, no
 cutoffs**, at 50 ms CPU search and passed its greedy gate. It became the served
 champion. No architecture receives promotion based solely on training loss.
+
+## Native search trees (19:33 UTC)
+
+A native forest backend now owns tree traversal, child-state creation and
+absolute-colour value backup in C++. Python retains batched PyTorch inference.
+Differential tests cover noisy searches, capture phases, terminal captures,
+root reuse, and an entire completed game with identical decisions and states.
+Compared with the already optimized Python tree, complete-search measurements
+showed **1.81×** for the active 512-root/128-simulation residual configuration
+and **1.99×** for 128-root/64-simulation MLP searches
+([benchmark](native-forest-benchmark.json)).
+
+A 60-second resumed-training smoke used normal 240-ply games, eight simulations
+and small updates; it advanced checkpoints, optimizer and RNG state without
+cutoffs. Smoke games are excluded from main training and playing-strength
+claims. Both main trainers then checkpointed and resumed with `--native-forest`.
+Serving and evaluation retain the established Python tree with native expansion;
+model checkpoints are compatible with both search implementations.
+
+CUDA graphs were retested with native trees. An initial timing suggested a gain,
+but the recorded repeat measured only **1.04× MLP / 0.96× residual**
+([report](native-forest-graph-benchmark.json)); graphs remain disabled. A short
+combined smoke verified graph inference through optimizer updates, but functional
+correctness alone is insufficient reason to enable a slower backend.

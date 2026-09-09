@@ -3,4 +3,4 @@
 . /opt/supervisor-scripts/utils/environment.sh
 cd /workspace/gipf
 export PYTHONPATH=/workspace/gipf
-exec /venv/main/bin/python -u -m ops.final_training --source "$GIPF_FINAL_SOURCE" --run runs/final --games 512 --simulations 128 --lr .001 --cuda-graph-batch 0 --deadline 1788988500
+exec /venv/main/bin/python -u -m ops.final_training --source "$GIPF_FINAL_SOURCE" --run runs/final --games 512 --simulations 128 --lr .001 --cuda-graph-batch 0 --native-forest --deadline 1788988500
