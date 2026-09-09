@@ -130,7 +130,8 @@ learning rate .001, and the existing twelve board symmetries.
   in 40-game fixed-128-simulation tests.
 * **Transformer64, two blocks:** noncausal attention over 37 playable-cell
   tokens, four heads, feed-forward width 128, learned linear embeddings of
-  centred axial coordinates, flattened policy/value heads. Pilot in progress.
+  centred axial coordinates, flattened policy/value heads. Pilot completed 5,411 games (one training cutoff), with 40–0 against both
+  random and greedy in fixed-128-simulation tests.
 
 These are practical time-limited comparisons. Different CPU contention and
 search optimizations mean games/hour cannot isolate the effect of geometry.
@@ -154,3 +155,14 @@ checkpointed and restarted to adopt native expansion. Residual self-play now
 uses 512 concurrent games; MLP remains at 128. Training targets and update
 ratio per completed game are unchanged. The batch and native-expansion gains
 were measured separately and should not simply be multiplied.
+
+At equal 50 ms CPU search, the 5,666-game hex pilot lost **6–74** to the
+23,016-game MLP ([match](hex-pilot-vs-mlp23016.json)). This compares practical
+checkpoints with different amounts of experience, not architecture alone.
+
+At 19:06 UTC, the 16,694-game square residual checkpoint passed the promotion
+gate against the 23,016-game MLP: **56–19 with five cutoffs**, then 40–0 against
+greedy. Both sides had 50 ms CPU budgets in that head-to-head match.
+The 41,008-game MLP also beat its older version **60–18 with two cutoffs** at
+equal simulations; a new equal-CPU-time match against the residual champion
+is pending.
