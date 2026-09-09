@@ -12,11 +12,15 @@ class Node:
     def __init__(self,state):
         self.state=state;self.actor=state.current_player;self.actions=None
         self.p=self.n=self.w=None;self.children={}
-    def expand(self,logits):
-        self.actions=np.asarray(self.state.legal_actions(),np.int32)
-        if not len(self.actions):raise RuntimeError('Nonterminal state has no legal actions')
-        v=logits[self.actions].astype(np.float64);v-=v.max();p=np.exp(v)
-        self.p=p/p.sum();self.n=np.zeros(len(p),np.int32);self.w=np.zeros(len(p),np.float64)
+    def expand(self,logits,native_expand=True):
+        if native_expand and hasattr(ge,'expand_policy'):
+            self.actions,self.p=ge.expand_policy(self.state,logits)
+        else:
+            self.actions=np.asarray(self.state.legal_actions(),np.int32)
+            if not len(self.actions):raise RuntimeError('Nonterminal state has no legal actions')
+            v=logits[self.actions].astype(np.float64);v-=v.max();p=np.exp(v)
+            self.p=p/p.sum()
+        self.n=np.zeros(len(self.p),np.int32);self.w=np.zeros(len(self.p),np.float64)
     def select(self,cpuct):
         if hasattr(ge,'puct_select'):
             i=int(ge.puct_select(self.p,self.n,self.w,cpuct))
@@ -33,11 +37,12 @@ class Node:
         return self.n/self.n.sum()
 
 class BatchedMCTS:
-    def __init__(self,model,device='cuda',cpuct=1.5,seed=0,cuda_graph_batch=0):
+    def __init__(self,model,device='cuda',cpuct=1.5,seed=0,cuda_graph_batch=0,native_expand=None):
         self.model=model;self.device=device;self.cpuct=cpuct;self.rng=np.random.default_rng(seed)
         self.evaluations=0
         self.inference=(CudaGraphInference(model,device,cuda_graph_batch)
                         if cuda_graph_batch and str(device).startswith('cuda') else None)
+        self.native_expand=hasattr(ge,'expand_policy') if native_expand is None else native_expand
     @torch.inference_mode()
     def evaluate(self,nodes):
         states=[n.state for n in nodes]
@@ -49,7 +54,7 @@ class BatchedMCTS:
             logits,values=self.inference.forward(x)
         logits=logits.float().cpu().numpy();values=values.float().cpu().numpy()
         self.evaluations+=len(nodes)
-        for n,p in zip(nodes,logits):n.expand(p)
+        for n,p in zip(nodes,logits):n.expand(p,self.native_expand)
         return values
     def search(self,roots,simulations=64,noise=False,deadline=None):
         if any(r.state.winner for r in roots):

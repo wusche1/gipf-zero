@@ -12,6 +12,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <cstdint>
+#include <limits>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -485,6 +486,35 @@ PYBIND11_MODULE(gipf_engine, m) {
     return static_cast<int>(best);
   }, py::arg("priors"), py::arg("visits"), py::arg("values"), py::arg("cpuct"),
   "Return the first PUCT argmax using the search's exact score formula.");
+  m.def("expand_policy", [](const State& state,
+                             py::array_t<float, py::array::c_style | py::array::forcecast> logits) {
+    const auto input = logits.request();
+    if (input.ndim != 1) throw std::invalid_argument("logits must be one-dimensional");
+    const std::vector<int> legal = state.legal_actions();
+    if (legal.empty()) throw std::invalid_argument("cannot expand a terminal state");
+    const auto* scores = static_cast<const float*>(input.ptr);
+    int max_action = 0;
+    for (int action : legal) max_action = std::max(max_action, action);
+    if (input.shape[0] <= max_action)
+      throw std::invalid_argument("logits do not cover every legal action");
+    py::array_t<int32_t> actions(static_cast<py::ssize_t>(legal.size()));
+    py::array_t<double> priors(static_cast<py::ssize_t>(legal.size()));
+    auto* action_data = actions.mutable_data();
+    auto* prior_data = priors.mutable_data();
+    double maximum = -std::numeric_limits<double>::infinity();
+    for (size_t i = 0; i < legal.size(); ++i) {
+      action_data[i] = legal[i];
+      maximum = std::max(maximum, static_cast<double>(scores[legal[i]]));
+    }
+    double total = 0.0;
+    for (size_t i = 0; i < legal.size(); ++i) {
+      prior_data[i] = std::exp(static_cast<double>(scores[legal[i]]) - maximum);
+      total += prior_data[i];
+    }
+    for (size_t i = 0; i < legal.size(); ++i) prior_data[i] /= total;
+    return py::make_tuple(actions, priors);
+  }, py::arg("state"), py::arg("logits"),
+  "Return legal action indices and their normalized softmax priors.");
   m.attr("PUSH_ACTIONS") = py::make_tuple(0, 41);
   m.attr("CAPTURE_BASE") = kCaptureBase;
   m.attr("CAPTURE_LINE_STRIDE") = kCaptureStride;
