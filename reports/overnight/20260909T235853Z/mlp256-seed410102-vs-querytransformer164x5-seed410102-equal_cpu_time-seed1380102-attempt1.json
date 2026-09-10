@@ -1,0 +1,176 @@
+{
+  "candidate": "/workspace/gipf/runs/overnight/20260909T235853Z/mlp256-seed410102/latest.pt",
+  "champion": "/workspace/gipf/runs/overnight/20260909T235853Z/querytransformer164x5-seed410102/latest.pt",
+  "hashes": [
+    "9ca408753dfbe4c2103016e9694be0e5033ed517459bf8a7cef2cb56164fa9a7",
+    "02b9f1909248f78a8d814f1f611cb21e44e0b552d630b70d49df66cb04cc9a8c"
+  ],
+  "models": [
+    {
+      "games": 8122,
+      "iteration": 251,
+      "config": {
+        "kind": "mlp",
+        "width": 256,
+        "blocks": 2,
+        "head": "flat"
+      }
+    },
+    {
+      "games": 476,
+      "iteration": 14,
+      "config": {
+        "kind": "transformer",
+        "width": 164,
+        "blocks": 5,
+        "head": "query"
+      }
+    }
+  ],
+  "wins": 5,
+  "losses": 0,
+  "cutoffs": 7,
+  "unfinished": 0,
+  "win_rate_decisive": 1.0,
+  "wilson_95_decisive": [
+    0.5655175352168254,
+    1.0
+  ],
+  "candidate_root_simulations": {
+    "count": 1456,
+    "mean": 245.4114010989011,
+    "min": 32,
+    "max": 10000
+  },
+  "champion_root_simulations": {
+    "count": 1439,
+    "mean": 16.82209867963864,
+    "min": 6,
+    "max": 22
+  },
+  "candidate_search_seconds": {
+    "count": 1456,
+    "mean": 0.05023818979408223,
+    "min": 0.029932472854852676,
+    "max": 0.09951138123869896
+  },
+  "champion_search_seconds": {
+    "count": 1439,
+    "mean": 0.051358162349735885,
+    "min": 0.05001908168196678,
+    "max": 0.07216424122452736
+  },
+  "elapsed_seconds": 147.3313555046916,
+  "config": {
+    "candidate": "/workspace/gipf/runs/overnight/20260909T235853Z/mlp256-seed410102/latest.pt",
+    "champion": "/workspace/gipf/runs/overnight/20260909T235853Z/querytransformer164x5-seed410102/latest.pt",
+    "games": 12,
+    "batch": 1,
+    "simulations": 10000,
+    "seed": 1380102,
+    "max_ply": 300,
+    "seconds": 180,
+    "output": "/workspace/gipf/reports/overnight/20260909T235853Z/mlp256-seed410102-vs-querytransformer164x5-seed410102-equal_cpu_time-seed1380102-attempt1.json",
+    "device": "cpu",
+    "threads": 1,
+    "budget_ms": 50.0
+  },
+  "records": [
+    {
+      "game": 0,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 1,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 44
+    },
+    {
+      "game": 2,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 3,
+      "candidate_color": -1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 4,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 5,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 100
+    },
+    {
+      "game": 6,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 41
+    },
+    {
+      "game": 7,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 54
+    },
+    {
+      "game": 8,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 9,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 38
+    },
+    {
+      "game": 10,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 11,
+      "candidate_color": -1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    }
+  ]
+}

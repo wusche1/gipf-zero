@@ -1,0 +1,475 @@
+{"event": "upload_start", "number": 1, "attempt": 1, "remote": "comparisons/20260909T235853Z/mlp256-seed410101-9acc8f0f15e5.pt", "time": 1789012876.7817333}
+uploading mlp256-seed410101-9acc8f0f15e5.pt -> comparisons/20260909T235853Z/mlp256-seed410101-9acc8f0f15e5.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410101-9acc8f0f15e5.pt:   8%|▊         |  990kB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt:   8%|▊         |  990kB / 11.8MB            [A[AProcessing Files (0 / 1)      :   8%|▊         |  990kB / 11.8MB, 97.2kB/s  
+New Data Upload               :   8%|▊         |  990kB / 11.8MB, 97.2kB/s  [A
+
+  ...eed410101-9acc8f0f15e5.pt:   8%|▊         |  990kB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt:   8%|▊         |  990kB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt:  17%|█▋        | 1.98MB / 11.8MB            [A[AProcessing Files (0 / 1)      :  17%|█▋        | 1.98MB / 11.8MB,  191kB/s  
+New Data Upload               :  17%|█▋        | 1.98MB / 11.8MB,  191kB/s  [A
+
+  ...eed410101-9acc8f0f15e5.pt:  42%|████▏     | 4.95MB / 11.8MB            [A[AProcessing Files (0 / 1)      :  42%|████▏     | 4.95MB / 11.8MB,  477kB/s  
+New Data Upload               :  42%|████▏     | 4.95MB / 11.8MB,  477kB/s  [A
+
+  ...eed410101-9acc8f0f15e5.pt:  42%|████▏     | 4.95MB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt:  76%|███████▌  | 8.91MB / 11.8MB            [A[AProcessing Files (0 / 1)      :  76%|███████▌  | 8.91MB / 11.8MB,  850kB/s  
+New Data Upload               :  76%|███████▌  | 8.91MB / 11.8MB,  850kB/s  [A
+
+  ...eed410101-9acc8f0f15e5.pt:  76%|███████▌  | 8.91MB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt: 100%|█████████▉| 11.8MB / 11.8MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 11.8MB / 11.8MB, 1.11MB/s  
+New Data Upload               : 100%|█████████▉| 11.8MB / 11.8MB, 1.11MB/s  [A
+
+  ...eed410101-9acc8f0f15e5.pt: 100%|█████████▉| 11.8MB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt: 100%|█████████▉| 11.8MB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt: 100%|██████████| 11.8MB / 11.8MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 11.8MB / 11.8MB, 1.08MB/s  
+New Data Upload               : 100%|██████████| 11.8MB / 11.8MB, 1.08MB/s  [A
+
+  ...eed410101-9acc8f0f15e5.pt: 100%|██████████| 11.8MB / 11.8MB            [A[A
+
+  ...eed410101-9acc8f0f15e5.pt: 100%|██████████| 11.8MB / 11.8MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 11.8MB / 11.8MB, 1.07MB/s  
+New Data Upload               : 100%|██████████| 11.8MB / 11.8MB, 1.07MB/s  
+  ...eed410101-9acc8f0f15e5.pt: 100%|██████████| 11.8MB / 11.8MB            
+uploaded comparisons/20260909T235853Z/mlp256-seed410101-9acc8f0f15e5.pt
+{"event": "upload_start", "number": 2, "attempt": 1, "remote": "comparisons/20260909T235853Z/mlp256-seed410102-9ca408753dfb.pt", "time": 1789012880.3217835}
+uploading mlp256-seed410102-9ca408753dfb.pt -> comparisons/20260909T235853Z/mlp256-seed410102-9ca408753dfb.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410102-9ca408753dfb.pt:   8%|▊         |  997kB / 11.8MB            [A[A
+
+  ...eed410102-9ca408753dfb.pt:   8%|▊         |  997kB / 11.8MB            [A[AProcessing Files (0 / 1)      :   8%|▊         |  997kB / 11.8MB, 97.9kB/s  
+New Data Upload               :   8%|▊         |  997kB / 11.8MB, 97.9kB/s  [A
+
+  ...eed410102-9ca408753dfb.pt:   8%|▊         |  997kB / 11.8MB            [A[A
+
+  ...eed410102-9ca408753dfb.pt:   8%|▊         |  997kB / 11.8MB            [A[A
+
+  ...eed410102-9ca408753dfb.pt:  17%|█▋        | 1.99MB / 11.8MB            [A[AProcessing Files (0 / 1)      :  17%|█▋        | 1.99MB / 11.8MB,  192kB/s  
+New Data Upload               :  17%|█▋        | 1.99MB / 11.8MB,  192kB/s  [A
+
+  ...eed410102-9ca408753dfb.pt:  42%|████▏     | 4.99MB / 11.8MB            [A[AProcessing Files (0 / 1)      :  42%|████▏     | 4.99MB / 11.8MB,  481kB/s  
+New Data Upload               :  42%|████▏     | 4.99MB / 11.8MB,  481kB/s  [A
+
+  ...eed410102-9ca408753dfb.pt:  59%|█████▉    | 6.98MB / 11.8MB            [A[AProcessing Files (0 / 1)      :  59%|█████▉    | 6.98MB / 11.8MB,  669kB/s  
+New Data Upload               :  59%|█████▉    | 6.98MB / 11.8MB,  669kB/s  [A
+
+  ...eed410102-9ca408753dfb.pt:  93%|█████████▎| 11.0MB / 11.8MB            [A[AProcessing Files (0 / 1)      :  93%|█████████▎| 11.0MB / 11.8MB, 1.05MB/s  
+New Data Upload               :  93%|█████████▎| 11.0MB / 11.8MB, 1.05MB/s  [A
+
+  ...eed410102-9ca408753dfb.pt: 100%|█████████▉| 11.8MB / 11.8MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 11.8MB / 11.8MB, 1.12MB/s  
+New Data Upload               : 100%|█████████▉| 11.8MB / 11.8MB, 1.12MB/s  [A
+
+  ...eed410102-9ca408753dfb.pt: 100%|█████████▉| 11.8MB / 11.8MB            [A[A
+
+  ...eed410102-9ca408753dfb.pt: 100%|██████████| 11.8MB / 11.8MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 11.8MB / 11.8MB, 1.09MB/s  
+New Data Upload               : 100%|██████████| 11.8MB / 11.8MB, 1.09MB/s  [A
+
+  ...eed410102-9ca408753dfb.pt: 100%|██████████| 11.8MB / 11.8MB            [A[A
+
+  ...eed410102-9ca408753dfb.pt: 100%|██████████| 11.8MB / 11.8MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 11.8MB / 11.8MB, 1.08MB/s  
+New Data Upload               : 100%|██████████| 11.8MB / 11.8MB, 1.08MB/s  
+  ...eed410102-9ca408753dfb.pt: 100%|██████████| 11.8MB / 11.8MB            
+uploaded comparisons/20260909T235853Z/mlp256-seed410102-9ca408753dfb.pt
+{"event": "upload_start", "number": 3, "attempt": 1, "remote": "comparisons/20260909T235853Z/squarecnn32-seed410101-e2a8946b1405.pt", "time": 1789012883.7271113}
+uploading squarecnn32-seed410101-e2a8946b1405.pt -> comparisons/20260909T235853Z/squarecnn32-seed410101-e2a8946b1405.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410101-e2a8946b1405.pt:   8%|▊         | 1.12MB / 14.0MB            [A[A
+
+  ...eed410101-e2a8946b1405.pt:   8%|▊         | 1.12MB / 14.0MB            [A[AProcessing Files (0 / 1)      :   8%|▊         | 1.12MB / 14.0MB,  110kB/s  
+New Data Upload               :   8%|▊         | 1.07MB / 13.3MB,  105kB/s  [A
+
+  ...eed410101-e2a8946b1405.pt:   8%|▊         | 1.12MB / 14.0MB            [A[A
+
+  ...eed410101-e2a8946b1405.pt:   8%|▊         | 1.12MB / 14.0MB            [A[A
+
+  ...eed410101-e2a8946b1405.pt:  16%|█▌        | 2.24MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  16%|█▌        | 2.24MB / 14.0MB,  216kB/s  
+New Data Upload               :  16%|█▌        | 2.14MB / 13.3MB,  206kB/s  [A
+
+  ...eed410101-e2a8946b1405.pt:  40%|████      | 5.61MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  40%|████      | 5.61MB / 14.0MB,  540kB/s  
+New Data Upload               :  40%|████      | 5.34MB / 13.3MB,  515kB/s  [A
+
+  ...eed410101-e2a8946b1405.pt:  64%|██████▍   | 8.97MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  64%|██████▍   | 8.97MB / 14.0MB,  861kB/s  
+New Data Upload               :  64%|██████▍   | 8.55MB / 13.3MB,  820kB/s  [A
+
+  ...eed410101-e2a8946b1405.pt:  64%|██████▍   | 8.97MB / 14.0MB            [A[A
+
+  ...eed410101-e2a8946b1405.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 14.0MB / 14.0MB, 1.33MB/s  
+New Data Upload               : 100%|█████████▉| 13.3MB / 13.3MB, 1.27MB/s  [A
+
+  ...eed410101-e2a8946b1405.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-e2a8946b1405.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-e2a8946b1405.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.29MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.23MB/s  [A
+
+  ...eed410101-e2a8946b1405.pt: 100%|██████████| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-e2a8946b1405.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.27MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.21MB/s  
+  ...eed410101-e2a8946b1405.pt: 100%|██████████| 14.0MB / 14.0MB            
+uploaded comparisons/20260909T235853Z/squarecnn32-seed410101-e2a8946b1405.pt
+{"event": "upload_start", "number": 4, "attempt": 1, "remote": "comparisons/20260909T235853Z/squarecnn32-seed410102-d3e8eb4f1e75.pt", "time": 1789012887.0262127}
+uploading squarecnn32-seed410102-d3e8eb4f1e75.pt -> comparisons/20260909T235853Z/squarecnn32-seed410102-d3e8eb4f1e75.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410102-d3e8eb4f1e75.pt:   6%|▌         |  786kB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt:   6%|▌         |  786kB / 14.0MB            [A[AProcessing Files (0 / 1)      :   6%|▌         |  786kB / 14.0MB, 77.7kB/s  
+
+  ...eed410102-d3e8eb4f1e75.pt:   6%|▌         |  786kB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt:  13%|█▎        | 1.82MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  13%|█▎        | 1.82MB / 14.0MB,  178kB/s  
+New Data Upload               :   8%|▊         | 1.03MB / 13.2MB,  101kB/s  [A
+
+  ...eed410102-d3e8eb4f1e75.pt:  13%|█▎        | 1.82MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt:  13%|█▎        | 1.82MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt:  20%|██        | 2.85MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  20%|██        | 2.85MB / 14.0MB,  273kB/s  
+New Data Upload               :  16%|█▌        | 2.06MB / 13.2MB,  199kB/s  [A
+
+  ...eed410102-d3e8eb4f1e75.pt:  35%|███▌      | 4.91MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  35%|███▌      | 4.91MB / 14.0MB,  470kB/s  
+New Data Upload               :  31%|███       | 4.13MB / 13.2MB,  397kB/s  [A
+
+  ...eed410102-d3e8eb4f1e75.pt:  57%|█████▋    | 8.01MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  57%|█████▋    | 8.01MB / 14.0MB,  766kB/s  
+New Data Upload               :  55%|█████▍    | 7.22MB / 13.2MB,  693kB/s  [A
+
+  ...eed410102-d3e8eb4f1e75.pt:  79%|███████▉  | 11.1MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  79%|███████▉  | 11.1MB / 14.0MB, 1.06MB/s  
+New Data Upload               :  78%|███████▊  | 10.3MB / 13.2MB,  985kB/s  [A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 14.0MB / 14.0MB, 1.33MB/s  
+New Data Upload               : 100%|█████████▉| 13.2MB / 13.2MB, 1.25MB/s  [A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.25MB/s  
+New Data Upload               : 100%|██████████| 13.2MB / 13.2MB, 1.18MB/s  [A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|██████████| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-d3e8eb4f1e75.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.23MB/s  
+New Data Upload               : 100%|██████████| 13.2MB / 13.2MB, 1.17MB/s  
+  ...eed410102-d3e8eb4f1e75.pt: 100%|██████████| 14.0MB / 14.0MB            
+uploaded comparisons/20260909T235853Z/squarecnn32-seed410102-d3e8eb4f1e75.pt
+{"event": "upload_start", "number": 5, "attempt": 1, "remote": "comparisons/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt", "time": 1789012891.0564473}
+uploading hexcnn32-seed410101-d6f1c7081cdb.pt -> comparisons/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410101-d6f1c7081cdb.pt:   5%|▍         |  655kB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt:   5%|▍         |  655kB / 14.0MB            [A[AProcessing Files (0 / 1)      :   5%|▍         |  655kB / 14.0MB, 57.5kB/s  
+
+  ...eed410101-d6f1c7081cdb.pt:  12%|█▏        | 1.69MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  12%|█▏        | 1.69MB / 14.0MB,  148kB/s  
+New Data Upload               :   8%|▊         | 1.04MB / 13.3MB, 90.8kB/s  [A
+
+  ...eed410101-d6f1c7081cdb.pt:  12%|█▏        | 1.69MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt:  12%|█▏        | 1.69MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt:  12%|█▏        | 1.69MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt:  20%|█▉        | 2.73MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  20%|█▉        | 2.73MB / 14.0MB,  233kB/s  
+New Data Upload               :  16%|█▌        | 2.08MB / 13.3MB,  178kB/s  [A
+
+  ...eed410101-d6f1c7081cdb.pt:  42%|████▏     | 5.85MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  42%|████▏     | 5.85MB / 14.0MB,  501kB/s  
+New Data Upload               :  39%|███▉      | 5.19MB / 13.3MB,  446kB/s  [A
+
+  ...eed410101-d6f1c7081cdb.pt:  64%|██████▍   | 8.96MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  64%|██████▍   | 8.96MB / 14.0MB,  766kB/s  
+New Data Upload               :  62%|██████▏   | 8.30MB / 13.3MB,  712kB/s  [A
+
+  ...eed410101-d6f1c7081cdb.pt:  86%|████████▌ | 12.1MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  86%|████████▌ | 12.1MB / 14.0MB, 1.03MB/s  
+New Data Upload               :  86%|████████▌ | 11.4MB / 13.3MB,  975kB/s  [A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 14.0MB / 14.0MB, 1.19MB/s  
+New Data Upload               : 100%|█████████▉| 13.3MB / 13.3MB, 1.13MB/s  [A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.14MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.08MB/s  [A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|██████████| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|██████████| 14.0MB / 14.0MB            [A[A
+
+  ...eed410101-d6f1c7081cdb.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.11MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.06MB/s  
+  ...eed410101-d6f1c7081cdb.pt: 100%|██████████| 14.0MB / 14.0MB            
+uploaded comparisons/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt
+{"event": "upload_start", "number": 6, "attempt": 1, "remote": "comparisons/20260909T235853Z/hexcnn32-seed410102-c7d5bd9e9ee0.pt", "time": 1789012900.2712195}
+uploading hexcnn32-seed410102-c7d5bd9e9ee0.pt -> comparisons/20260909T235853Z/hexcnn32-seed410102-c7d5bd9e9ee0.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410102-c7d5bd9e9ee0.pt:   3%|▎         |  393kB / 14.0MB            [A[A
+
+  ...eed410102-c7d5bd9e9ee0.pt:   3%|▎         |  393kB / 14.0MB            [A[AProcessing Files (0 / 1)      :   3%|▎         |  393kB / 14.0MB, 38.8kB/s  
+
+  ...eed410102-c7d5bd9e9ee0.pt:   3%|▎         |  393kB / 14.0MB            [A[A
+
+  ...eed410102-c7d5bd9e9ee0.pt:  10%|█         | 1.45MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  10%|█         | 1.45MB / 14.0MB,  142kB/s  
+New Data Upload               :   8%|▊         | 1.06MB / 13.6MB,  104kB/s  [A
+
+  ...eed410102-c7d5bd9e9ee0.pt:  10%|█         | 1.45MB / 14.0MB            [A[A
+
+  ...eed410102-c7d5bd9e9ee0.pt:  10%|█         | 1.45MB / 14.0MB            [A[A
+
+  ...eed410102-c7d5bd9e9ee0.pt:  18%|█▊        | 2.51MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  18%|█▊        | 2.51MB / 14.0MB,  241kB/s  
+New Data Upload               :  16%|█▌        | 2.12MB / 13.6MB,  204kB/s  [A
+
+  ...eed410102-c7d5bd9e9ee0.pt:  41%|████      | 5.69MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  41%|████      | 5.69MB / 14.0MB,  547kB/s  
+New Data Upload               :  39%|███▉      | 5.29MB / 13.6MB,  510kB/s  [A
+
+  ...eed410102-c7d5bd9e9ee0.pt:  63%|██████▎   | 8.86MB / 14.0MB            [A[AProcessing Files (0 / 1)      :  63%|██████▎   | 8.86MB / 14.0MB,  849kB/s  
+New Data Upload               :  62%|██████▏   | 8.47MB / 13.6MB,  813kB/s  [A
+
+  ...eed410102-c7d5bd9e9ee0.pt:  63%|██████▎   | 8.86MB / 14.0MB            [A[A
+
+  ...eed410102-c7d5bd9e9ee0.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 14.0MB / 14.0MB, 1.33MB/s  
+New Data Upload               : 100%|█████████▉| 13.6MB / 13.6MB, 1.29MB/s  [A
+
+  ...eed410102-c7d5bd9e9ee0.pt: 100%|█████████▉| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-c7d5bd9e9ee0.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.30MB/s  
+New Data Upload               : 100%|██████████| 13.6MB / 13.6MB, 1.27MB/s  [A
+
+  ...eed410102-c7d5bd9e9ee0.pt: 100%|██████████| 14.0MB / 14.0MB            [A[A
+
+  ...eed410102-c7d5bd9e9ee0.pt: 100%|██████████| 14.0MB / 14.0MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 14.0MB / 14.0MB, 1.28MB/s  
+New Data Upload               : 100%|██████████| 13.6MB / 13.6MB, 1.25MB/s  
+  ...eed410102-c7d5bd9e9ee0.pt: 100%|██████████| 14.0MB / 14.0MB            
+uploaded comparisons/20260909T235853Z/hexcnn32-seed410102-c7d5bd9e9ee0.pt
+{"event": "upload_start", "number": 7, "attempt": 1, "remote": "comparisons/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt", "time": 1789012904.7420404}
+uploading querytransformer256x2-seed410101-454d54089b4a.pt -> comparisons/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410101-454d54089b4a.pt:   4%|▍         |  566kB / 13.3MB            [A[A
+
+  ...eed410101-454d54089b4a.pt:   4%|▍         |  566kB / 13.3MB            [A[AProcessing Files (0 / 1)      :   4%|▍         |  566kB / 13.3MB, 55.6kB/s  
+New Data Upload               :   4%|▍         |  566kB / 13.3MB, 55.6kB/s  [A
+
+  ...eed410101-454d54089b4a.pt:   4%|▍         |  566kB / 13.3MB            [A[A
+
+  ...eed410101-454d54089b4a.pt:   4%|▍         |  566kB / 13.3MB            [A[A
+
+  ...eed410101-454d54089b4a.pt:   9%|▊         | 1.13MB / 13.3MB            [A[AProcessing Files (0 / 1)      :   9%|▊         | 1.13MB / 13.3MB,  109kB/s  
+New Data Upload               :   9%|▊         | 1.13MB / 13.3MB,  109kB/s  [A
+
+  ...eed410101-454d54089b4a.pt:  17%|█▋        | 2.26MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  17%|█▋        | 2.26MB / 13.3MB,  218kB/s  
+New Data Upload               :  17%|█▋        | 2.26MB / 13.3MB,  218kB/s  [A
+
+  ...eed410101-454d54089b4a.pt:  30%|██▉       | 3.96MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  30%|██▉       | 3.96MB / 13.3MB,  380kB/s  
+New Data Upload               :  30%|██▉       | 3.96MB / 13.3MB,  380kB/s  [A
+
+  ...eed410101-454d54089b4a.pt:  47%|████▋     | 6.23MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  47%|████▋     | 6.23MB / 13.3MB,  595kB/s  
+New Data Upload               :  47%|████▋     | 6.23MB / 13.3MB,  595kB/s  [A
+
+  ...eed410101-454d54089b4a.pt:  60%|█████▉    | 7.92MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  60%|█████▉    | 7.92MB / 13.3MB,  753kB/s  
+New Data Upload               :  60%|█████▉    | 7.92MB / 13.3MB,  753kB/s  [A
+
+  ...eed410101-454d54089b4a.pt:  81%|████████  | 10.8MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  81%|████████  | 10.8MB / 13.3MB, 1.02MB/s  
+New Data Upload               :  81%|████████  | 10.8MB / 13.3MB, 1.02MB/s  [A
+
+  ...eed410101-454d54089b4a.pt: 100%|█████████▉| 13.3MB / 13.3MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 13.3MB / 13.3MB, 1.25MB/s  
+New Data Upload               : 100%|█████████▉| 13.3MB / 13.3MB, 1.25MB/s  [A
+
+  ...eed410101-454d54089b4a.pt: 100%|█████████▉| 13.3MB / 13.3MB            [A[A
+
+  ...eed410101-454d54089b4a.pt: 100%|█████████▉| 13.3MB / 13.3MB            [A[A
+
+  ...eed410101-454d54089b4a.pt: 100%|██████████| 13.3MB / 13.3MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.3MB / 13.3MB, 1.21MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.21MB/s  [A
+
+  ...eed410101-454d54089b4a.pt: 100%|██████████| 13.3MB / 13.3MB            [A[A
+
+  ...eed410101-454d54089b4a.pt: 100%|██████████| 13.3MB / 13.3MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.3MB / 13.3MB, 1.20MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.20MB/s  
+  ...eed410101-454d54089b4a.pt: 100%|██████████| 13.3MB / 13.3MB            
+uploaded comparisons/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt
+{"event": "upload_start", "number": 8, "attempt": 1, "remote": "comparisons/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt", "time": 1789012908.5162961}
+uploading querytransformer256x2-seed410102-a0a1d4c39231.pt -> comparisons/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410102-a0a1d4c39231.pt:   4%|▍         |  567kB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt:   4%|▍         |  567kB / 13.3MB            [A[AProcessing Files (0 / 1)      :   4%|▍         |  567kB / 13.3MB, 55.2kB/s  
+New Data Upload               :   4%|▍         |  567kB / 13.3MB, 55.2kB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt:   4%|▍         |  567kB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt:   4%|▍         |  567kB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt:   4%|▍         |  567kB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt:   9%|▊         | 1.13MB / 13.3MB            [A[AProcessing Files (0 / 1)      :   9%|▊         | 1.13MB / 13.3MB,  108kB/s  
+New Data Upload               :   9%|▊         | 1.13MB / 13.3MB,  108kB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt:  21%|██▏       | 2.83MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  21%|██▏       | 2.83MB / 13.3MB,  270kB/s  
+New Data Upload               :  21%|██▏       | 2.83MB / 13.3MB,  270kB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt:  34%|███▍      | 4.53MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  34%|███▍      | 4.53MB / 13.3MB,  430kB/s  
+New Data Upload               :  34%|███▍      | 4.53MB / 13.3MB,  430kB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt:  34%|███▍      | 4.53MB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt:  60%|█████▉    | 7.94MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  60%|█████▉    | 7.94MB / 13.3MB,  746kB/s  
+New Data Upload               :  60%|█████▉    | 7.94MB / 13.3MB,  746kB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt:  85%|████████▌ | 11.3MB / 13.3MB            [A[AProcessing Files (0 / 1)      :  85%|████████▌ | 11.3MB / 13.3MB, 1.06MB/s  
+New Data Upload               :  85%|████████▌ | 11.3MB / 13.3MB, 1.06MB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt: 100%|█████████▉| 13.3MB / 13.3MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 13.3MB / 13.3MB, 1.24MB/s  
+New Data Upload               : 100%|█████████▉| 13.3MB / 13.3MB, 1.24MB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt: 100%|█████████▉| 13.3MB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt: 100%|█████████▉| 13.3MB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt: 100%|█████████▉| 13.3MB / 13.3MB            [A[A
+
+  ...eed410102-a0a1d4c39231.pt: 100%|██████████| 13.3MB / 13.3MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.3MB / 13.3MB, 1.19MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.19MB/s  [A
+
+  ...eed410102-a0a1d4c39231.pt: 100%|██████████| 13.3MB / 13.3MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.3MB / 13.3MB, 1.18MB/s  
+New Data Upload               : 100%|██████████| 13.3MB / 13.3MB, 1.18MB/s  
+  ...eed410102-a0a1d4c39231.pt: 100%|██████████| 13.3MB / 13.3MB            
+uploaded comparisons/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt
+{"event": "upload_start", "number": 9, "attempt": 1, "remote": "comparisons/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt", "time": 1789012912.641412}
+uploading querytransformer164x5-seed410101-8568880b8377.pt -> comparisons/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410101-8568880b8377.pt:   4%|▍         |  559kB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt:   4%|▍         |  559kB / 13.5MB            [A[AProcessing Files (0 / 1)      :   4%|▍         |  559kB / 13.5MB, 54.9kB/s  
+New Data Upload               :   4%|▍         |  559kB / 13.5MB, 54.9kB/s  [A
+
+  ...eed410101-8568880b8377.pt:   4%|▍         |  559kB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt:   4%|▍         |  559kB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt:   4%|▍         |  559kB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt:   4%|▍         |  559kB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt:   8%|▊         | 1.12MB / 13.5MB            [A[AProcessing Files (0 / 1)      :   8%|▊         | 1.12MB / 13.5MB,  106kB/s  
+New Data Upload               :   8%|▊         | 1.12MB / 13.5MB,  106kB/s  [A
+
+  ...eed410101-8568880b8377.pt:  21%|██        | 2.80MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  21%|██        | 2.80MB / 13.5MB,  267kB/s  
+New Data Upload               :  21%|██        | 2.80MB / 13.5MB,  267kB/s  [A
+
+  ...eed410101-8568880b8377.pt:  29%|██▉       | 3.91MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  29%|██▉       | 3.91MB / 13.5MB,  372kB/s  
+New Data Upload               :  29%|██▉       | 3.91MB / 13.5MB,  372kB/s  [A
+
+  ...eed410101-8568880b8377.pt:  46%|████▌     | 6.15MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  46%|████▌     | 6.15MB / 13.5MB,  583kB/s  
+New Data Upload               :  46%|████▌     | 6.15MB / 13.5MB,  583kB/s  [A
+
+  ...eed410101-8568880b8377.pt:  58%|█████▊    | 7.83MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  58%|█████▊    | 7.83MB / 13.5MB,  738kB/s  
+New Data Upload               :  58%|█████▊    | 7.83MB / 13.5MB,  738kB/s  [A
+
+  ...eed410101-8568880b8377.pt:  75%|███████▍  | 10.1MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  75%|███████▍  | 10.1MB / 13.5MB,  945kB/s  
+New Data Upload               :  75%|███████▍  | 10.1MB / 13.5MB,  945kB/s  [A
+
+  ...eed410101-8568880b8377.pt: 100%|█████████▉| 13.5MB / 13.5MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 13.5MB / 13.5MB, 1.26MB/s  
+New Data Upload               : 100%|█████████▉| 13.5MB / 13.5MB, 1.26MB/s  [A
+
+  ...eed410101-8568880b8377.pt: 100%|█████████▉| 13.5MB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt: 100%|█████████▉| 13.5MB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt: 100%|█████████▉| 13.5MB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt: 100%|██████████| 13.5MB / 13.5MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.5MB / 13.5MB, 1.21MB/s  
+New Data Upload               : 100%|██████████| 13.5MB / 13.5MB, 1.21MB/s  [A
+
+  ...eed410101-8568880b8377.pt: 100%|██████████| 13.5MB / 13.5MB            [A[A
+
+  ...eed410101-8568880b8377.pt: 100%|██████████| 13.5MB / 13.5MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.5MB / 13.5MB, 1.19MB/s  
+New Data Upload               : 100%|██████████| 13.5MB / 13.5MB, 1.19MB/s  
+  ...eed410101-8568880b8377.pt: 100%|██████████| 13.5MB / 13.5MB            
+uploaded comparisons/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt
+{"event": "upload_start", "number": 10, "attempt": 1, "remote": "comparisons/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt", "time": 1789012916.7205343}
+uploading querytransformer164x5-seed410102-02b9f1909248.pt -> comparisons/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt
+Processing Files (0 / 0)      : |          |  0.00B /  0.00B            
+New Data Upload               : |          |  0.00B /  0.00B            [A
+
+  ...eed410102-02b9f1909248.pt:   4%|▍         |  557kB / 13.5MB            [A[A
+
+  ...eed410102-02b9f1909248.pt:   4%|▍         |  557kB / 13.5MB            [A[AProcessing Files (0 / 1)      :   4%|▍         |  557kB / 13.5MB, 54.7kB/s  
+New Data Upload               :   4%|▍         |  557kB / 13.5MB, 54.7kB/s  [A
+
+  ...eed410102-02b9f1909248.pt:   4%|▍         |  557kB / 13.5MB            [A[A
+
+  ...eed410102-02b9f1909248.pt:   4%|▍         |  557kB / 13.5MB            [A[A
+
+  ...eed410102-02b9f1909248.pt:   8%|▊         | 1.11MB / 13.5MB            [A[AProcessing Files (0 / 1)      :   8%|▊         | 1.11MB / 13.5MB,  107kB/s  
+New Data Upload               :   8%|▊         | 1.11MB / 13.5MB,  107kB/s  [A
+
+  ...eed410102-02b9f1909248.pt:  12%|█▏        | 1.67MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  12%|█▏        | 1.67MB / 13.5MB,  160kB/s  
+New Data Upload               :  12%|█▏        | 1.67MB / 13.5MB,  160kB/s  [A
+
+  ...eed410102-02b9f1909248.pt:  29%|██▉       | 3.90MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  29%|██▉       | 3.90MB / 13.5MB,  375kB/s  
+New Data Upload               :  29%|██▉       | 3.90MB / 13.5MB,  375kB/s  [A
+
+  ...eed410102-02b9f1909248.pt:  37%|███▋      | 5.02MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  37%|███▋      | 5.02MB / 13.5MB,  479kB/s  
+New Data Upload               :  37%|███▋      | 5.02MB / 13.5MB,  479kB/s  [A
+
+  ...eed410102-02b9f1909248.pt:  37%|███▋      | 5.02MB / 13.5MB            [A[A
+
+  ...eed410102-02b9f1909248.pt:  58%|█████▊    | 7.80MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  58%|█████▊    | 7.80MB / 13.5MB,  737kB/s  
+New Data Upload               :  58%|█████▊    | 7.80MB / 13.5MB,  737kB/s  [A
+
+  ...eed410102-02b9f1909248.pt:  87%|████████▋ | 11.7MB / 13.5MB            [A[AProcessing Files (0 / 1)      :  87%|████████▋ | 11.7MB / 13.5MB, 1.10MB/s  
+New Data Upload               :  87%|████████▋ | 11.7MB / 13.5MB, 1.10MB/s  [A
+
+  ...eed410102-02b9f1909248.pt: 100%|█████████▉| 13.5MB / 13.5MB            [A[AProcessing Files (0 / 1)      : 100%|█████████▉| 13.5MB / 13.5MB, 1.26MB/s  
+New Data Upload               : 100%|█████████▉| 13.5MB / 13.5MB, 1.26MB/s  [A
+
+  ...eed410102-02b9f1909248.pt: 100%|█████████▉| 13.5MB / 13.5MB            [A[A
+
+  ...eed410102-02b9f1909248.pt: 100%|█████████▉| 13.5MB / 13.5MB            [A[A
+
+  ...eed410102-02b9f1909248.pt: 100%|██████████| 13.5MB / 13.5MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.5MB / 13.5MB, 1.23MB/s  
+New Data Upload               : 100%|██████████| 13.5MB / 13.5MB, 1.23MB/s  [A
+
+  ...eed410102-02b9f1909248.pt: 100%|██████████| 13.5MB / 13.5MB            [A[A
+
+  ...eed410102-02b9f1909248.pt: 100%|██████████| 13.5MB / 13.5MB            [A[AProcessing Files (1 / 1)      : 100%|██████████| 13.5MB / 13.5MB, 1.21MB/s  
+New Data Upload               : 100%|██████████| 13.5MB / 13.5MB, 1.21MB/s  
+  ...eed410102-02b9f1909248.pt: 100%|██████████| 13.5MB / 13.5MB            
+uploaded comparisons/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt
+{"event": "upload_start", "number": 11, "attempt": 1, "remote": "comparisons/20260909T235853Z/manifest.json", "time": 1789012920.3888433}
+uploading comparison-checkpoints-manifest.json -> comparisons/20260909T235853Z/manifest.json
+uploaded comparisons/20260909T235853Z/manifest.json

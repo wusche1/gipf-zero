@@ -1,0 +1,97 @@
+{
+  "version": "overnight-v1",
+  "deadline": "2026-09-10T06:00:00Z",
+  "training_stop": "2026-09-10T05:30:00Z",
+  "wait_service": "gipf_async_validation",
+  "wait_seconds": 2400,
+  "training_seconds": 600,
+  "seeds": [
+    410101,
+    410102
+  ],
+  "architectures": [
+    {
+      "name": "mlp256",
+      "kind": "mlp",
+      "head": "flat",
+      "width": 256,
+      "blocks": 2
+    },
+    {
+      "name": "squarecnn32",
+      "kind": "resnet",
+      "head": "flat",
+      "width": 32,
+      "blocks": 2
+    },
+    {
+      "name": "hexcnn32",
+      "kind": "hexresnet",
+      "head": "flat",
+      "width": 32,
+      "blocks": 2
+    },
+    {
+      "name": "querytransformer256x2",
+      "kind": "transformer",
+      "head": "query",
+      "width": 256,
+      "blocks": 2
+    },
+    {
+      "name": "querytransformer164x5",
+      "kind": "transformer",
+      "head": "query",
+      "width": 164,
+      "blocks": 5
+    }
+  ],
+  "selfplay": {
+    "games": 64,
+    "games_per_iteration": 32,
+    "updates": 32,
+    "simulations": 32,
+    "batch_size": 256,
+    "lr": 0.001,
+    "max_ply": 300,
+    "replay_size": 100000,
+    "device": "cuda",
+    "native_forest": true
+  },
+  "duels": {
+    "games": 12,
+    "seconds_cpu": 180,
+    "seconds_sim": 45,
+    "min_cpu_games_per_model": 96,
+    "equal_cpu_time": {
+      "device": "cpu",
+      "threads": 1,
+      "batch": 1,
+      "simulations": 10000,
+      "budget_ms": 50
+    },
+    "equal_simulations": {
+      "device": "cuda",
+      "threads": 2,
+      "batch": 64,
+      "simulations": 32,
+      "budget_ms": 0
+    }
+  },
+  "continuation": {
+    "games": 128,
+    "games_per_iteration": 32,
+    "updates": 32,
+    "simulations": 64,
+    "batch_size": 256,
+    "lr": 0.001,
+    "max_ply": 300,
+    "replay_size": 100000,
+    "device": "cuda",
+    "native_forest": true
+  },
+  "publication": {
+    "hf_repo": "wuschelschulz/gipf-zero",
+    "github": true
+  }
+}

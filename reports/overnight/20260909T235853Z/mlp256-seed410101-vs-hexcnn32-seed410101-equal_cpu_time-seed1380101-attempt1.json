@@ -1,0 +1,176 @@
+{
+  "candidate": "/workspace/gipf/runs/overnight/20260909T235853Z/mlp256-seed410101/latest.pt",
+  "champion": "/workspace/gipf/runs/overnight/20260909T235853Z/hexcnn32-seed410101/latest.pt",
+  "hashes": [
+    "9acc8f0f15e5831249949239bac566467a951a3559d4953066f18631e7aef64f",
+    "d6f1c7081cdb8f802f88322f65368dfb52cb0cd10e2fae155efae1973e0bc2e5"
+  ],
+  "models": [
+    {
+      "games": 8740,
+      "iteration": 270,
+      "config": {
+        "kind": "mlp",
+        "width": 256,
+        "blocks": 2,
+        "head": "flat"
+      }
+    },
+    {
+      "games": 7877,
+      "iteration": 242,
+      "config": {
+        "kind": "hexresnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      }
+    }
+  ],
+  "wins": 2,
+  "losses": 8,
+  "cutoffs": 2,
+  "unfinished": 0,
+  "win_rate_decisive": 0.2,
+  "wilson_95_decisive": [
+    0.056682151454375246,
+    0.5098375284633582
+  ],
+  "candidate_root_simulations": {
+    "count": 801,
+    "mean": 228.27715355805245,
+    "min": 100,
+    "max": 10000
+  },
+  "champion_root_simulations": {
+    "count": 801,
+    "mean": 201.11610486891385,
+    "min": 41,
+    "max": 10000
+  },
+  "candidate_search_seconds": {
+    "count": 801,
+    "mean": 0.05022746998440014,
+    "min": 0.030646514147520065,
+    "max": 0.06282975524663925
+  },
+  "champion_search_seconds": {
+    "count": 801,
+    "mean": 0.05027599407176251,
+    "min": 0.02731853723526001,
+    "max": 0.05738721042871475
+  },
+  "elapsed_seconds": 80.68824608251452,
+  "config": {
+    "candidate": "/workspace/gipf/runs/overnight/20260909T235853Z/mlp256-seed410101/latest.pt",
+    "champion": "/workspace/gipf/runs/overnight/20260909T235853Z/hexcnn32-seed410101/latest.pt",
+    "games": 12,
+    "batch": 1,
+    "simulations": 10000,
+    "seed": 1380101,
+    "max_ply": 300,
+    "seconds": 180,
+    "output": "/workspace/gipf/reports/overnight/20260909T235853Z/mlp256-seed410101-vs-hexcnn32-seed410101-equal_cpu_time-seed1380101-attempt1.json",
+    "device": "cpu",
+    "threads": 1,
+    "budget_ms": 50.0
+  },
+  "records": [
+    {
+      "game": 0,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 68
+    },
+    {
+      "game": 1,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 57
+    },
+    {
+      "game": 2,
+      "candidate_color": 1,
+      "winner": 1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 79
+    },
+    {
+      "game": 3,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 73
+    },
+    {
+      "game": 4,
+      "candidate_color": 1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 5,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 67
+    },
+    {
+      "game": 6,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 118
+    },
+    {
+      "game": 7,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 72
+    },
+    {
+      "game": 8,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 60
+    },
+    {
+      "game": 9,
+      "candidate_color": -1,
+      "winner": 0,
+      "outcome": "cutoff",
+      "cutoff_reason": "insertion",
+      "ply": 300
+    },
+    {
+      "game": 10,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 66
+    },
+    {
+      "game": 11,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 91
+    }
+  ]
+}

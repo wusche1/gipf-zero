@@ -1,0 +1,153 @@
+{
+  "purpose": "Retries of only the three timed-out equal-simulations duels. The primary summary.json is intentionally unchanged.",
+  "all_complete": true,
+  "entries": [
+    {
+      "original_report": "reports/overnight/20260909T235853Z/hexcnn32-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-attempt1.json",
+      "retry_report": "reports/overnight/20260909T235853Z/hexcnn32-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-retry-complete.json",
+      "retry_log": "reports/overnight/20260909T235853Z/hexcnn32-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-retry-complete.log",
+      "left": "hexcnn32-seed410101",
+      "right": "querytransformer164x5-seed410101",
+      "seed": 1380101,
+      "frozen": {
+        "candidate": "checkpoints/overnight/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt",
+        "champion": "checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt"
+      },
+      "hashes": [
+        "d6f1c7081cdb8f802f88322f65368dfb52cb0cd10e2fae155efae1973e0bc2e5",
+        "8568880b8377b2fd9d2d0f10b1081838644f69e6e9be3df26bb5fc9c9188ed99"
+      ],
+      "frozen_hashes_match_original": true,
+      "command": "PYTHONPATH=/workspace/gipf timeout 200s /venv/main/bin/python -m training.duel --candidate checkpoints/overnight/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt --champion checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt --games 12 --batch 64 --simulations 32 --seed 1380101 --max-ply 300 --seconds 180 --output reports/overnight/20260909T235853Z/hexcnn32-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-retry-complete.json --device cuda --threads 1 --budget-ms 0",
+      "protocol_verified": {
+        "games": 12,
+        "batch": 64,
+        "simulations": 32,
+        "seed": 1380101,
+        "max_ply": 300,
+        "seconds": 180,
+        "device": "cuda",
+        "threads": 1,
+        "budget_ms": 0.0
+      },
+      "result": {
+        "wins": 6,
+        "losses": 0,
+        "cutoffs": 6,
+        "unfinished": 0,
+        "elapsed_seconds": 45.535510551184416,
+        "win_rate_decisive": 1.0,
+        "candidate_root_simulations": {
+          "count": 1259,
+          "mean": 32.0,
+          "min": 32,
+          "max": 32
+        },
+        "champion_root_simulations": {
+          "count": 1247,
+          "mean": 32.0,
+          "min": 32,
+          "max": 32
+        }
+      }
+    },
+    {
+      "original_report": "reports/overnight/20260909T235853Z/querytransformer256x2-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-attempt1.json",
+      "retry_report": "reports/overnight/20260909T235853Z/querytransformer256x2-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-retry-complete.json",
+      "retry_log": "reports/overnight/20260909T235853Z/querytransformer256x2-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-retry-complete.log",
+      "left": "querytransformer256x2-seed410101",
+      "right": "querytransformer164x5-seed410101",
+      "seed": 1380101,
+      "frozen": {
+        "candidate": "checkpoints/overnight/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt",
+        "champion": "checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt"
+      },
+      "hashes": [
+        "454d54089b4a383e448282be0472c67d25a6be6f4e5cb510d6a37256a9111ea4",
+        "8568880b8377b2fd9d2d0f10b1081838644f69e6e9be3df26bb5fc9c9188ed99"
+      ],
+      "frozen_hashes_match_original": true,
+      "command": "PYTHONPATH=/workspace/gipf timeout 200s /venv/main/bin/python -m training.duel --candidate checkpoints/overnight/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt --champion checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt --games 12 --batch 64 --simulations 32 --seed 1380101 --max-ply 300 --seconds 180 --output reports/overnight/20260909T235853Z/querytransformer256x2-seed410101-vs-querytransformer164x5-seed410101-equal_simulations-seed1380101-retry-complete.json --device cuda --threads 1 --budget-ms 0",
+      "protocol_verified": {
+        "games": 12,
+        "batch": 64,
+        "simulations": 32,
+        "seed": 1380101,
+        "max_ply": 300,
+        "seconds": 180,
+        "device": "cuda",
+        "threads": 1,
+        "budget_ms": 0.0
+      },
+      "result": {
+        "wins": 5,
+        "losses": 2,
+        "cutoffs": 5,
+        "unfinished": 0,
+        "elapsed_seconds": 61.950876381248236,
+        "win_rate_decisive": 0.7142857142857143,
+        "candidate_root_simulations": {
+          "count": 1169,
+          "mean": 32.0,
+          "min": 32,
+          "max": 32
+        },
+        "champion_root_simulations": {
+          "count": 1161,
+          "mean": 32.0,
+          "min": 32,
+          "max": 32
+        }
+      }
+    },
+    {
+      "original_report": "reports/overnight/20260909T235853Z/querytransformer256x2-seed410102-vs-querytransformer164x5-seed410102-equal_simulations-seed1380102-attempt1.json",
+      "retry_report": "reports/overnight/20260909T235853Z/querytransformer256x2-seed410102-vs-querytransformer164x5-seed410102-equal_simulations-seed1380102-retry-complete.json",
+      "retry_log": "reports/overnight/20260909T235853Z/querytransformer256x2-seed410102-vs-querytransformer164x5-seed410102-equal_simulations-seed1380102-retry-complete.log",
+      "left": "querytransformer256x2-seed410102",
+      "right": "querytransformer164x5-seed410102",
+      "seed": 1380102,
+      "frozen": {
+        "candidate": "checkpoints/overnight/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt",
+        "champion": "checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt"
+      },
+      "hashes": [
+        "a0a1d4c3923127d74b628540ae9fb3a117517ce6d8757629b73c55c4d9d3d486",
+        "02b9f1909248f78a8d814f1f611cb21e44e0b552d630b70d49df66cb04cc9a8c"
+      ],
+      "frozen_hashes_match_original": true,
+      "command": "PYTHONPATH=/workspace/gipf timeout 200s /venv/main/bin/python -m training.duel --candidate checkpoints/overnight/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt --champion checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt --games 12 --batch 64 --simulations 32 --seed 1380102 --max-ply 300 --seconds 180 --output reports/overnight/20260909T235853Z/querytransformer256x2-seed410102-vs-querytransformer164x5-seed410102-equal_simulations-seed1380102-retry-complete.json --device cuda --threads 1 --budget-ms 0",
+      "protocol_verified": {
+        "games": 12,
+        "batch": 64,
+        "simulations": 32,
+        "seed": 1380102,
+        "max_ply": 300,
+        "seconds": 180,
+        "device": "cuda",
+        "threads": 1,
+        "budget_ms": 0.0
+      },
+      "result": {
+        "wins": 9,
+        "losses": 0,
+        "cutoffs": 3,
+        "unfinished": 0,
+        "elapsed_seconds": 53.1677360907197,
+        "win_rate_decisive": 1.0,
+        "candidate_root_simulations": {
+          "count": 762,
+          "mean": 32.0,
+          "min": 32,
+          "max": 32
+        },
+        "champion_root_simulations": {
+          "count": 754,
+          "mean": 32.0,
+          "min": 32,
+          "max": 32
+        }
+      }
+    }
+  ]
+}

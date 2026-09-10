@@ -1,0 +1,30 @@
+{
+  "schema": "gipf-zero-final-checkpoint-publication-v1",
+  "repository": "wuschelschulz/gipf-zero",
+  "tag": "20260909T235853Z",
+  "checkpoint": "checkpoints/overnight/20260909T235853Z/selected-final-cb19bc298969.pt",
+  "remote_path": "finalists/20260909T235853Z/selected-final-cb19bc298969.pt",
+  "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/finalists/20260909T235853Z/selected-final-cb19bc298969.pt",
+  "bytes": 14003543,
+  "file_sha256": "cb19bc298969043987463b267b909ca38c7ead84bab3c0b46571b6ef30e6d00f",
+  "remote_lfs_sha256": "cb19bc298969043987463b267b909ca38c7ead84bab3c0b46571b6ef30e6d00f",
+  "remote_lfs_size": 14003543,
+  "remote_lfs_sha256_verified": true,
+  "config": {
+    "kind": "hexresnet",
+    "width": 32,
+    "blocks": 2,
+    "head": "flat"
+  },
+  "games": 93916,
+  "iteration": 2873,
+  "evaluation_pending": true,
+  "evaluation_report": "reports/overnight/20260909T235853Z/final-vs-served.json",
+  "interpretation": "Frozen final training checkpoint only; evaluation and promotion were pending when this receipt was created. It is not claimed as strongest or served champion.",
+  "upload_protocol": {
+    "per_process_timeout_seconds": 180,
+    "maximum_retries": 1,
+    "network_upload_attempts": 1
+  },
+  "repository_commit": "8682c0c683117b697b3f1c36ff63008acf3295b8"
+}

@@ -1,0 +1,269 @@
+{
+  "schema": "gipf-zero-comparison-checkpoints-v1",
+  "repository": "wuschelschulz/gipf-zero",
+  "tag": "20260909T235853Z",
+  "source_github_commit": "f4c83a5140625caba30aea6c045a11d92261f6be",
+  "source_github_url": "https://github.com/wusche1/gipf-zero/tree/f4c83a5140625caba30aea6c045a11d92261f6be",
+  "protocol": {
+    "training_seconds": 600,
+    "seeds": [
+      410101,
+      410102
+    ],
+    "architectures": [
+      {
+        "name": "mlp256",
+        "kind": "mlp",
+        "head": "flat",
+        "width": 256,
+        "blocks": 2
+      },
+      {
+        "name": "squarecnn32",
+        "kind": "resnet",
+        "head": "flat",
+        "width": 32,
+        "blocks": 2
+      },
+      {
+        "name": "hexcnn32",
+        "kind": "hexresnet",
+        "head": "flat",
+        "width": 32,
+        "blocks": 2
+      },
+      {
+        "name": "querytransformer256x2",
+        "kind": "transformer",
+        "head": "query",
+        "width": 256,
+        "blocks": 2
+      },
+      {
+        "name": "querytransformer164x5",
+        "kind": "transformer",
+        "head": "query",
+        "width": 164,
+        "blocks": 5
+      }
+    ],
+    "selfplay": {
+      "games": 64,
+      "games_per_iteration": 32,
+      "updates": 32,
+      "simulations": 32,
+      "batch_size": 256,
+      "lr": 0.001,
+      "max_ply": 300,
+      "replay_size": 100000,
+      "device": "cuda",
+      "native_forest": true
+    },
+    "duels": {
+      "games": 12,
+      "seconds_cpu": 180,
+      "seconds_sim": 45,
+      "min_cpu_games_per_model": 96,
+      "equal_cpu_time": {
+        "device": "cpu",
+        "threads": 1,
+        "batch": 1,
+        "simulations": 10000,
+        "budget_ms": 50
+      },
+      "equal_simulations": {
+        "device": "cuda",
+        "threads": 2,
+        "batch": 64,
+        "simulations": 32,
+        "budget_ms": 0
+      }
+    }
+  },
+  "files": [
+    {
+      "name": "mlp256-seed410101",
+      "seed": 410101,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/mlp256-seed410101-9acc8f0f15e5.pt",
+      "remote_path": "comparisons/20260909T235853Z/mlp256-seed410101-9acc8f0f15e5.pt",
+      "bytes": 11775385,
+      "summary_source_sha256": "9acc8f0f15e5831249949239bac566467a951a3559d4953066f18631e7aef64f",
+      "file_sha256": "9acc8f0f15e5831249949239bac566467a951a3559d4953066f18631e7aef64f",
+      "config": {
+        "kind": "mlp",
+        "width": 256,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "games": 8740,
+      "iteration": 270
+    },
+    {
+      "name": "mlp256-seed410102",
+      "seed": 410102,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/mlp256-seed410102-9ca408753dfb.pt",
+      "remote_path": "comparisons/20260909T235853Z/mlp256-seed410102-9ca408753dfb.pt",
+      "bytes": 11775385,
+      "summary_source_sha256": "9ca408753dfbe4c2103016e9694be0e5033ed517459bf8a7cef2cb56164fa9a7",
+      "file_sha256": "9ca408753dfbe4c2103016e9694be0e5033ed517459bf8a7cef2cb56164fa9a7",
+      "config": {
+        "kind": "mlp",
+        "width": 256,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "games": 8122,
+      "iteration": 251
+    },
+    {
+      "name": "squarecnn32-seed410101",
+      "seed": 410101,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/squarecnn32-seed410101-e2a8946b1405.pt",
+      "remote_path": "comparisons/20260909T235853Z/squarecnn32-seed410101-e2a8946b1405.pt",
+      "bytes": 14001446,
+      "summary_source_sha256": "e2a8946b1405174aaa0b0d08e8d88e10078f40e90aac72596631d1bd6757cbd1",
+      "file_sha256": "e2a8946b1405174aaa0b0d08e8d88e10078f40e90aac72596631d1bd6757cbd1",
+      "config": {
+        "kind": "resnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "games": 6214,
+      "iteration": 192
+    },
+    {
+      "name": "squarecnn32-seed410102",
+      "seed": 410102,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/squarecnn32-seed410102-d3e8eb4f1e75.pt",
+      "remote_path": "comparisons/20260909T235853Z/squarecnn32-seed410102-d3e8eb4f1e75.pt",
+      "bytes": 14001446,
+      "summary_source_sha256": "d3e8eb4f1e75d18bbeb28bef1b46c6c3f84b1ab6f009e63cc950a88f647c8025",
+      "file_sha256": "d3e8eb4f1e75d18bbeb28bef1b46c6c3f84b1ab6f009e63cc950a88f647c8025",
+      "config": {
+        "kind": "resnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "games": 8449,
+      "iteration": 260
+    },
+    {
+      "name": "hexcnn32-seed410101",
+      "seed": 410101,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt",
+      "remote_path": "comparisons/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt",
+      "bytes": 14003159,
+      "summary_source_sha256": "d6f1c7081cdb8f802f88322f65368dfb52cb0cd10e2fae155efae1973e0bc2e5",
+      "file_sha256": "d6f1c7081cdb8f802f88322f65368dfb52cb0cd10e2fae155efae1973e0bc2e5",
+      "config": {
+        "kind": "hexresnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "games": 7877,
+      "iteration": 242
+    },
+    {
+      "name": "hexcnn32-seed410102",
+      "seed": 410102,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/hexcnn32-seed410102-c7d5bd9e9ee0.pt",
+      "remote_path": "comparisons/20260909T235853Z/hexcnn32-seed410102-c7d5bd9e9ee0.pt",
+      "bytes": 14003159,
+      "summary_source_sha256": "c7d5bd9e9ee03104059833d76fa22e3aad2919e2f321302454d0b1750d8ce62d",
+      "file_sha256": "c7d5bd9e9ee03104059833d76fa22e3aad2919e2f321302454d0b1750d8ce62d",
+      "config": {
+        "kind": "hexresnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      },
+      "games": 6813,
+      "iteration": 209
+    },
+    {
+      "name": "querytransformer256x2-seed410101",
+      "seed": 410101,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt",
+      "bytes": 13274255,
+      "summary_source_sha256": "454d54089b4a383e448282be0472c67d25a6be6f4e5cb510d6a37256a9111ea4",
+      "file_sha256": "454d54089b4a383e448282be0472c67d25a6be6f4e5cb510d6a37256a9111ea4",
+      "config": {
+        "kind": "transformer",
+        "width": 256,
+        "blocks": 2,
+        "head": "query"
+      },
+      "games": 524,
+      "iteration": 15
+    },
+    {
+      "name": "querytransformer256x2-seed410102",
+      "seed": 410102,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt",
+      "bytes": 13274191,
+      "summary_source_sha256": "a0a1d4c3923127d74b628540ae9fb3a117517ce6d8757629b73c55c4d9d3d486",
+      "file_sha256": "a0a1d4c3923127d74b628540ae9fb3a117517ce6d8757629b73c55c4d9d3d486",
+      "config": {
+        "kind": "transformer",
+        "width": 256,
+        "blocks": 2,
+        "head": "query"
+      },
+      "games": 717,
+      "iteration": 22
+    },
+    {
+      "name": "querytransformer164x5-seed410101",
+      "seed": 410101,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt",
+      "bytes": 13479583,
+      "summary_source_sha256": "8568880b8377b2fd9d2d0f10b1081838644f69e6e9be3df26bb5fc9c9188ed99",
+      "file_sha256": "8568880b8377b2fd9d2d0f10b1081838644f69e6e9be3df26bb5fc9c9188ed99",
+      "config": {
+        "kind": "transformer",
+        "width": 164,
+        "blocks": 5,
+        "head": "query"
+      },
+      "games": 582,
+      "iteration": 18
+    },
+    {
+      "name": "querytransformer164x5-seed410102",
+      "seed": 410102,
+      "frozen_source": "checkpoints/overnight/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt",
+      "bytes": 13479583,
+      "summary_source_sha256": "02b9f1909248f78a8d814f1f611cb21e44e0b552d630b70d49df66cb04cc9a8c",
+      "file_sha256": "02b9f1909248f78a8d814f1f611cb21e44e0b552d630b70d49df66cb04cc9a8c",
+      "config": {
+        "kind": "transformer",
+        "width": 164,
+        "blocks": 5,
+        "head": "query"
+      },
+      "games": 476,
+      "iteration": 14
+    }
+  ],
+  "total_files": 10,
+  "total_bytes": 133067592,
+  "source_github_commit_provenance": {
+    "kind": "inferred_repository_tree_at_backend_freeze",
+    "checkpoint_embedded_git_commit": null,
+    "basis": "The checkpoints contain config and RNG/training state but no Git revision. This commit was the latest local commit before summary backend_frozen at 2026-09-09T23:58:53Z; committed blobs match every recorded Python backend hash.",
+    "verified_backend_tree_sha256": {
+      "training/model.py": "1130a6f7e23524c04790adc702b8ecc7a9d92008bb354a398f377735b379dd71",
+      "training/native_search.py": "88beacc193f1fcfae082e46d93b3e1c8ca5edf76bf99c2c6298bd3d6cbe359f0",
+      "training/query_transformer.py": "9ff230547d8a0f9fd393fe05414a496724b3c514f76839a8f4c956e941f70385",
+      "training/search.py": "54587d2fde6bc62a671d9ff22ca2681f6fff521bbc5ed439c9cdd2b9c1786664",
+      "training/train.py": "8cbb2ed0b29d35c5101b6d9882cc2e83dc919277a32816b322a059abf97bd648"
+    }
+  }
+}

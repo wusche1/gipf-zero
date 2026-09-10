@@ -1,0 +1,46 @@
+/venv/main/lib/python3.12/site-packages/huggingface_hub/hf_api.py:11697: UserWarning: Warnings while validating metadata in README.md:
+- empty or missing yaml metadata in repo card
+  warnings.warn(f"Warnings while validating metadata in README.md:\n{message}")
+Traceback (most recent call last):
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 808, in hf_raise_for_status
+    response.raise_for_status()
+  File "/venv/main/lib/python3.12/site-packages/httpx/_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '401 Unauthorized' for url 'https://huggingface.co/api/models/wuschelschulz/gipf-zero/preupload/main'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/hf_api.py", line 2153, in _inner
+    return fn(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/hf_api.py", line 6061, in upload_folder
+    return pipelined_upload(
+           ^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/_upload_pipeline.py", line 684, in pipelined_upload
+    ).run()
+      ^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/_upload_pipeline.py", line 392, in run
+    self._coordinator_loop()
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/_upload_pipeline.py", line 429, in _coordinator_loop
+    _fetch_upload_modes(
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/_commit_api.py", line 763, in _fetch_upload_modes
+    hf_raise_for_status(resp)
+  File "/venv/main/lib/python3.12/site-packages/huggingface_hub/utils/_http.py", line 895, in hf_raise_for_status
+    raise _format(RepositoryNotFoundError, message, response, repo_type=repo_type, repo_id=repo_id) from e
+huggingface_hub.errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-6aa241d4-236aa9413bc31dd950908c63;5cd6141f-5590-48b2-b13f-bed840011ee1)
+
+Repository Not Found for url: https://huggingface.co/api/models/wuschelschulz/gipf-zero/preupload/main.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated and your token has the required permissions.
+For more details, see https://huggingface.co/docs/huggingface_hub/authentication
+Invalid username or password.
+Note: Creating a commit assumes that the repo already exists on the Huggingface Hub. Please use `create_repo` if it's not the case.

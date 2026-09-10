@@ -1,0 +1,133 @@
+{
+  "schema": "gipf-zero-comparison-publication-receipt-v1",
+  "repository": "wuschelschulz/gipf-zero",
+  "tag": "20260909T235853Z",
+  "repository_commit": "3996ec0178ef203edefeaa052cffa78c11eb2093",
+  "source_github_commit": "f4c83a5140625caba30aea6c045a11d92261f6be",
+  "source_github_url": "https://github.com/wusche1/gipf-zero/tree/f4c83a5140625caba30aea6c045a11d92261f6be",
+  "manifest": "comparison-checkpoints-manifest.json",
+  "remote_manifest_path": "comparisons/20260909T235853Z/manifest.json",
+  "remote_manifest_sha256": "19504f4cc194e7b527bcfe470a1c38e3103bb4d6decdc9af232e018a8a019a25",
+  "files_uploaded": 10,
+  "total_bytes": 133067592,
+  "network_protocol": {
+    "per_process_timeout_seconds": 180,
+    "maximum_retries": 2,
+    "attempts_per_file": 1
+  },
+  "remote_lfs_sha256_verification": true,
+  "files": [
+    {
+      "name": "mlp256-seed410101",
+      "remote_path": "comparisons/20260909T235853Z/mlp256-seed410101-9acc8f0f15e5.pt",
+      "bytes": 11775385,
+      "local_sha256": "9acc8f0f15e5831249949239bac566467a951a3559d4953066f18631e7aef64f",
+      "remote_lfs_sha256": "9acc8f0f15e5831249949239bac566467a951a3559d4953066f18631e7aef64f",
+      "remote_lfs_size": 11775385,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/mlp256-seed410101-9acc8f0f15e5.pt"
+    },
+    {
+      "name": "mlp256-seed410102",
+      "remote_path": "comparisons/20260909T235853Z/mlp256-seed410102-9ca408753dfb.pt",
+      "bytes": 11775385,
+      "local_sha256": "9ca408753dfbe4c2103016e9694be0e5033ed517459bf8a7cef2cb56164fa9a7",
+      "remote_lfs_sha256": "9ca408753dfbe4c2103016e9694be0e5033ed517459bf8a7cef2cb56164fa9a7",
+      "remote_lfs_size": 11775385,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/mlp256-seed410102-9ca408753dfb.pt"
+    },
+    {
+      "name": "squarecnn32-seed410101",
+      "remote_path": "comparisons/20260909T235853Z/squarecnn32-seed410101-e2a8946b1405.pt",
+      "bytes": 14001446,
+      "local_sha256": "e2a8946b1405174aaa0b0d08e8d88e10078f40e90aac72596631d1bd6757cbd1",
+      "remote_lfs_sha256": "e2a8946b1405174aaa0b0d08e8d88e10078f40e90aac72596631d1bd6757cbd1",
+      "remote_lfs_size": 14001446,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/squarecnn32-seed410101-e2a8946b1405.pt"
+    },
+    {
+      "name": "squarecnn32-seed410102",
+      "remote_path": "comparisons/20260909T235853Z/squarecnn32-seed410102-d3e8eb4f1e75.pt",
+      "bytes": 14001446,
+      "local_sha256": "d3e8eb4f1e75d18bbeb28bef1b46c6c3f84b1ab6f009e63cc950a88f647c8025",
+      "remote_lfs_sha256": "d3e8eb4f1e75d18bbeb28bef1b46c6c3f84b1ab6f009e63cc950a88f647c8025",
+      "remote_lfs_size": 14001446,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/squarecnn32-seed410102-d3e8eb4f1e75.pt"
+    },
+    {
+      "name": "hexcnn32-seed410101",
+      "remote_path": "comparisons/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt",
+      "bytes": 14003159,
+      "local_sha256": "d6f1c7081cdb8f802f88322f65368dfb52cb0cd10e2fae155efae1973e0bc2e5",
+      "remote_lfs_sha256": "d6f1c7081cdb8f802f88322f65368dfb52cb0cd10e2fae155efae1973e0bc2e5",
+      "remote_lfs_size": 14003159,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/hexcnn32-seed410101-d6f1c7081cdb.pt"
+    },
+    {
+      "name": "hexcnn32-seed410102",
+      "remote_path": "comparisons/20260909T235853Z/hexcnn32-seed410102-c7d5bd9e9ee0.pt",
+      "bytes": 14003159,
+      "local_sha256": "c7d5bd9e9ee03104059833d76fa22e3aad2919e2f321302454d0b1750d8ce62d",
+      "remote_lfs_sha256": "c7d5bd9e9ee03104059833d76fa22e3aad2919e2f321302454d0b1750d8ce62d",
+      "remote_lfs_size": 14003159,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/hexcnn32-seed410102-c7d5bd9e9ee0.pt"
+    },
+    {
+      "name": "querytransformer256x2-seed410101",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt",
+      "bytes": 13274255,
+      "local_sha256": "454d54089b4a383e448282be0472c67d25a6be6f4e5cb510d6a37256a9111ea4",
+      "remote_lfs_sha256": "454d54089b4a383e448282be0472c67d25a6be6f4e5cb510d6a37256a9111ea4",
+      "remote_lfs_size": 13274255,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/querytransformer256x2-seed410101-454d54089b4a.pt"
+    },
+    {
+      "name": "querytransformer256x2-seed410102",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt",
+      "bytes": 13274191,
+      "local_sha256": "a0a1d4c3923127d74b628540ae9fb3a117517ce6d8757629b73c55c4d9d3d486",
+      "remote_lfs_sha256": "a0a1d4c3923127d74b628540ae9fb3a117517ce6d8757629b73c55c4d9d3d486",
+      "remote_lfs_size": 13274191,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/querytransformer256x2-seed410102-a0a1d4c39231.pt"
+    },
+    {
+      "name": "querytransformer164x5-seed410101",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt",
+      "bytes": 13479583,
+      "local_sha256": "8568880b8377b2fd9d2d0f10b1081838644f69e6e9be3df26bb5fc9c9188ed99",
+      "remote_lfs_sha256": "8568880b8377b2fd9d2d0f10b1081838644f69e6e9be3df26bb5fc9c9188ed99",
+      "remote_lfs_size": 13479583,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/querytransformer164x5-seed410101-8568880b8377.pt"
+    },
+    {
+      "name": "querytransformer164x5-seed410102",
+      "remote_path": "comparisons/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt",
+      "bytes": 13479583,
+      "local_sha256": "02b9f1909248f78a8d814f1f611cb21e44e0b552d630b70d49df66cb04cc9a8c",
+      "remote_lfs_sha256": "02b9f1909248f78a8d814f1f611cb21e44e0b552d630b70d49df66cb04cc9a8c",
+      "remote_lfs_size": 13479583,
+      "verified": true,
+      "url": "https://huggingface.co/wuschelschulz/gipf-zero/resolve/main/comparisons/20260909T235853Z/querytransformer164x5-seed410102-02b9f1909248.pt"
+    }
+  ],
+  "source_github_commit_provenance": {
+    "kind": "inferred_repository_tree_at_backend_freeze",
+    "checkpoint_embedded_git_commit": null,
+    "basis": "The checkpoints contain config and RNG/training state but no Git revision. This commit was the latest local commit before summary backend_frozen at 2026-09-09T23:58:53Z; committed blobs match every recorded Python backend hash.",
+    "verified_backend_tree_sha256": {
+      "training/model.py": "1130a6f7e23524c04790adc702b8ecc7a9d92008bb354a398f377735b379dd71",
+      "training/native_search.py": "88beacc193f1fcfae082e46d93b3e1c8ca5edf76bf99c2c6298bd3d6cbe359f0",
+      "training/query_transformer.py": "9ff230547d8a0f9fd393fe05414a496724b3c514f76839a8f4c956e941f70385",
+      "training/search.py": "54587d2fde6bc62a671d9ff22ca2681f6fff521bbc5ed439c9cdd2b9c1786664",
+      "training/train.py": "8cbb2ed0b29d35c5101b6d9882cc2e83dc919277a32816b322a059abf97bd648"
+    }
+  }
+}
