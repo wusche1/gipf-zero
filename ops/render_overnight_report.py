@@ -334,6 +334,38 @@ def training_rows(summary: dict[str, Any], report_dir: Path, run_root: Path) -> 
     return rows
 
 
+def publication_recovered(
+    summary: dict[str, Any],
+    report_dir: Path,
+    training: list[dict[str, Any]],
+    cpu_records: list[dict[str, Any]],
+    expected_cpu_matches: int,
+) -> bool:
+    """Return true only for an explicit, fully gated publication recovery.
+
+    The main runner can retain a raw ``partial`` status after publication
+    failed even though its training and evaluation completed.  A separate
+    recovery receipt is authoritative only when it says ``event=complete``
+    and the summary independently proves continuation, promotion, training,
+    and full CPU evaluation completion.
+    """
+    receipt = read_json(report_dir / "publication-recovery.json")
+    continuation = summary.get("continuation") or {}
+    training_complete = bool(training) and all(row.get("completed") for row in training)
+    cpu_complete = (
+        expected_cpu_matches > 0
+        and len(cpu_records) >= expected_cpu_matches
+        and all(record.get("complete") and record.get("unfinished", 0) == 0 for record in cpu_records)
+    )
+    return (
+        receipt.get("event") == "complete"
+        and continuation.get("completed") is True
+        and bool(summary.get("promotion"))
+        and training_complete
+        and cpu_complete
+    )
+
+
 def table(rows: list[list[Any]], headers: list[str]) -> str:
     out = ["| " + " | ".join(headers) + " |", "|" + "|".join("---" for _ in headers) + "|"]
     out.extend("| " + " | ".join(str(cell) for cell in row) + " |" for row in rows)
@@ -362,9 +394,14 @@ def render(summary_path: Path) -> Path:
     fixed_pairs = pair_totals(fixed)
     cpu_pairs = pair_totals(cpu)
     status = str(summary.get("status", "unknown"))
+    expected_cpu_matches = len(models) * max(0, len(models) - 1) // 2 * len(seeds)
+    recovered_publication = publication_recovered(summary, report_dir, training, cpu, expected_cpu_matches)
     heads = {str(item.get("head")) for item in architectures if item.get("head") is not None}
-    lines = [f"# Overnight evaluation — `{tag}`", "", f"**Status:** `{status}`"]
-    if status not in {"complete", "published"}:
+    status_label = f"`{status}`"
+    if recovered_publication:
+        status_label += " (training/evaluation complete; publication recovered)"
+    lines = [f"# Overnight evaluation — `{tag}`", "", f"**Status:** {status_label}"]
+    if status not in {"complete", "published"} and not recovered_publication:
         lines += ["", "> This experiment is incomplete or still running. Missing matches are shown as unplayed; no winner is inferred from partial coverage."]
     lines += ["", "## Protocol", "", f"- Training: isolated **{config.get('training_seconds', 600)} seconds per run**, {len(seeds)} seed(s), native forest search: **{bool((config.get('selfplay') or {}).get('native_forest', False))}**.", f"- Primary matches: {duel_cfg.get('games', '—')} paired-colour games per seed and pair, **{(duel_cfg.get('equal_cpu_time') or {}).get('budget_ms', '—')} ms per decision** on one CPU thread for each player. Secondary matches use **{(duel_cfg.get('equal_simulations') or {}).get('simulations', '—')} search simulations per decision** on GPU.", f"- Whole-match timeouts are {duel_cfg.get('seconds_cpu', '—')} seconds (CPU) and {duel_cfg.get('seconds_sim', '—')} seconds (fixed simulations); unfinished games are reported separately.", "- Training seconds are nominal allocations; the elapsed column includes checkpoint and shutdown overhead.", "- Parameter counts are read from each run's initial `start` metric, before training."]
     if len(heads) > 1:
@@ -399,12 +436,29 @@ def render(summary_path: Path) -> Path:
                         row["wins"], row["losses"], row["cutoffs"], row["unfinished"]] for row in league_reports]
         lines.append(table(league_rows, ["Report", "Evaluation", "Candidate games", "W", "L", "C", "Unfinished"]))
     lines += ["", "## Promotion and publication", ""]
+    if recovered_publication:
+        lines.append("> Training/evaluation complete; publication recovered. The raw runner status and errors are retained below for audit.")
+    elif status not in {"complete", "published"}:
+        lines.append(f"- Raw runner status: `{status}`.")
+    if summary.get("errors"):
+        lines.append("- Raw runner errors: " + "; ".join(
+            str(error.get("message", error)) if isinstance(error, dict) else str(error)
+            for error in summary["errors"]
+        ))
     lines.append(f"- Promotion gate: `{promotion.get('passed')}`." if promotion else "- No promotion gate result recorded.")
     for key in ("duel_report", "greedy_report"):
         if promotion.get(key):
             lines.append(f"- `{key}`: [{Path(str(promotion[key])).name}]({Path(str(promotion[key])).name})")
     if publication.get("hf_repo"):
         lines.append(f"- Hugging Face: [" + str(publication["hf_repo"]) + f"](https://huggingface.co/{publication['hf_repo']})")
+    recovery_receipt = report_dir / "publication-recovery.json"
+    if recovery_receipt.exists():
+        recovery = read_json(recovery_receipt)
+        event = recovery.get("event", "unknown")
+        if recovered_publication:
+            lines.append(f"- Publication recovery receipt: [{recovery_receipt.name}]({recovery_receipt.name}) (`event={event}`).")
+        else:
+            lines.append(f"- Publication recovery receipt: [{recovery_receipt.name}]({recovery_receipt.name}) (`event={event}`; completion gates not all satisfied).")
     lines += ["", "## Raw duel reports", ""]
     raw_paths = sorted({record["path"] for record in records if record.get("path")}, key=lambda path: path.name)
     lines.extend(f"- [{path.name}]({path.name})" for path in raw_paths) if raw_paths else lines.append("No raw duel report has been written yet.")

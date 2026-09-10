@@ -126,3 +126,59 @@ def test_training_table_stops_at_initial_checkpoint_freeze(tmp_path, monkeypatch
     assert rows[0]["games"] == 10
     assert rows[0]["updates"] == 2
     assert rows[0]["seconds"] == 10
+
+
+def _recovery_fixture(tmp_path, *, recovery=True, continuation_complete=True, promotion=True, cpu_complete=True):
+    monkeypatch_root = tmp_path
+    tag = "20260101T000000Z"
+    report_dir = monkeypatch_root / "reports" / "overnight" / tag
+    run_root = monkeypatch_root / "runs" / "overnight" / tag
+    training = []
+    for model in ("a", "b"):
+        name = f"{model}-seed1"
+        run = run_root / name
+        write_json(run / "config.json", {"seed": 1, "effective_model": {"kind": "resnet"}})
+        (run / "metrics.jsonl").parent.mkdir(parents=True, exist_ok=True)
+        (run / "metrics.jsonl").write_text(json.dumps({"event": "train", "elapsed": 600, "games": 12, "updates": 4}) + "\n")
+        training.append({"name": name, "run": f"runs/overnight/{tag}/{name}", "completed": True})
+    write_json(report_dir / "config.json", {
+        "seeds": [1], "architectures": [{"name": "a", "head": "flat"}, {"name": "b", "head": "flat"}],
+        "duels": {"games": 12, "seconds_cpu": 600, "seconds_sim": 45},
+    })
+    write_json(report_dir / "a-vs-b.json", duel(8, 4, unfinished=0 if cpu_complete else 2))
+    summary = {
+        "tag": tag, "status": "partial", "training": training,
+        "continuation": {"completed": continuation_complete},
+        "duels": [{"left": "a-seed1", "right": "b-seed1", "mode": "equal_cpu_time", "seed": 1,
+                    "attempt": 1, "complete": cpu_complete, "report": "a-vs-b.json"}],
+        "errors": [{"label": "huggingface-upload", "message": "upload failed"}],
+    }
+    if promotion:
+        summary["promotion"] = {"passed": False, "duel_report": "a-vs-b.json"}
+    write_json(report_dir / "summary.json", summary)
+    if recovery:
+        write_json(report_dir / "publication-recovery.json", {"event": "complete", "url": "https://example.invalid/recovered.pt"})
+    return report_dir
+
+
+def test_publication_recovery_clears_only_publication_incomplete_banner(tmp_path, monkeypatch):
+    monkeypatch.setattr(renderer, "ROOT", tmp_path)
+    report_dir = _recovery_fixture(tmp_path)
+    summary_path = report_dir / "summary.json"
+    text = renderer.render(summary_path).read_text()
+    assert "training/evaluation complete; publication recovered" in text
+    assert "incomplete or still running" not in text
+    assert "**Status:** `partial` (training/evaluation complete; publication recovered)" in text
+    assert "upload failed" in text
+    assert "publication-recovery.json" in text
+
+
+def test_publication_recovery_never_claims_completion_without_all_gates(tmp_path, monkeypatch):
+    monkeypatch.setattr(renderer, "ROOT", tmp_path)
+    for index, kwargs in enumerate((
+        {"recovery": False}, {"continuation_complete": False}, {"promotion": False}, {"cpu_complete": False},
+    )):
+        report_dir = _recovery_fixture(tmp_path / str(index), **kwargs)
+        text = renderer.render(report_dir / "summary.json").read_text()
+        assert "training/evaluation complete; publication recovered" not in text
+        assert "incomplete or still running" in text
