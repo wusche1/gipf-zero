@@ -64,6 +64,21 @@ def test_secondary_retry_replaces_only_matching_incomplete_fixed_record(tmp_path
     assert renderer.primary_records(records, "equal_cpu_time") == renderer.primary_records(overlaid, "equal_cpu_time")
 
 
+def test_renderer_lists_only_this_continuation_league_evidence(tmp_path, monkeypatch):
+    monkeypatch.setattr(renderer, "ROOT", tmp_path)
+    tag = "20260101T000000Z"; report_dir = tmp_path / "reports" / "overnight" / tag
+    run = tmp_path / "runs" / "overnight" / tag / "winner-seed1"
+    run.mkdir(parents=True); (run / "league-010203-duel.log").write_text("done")
+    historical = tmp_path / "runs" / "final"; historical.mkdir(parents=True); (historical / "league-999999-duel.log").write_text("old")
+    write_json(tmp_path / "reports" / "league-010203-duel.json", {**duel(7, 2), "models": [{"games": 1234}]})
+    write_json(report_dir / "config.json", {"architectures": [], "duels": {}})
+    write_json(report_dir / "summary.json", {"tag": tag, "continuation": {"run": f"runs/overnight/{tag}/winner-seed1"}})
+    rows = renderer.continuation_league_reports(renderer.read_json(report_dir / "summary.json"), report_dir)
+    assert len(rows) == 1 and rows[0]["path"].name == "league-010203-duel.json" and rows[0]["candidate_games"] == 1234
+    text = renderer.render(report_dir / "summary.json").read_text()
+    assert "Continuation league evaluations" in text and "1234" in text and "do not by themselves imply promotion" in text
+
+
 def test_render_marks_incomplete_protocol_and_links_raw_reports(tmp_path, monkeypatch):
     monkeypatch.setattr(renderer, "ROOT", tmp_path)
     tag = "20260101T000000Z"

@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SEED_RE = re.compile(r"-seed(\d+)")
 ATTEMPT_RE = re.compile(r"-attempt(\d+)")
 MODE_RE = re.compile(r"-(equal_cpu_time|equal_simulations)(?:-|\.)")
+LEAGUE_LOG_RE = re.compile(r"^(league-\d+-(duel|greedy))\.log$")
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -41,6 +42,43 @@ def read_metrics(path: Path) -> list[dict[str, Any]]:
             continue
         if isinstance(value, dict):
             rows.append(value)
+    return rows
+
+
+def continuation_league_reports(summary: dict[str, Any], report_dir: Path) -> list[dict[str, Any]]:
+    """Read only league evidence logged by this overnight continuation."""
+    continuation = summary.get("continuation") or {}
+    run_value = continuation.get("run") if isinstance(continuation, dict) else None
+    if not isinstance(run_value, str):
+        return []
+    run = (ROOT / run_value).resolve()
+    try:
+        run.relative_to(ROOT.resolve())
+    except ValueError:
+        return []
+    if not run.is_dir():
+        return []
+    rows = []
+    for log in sorted(run.glob("league-*-*.log")):
+        match = LEAGUE_LOG_RE.match(log.name)
+        if not match:
+            continue
+        name, kind = match.groups()
+        # Finalization copies this source into report_dir.  Prefer the copied
+        # immutable copy when present, while still rendering before finalization.
+        source = ROOT / "reports" / f"{name}.json"
+        path = report_dir / source.name if (report_dir / source.name).exists() else source
+        raw = read_json(path)
+        if not raw or not any(key in raw for key in ("wins", "losses", "cutoffs", "unfinished")):
+            continue
+        models = raw.get("models") if isinstance(raw.get("models"), list) else []
+        candidate_games = raw.get("model_games")
+        if candidate_games is None and models and isinstance(models[0], dict):
+            candidate_games = models[0].get("games")
+        rows.append({"name": name, "kind": kind, "path": path, "source": source,
+                     "candidate_games": candidate_games, "wins": int(raw.get("wins", 0) or 0),
+                     "losses": int(raw.get("losses", 0) or 0), "cutoffs": int(raw.get("cutoffs", 0) or 0),
+                     "unfinished": int(raw.get("unfinished", 0) or 0)})
     return rows
 
 
@@ -353,6 +391,13 @@ def render(summary_path: Path) -> Path:
     lines.append(table(tie_rows, ["Report", "Candidate", "Opponent", "W", "L", "C", "State"]) if tie_rows else "No extra tie-break attempt recorded.")
     promotion = summary.get("promotion") or {}
     publication = summary.get("publication") or {}
+    league_reports = continuation_league_reports(summary, report_dir)
+    if league_reports:
+        lines += ["", "## Continuation league evaluations", "",
+                  "These intermediate continuation snapshots are included for audit. They do not by themselves imply promotion; promotion requires its explicit gate.", ""]
+        league_rows = [[f"[{row['path'].name}]({row['path'].name})", row["kind"], row["candidate_games"] if row["candidate_games"] is not None else "—",
+                        row["wins"], row["losses"], row["cutoffs"], row["unfinished"]] for row in league_reports]
+        lines.append(table(league_rows, ["Report", "Evaluation", "Candidate games", "W", "L", "C", "Unfinished"]))
     lines += ["", "## Promotion and publication", ""]
     lines.append(f"- Promotion gate: `{promotion.get('passed')}`." if promotion else "- No promotion gate result recorded.")
     for key in ("duel_report", "greedy_report"):
