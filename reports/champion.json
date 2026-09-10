@@ -29,5 +29,6 @@
       "unfinished": 0
     }
   ],
-  "evaluation_settings": "See linked reports for fixed simulation counts, baseline time budgets, paired opening seeds, and cutoffs."
+  "evaluation_settings": "See linked reports for fixed simulation counts, baseline time budgets, paired opening seeds, and cutoffs.",
+  "served_artifact_sha256": "d5a7e3bda2966a79d22cf34f131976907260e679683d0e2680d935312f41c2f6"
 }

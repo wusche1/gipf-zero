@@ -1,6 +1,6 @@
 # Overnight evaluation — `20260909T235853Z`
 
-**Status:** `running`
+**Status:** `partial`
 
 > This experiment is incomplete or still running. Missing matches are shown as unplayed; no winner is inferred from partial coverage.
 
@@ -87,11 +87,16 @@ These intermediate continuation snapshots are included for audit. They do not by
 
 | Report | Evaluation | Candidate games | W | L | C | Unfinished |
 |---|---|---|---|---|---|---|
-| league-024737-duel.json | duel | 21515 | 13 | 65 | 2 | 0 |
+| [league-024737-duel.json](league-024737-duel.json) | duel | 21515 | 13 | 65 | 2 | 0 |
+| [league-032337-duel.json](league-032337-duel.json) | duel | 38076 | 31 | 49 | 0 | 0 |
+| [league-035932-duel.json](league-035932-duel.json) | duel | 54044 | 34 | 46 | 0 | 0 |
+| [league-043512-duel.json](league-043512-duel.json) | duel | 69700 | 39 | 41 | 0 | 0 |
 
 ## Promotion and publication
 
-- No promotion gate result recorded.
+- Promotion gate: `False`.
+- `duel_report`: [final-vs-served.json](final-vs-served.json)
+- Hugging Face: [wuschelschulz/gipf-zero](https://huggingface.co/wuschelschulz/gipf-zero)
 
 ## Raw duel reports
 

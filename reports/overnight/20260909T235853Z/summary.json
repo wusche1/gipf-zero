@@ -1128,6 +1128,11 @@
       "label": "huggingface-upload",
       "message": "huggingface-upload exited 1",
       "type": "RuntimeError"
+    },
+    {
+      "label": "github-push",
+      "message": "github-push exited 128",
+      "type": "RuntimeError"
     }
   ],
   "promotion": {
@@ -1136,7 +1141,14 @@
     "greedy_report": null,
     "passed": false
   },
-  "publication": null,
+  "publication": {
+    "github_commit": true,
+    "github_push": false,
+    "github_release": false,
+    "hf_repo": "wuschelschulz/gipf-zero",
+    "source_hash": "aa533bb8922231a3e0dc53dd2ff947cab6899ef09a9245463c89ac99ea776ef0",
+    "uploaded": false
+  },
   "ranking": {
     "alternative": "hexcnn32",
     "direct_wilson_95": [
@@ -1238,7 +1250,7 @@
     "winner": "hexcnn32",
     "winner_seed": 410102
   },
-  "status": "running",
+  "status": "partial",
   "tag": "20260909T235853Z",
   "training": [
     {
