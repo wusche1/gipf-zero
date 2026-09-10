@@ -525,5 +525,5 @@ function rayHitTarget(ray) {
   return svg('polygon', { points, class: 'ray-hit', 'data-ray-id': ray.rayId });
 }
 function svg(tag, attrs, text = '') { const element = document.createElementNS(svgNS, tag); Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value)); if (text) element.appendChild(document.createTextNode(text)); return element; }
-function hexPoints(radius) { return Array.from({ length: 6 }, (_, i) => { const angle = (-90 + i * 60) * Math.PI / 180; return `${400 + Math.cos(angle) * radius},${400 + Math.sin(angle) * radius}`; }).join(' '); }
+function hexPoints(radius) { return Array.from({ length: 6 }, (_, i) => { const angle = i * 60 * Math.PI / 180; return `${400 + Math.cos(angle) * radius},${400 + Math.sin(angle) * radius}`; }).join(' '); }
 function showToast(message) { clearTimeout(toastTimer); els.toast.textContent = message; els.toast.classList.add('show'); toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2400); }
