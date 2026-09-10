@@ -166,6 +166,58 @@ def primary_records(records: list[dict[str, Any]], mode: str) -> list[dict[str, 
     return selected
 
 
+def secondary_retry_overlay(records: list[dict[str, Any]], report_dir: Path) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Replace verified incomplete fixed-simulation records for display only.
+
+    The runner's summary is the primary experiment record.  A separately
+    verified retry can complete a match that reached its short whole-match
+    deadline, but it must never become evidence in the primary CPU ranking or
+    be appended beside its original fixed-simulation record.
+    """
+    manifest = read_json(report_dir / "secondary-retries.json")
+    if manifest.get("all_complete") is not True:
+        return records, []
+    entries = manifest.get("entries")
+    if not isinstance(entries, list):
+        return records, []
+    replacements: dict[Path, tuple[dict[str, Any], Path, dict[str, Any]]] = {}
+    for entry in entries:
+        if not isinstance(entry, dict) or entry.get("frozen_hashes_match_original") is not True:
+            continue
+        original = raw_report_path(report_dir, entry.get("original_report"))
+        retry = raw_report_path(report_dir, entry.get("retry_report"))
+        if not original or not retry:
+            continue
+        original_data, retry_data = read_json(original), read_json(retry)
+        if int(retry_data.get("unfinished", 1) or 0) != 0:
+            continue
+        # Hash equality binds a retry to the frozen models of its original.
+        if not isinstance(retry_data.get("hashes"), list) or retry_data.get("hashes") != original_data.get("hashes"):
+            continue
+        replacements[original.resolve()] = (entry, retry, retry_data)
+    overlaid = []
+    applied = []
+    for record in records:
+        replacement = replacements.get(record.get("path").resolve()) if record.get("path") else None
+        if (not replacement or record["mode"] != "equal_simulations" or record["complete"]
+                or not record.get("eligible", True)):
+            overlaid.append(record)
+            continue
+        entry, retry_path, retry = replacement
+        if (record["left"] != model_name(entry.get("left")) or record["right"] != model_name(entry.get("right"))
+                or record["seed"] != infer_seed(entry, retry_path.name)):
+            overlaid.append(record)
+            continue
+        updated = dict(record)
+        updated.update({"wins": int(retry.get("wins", 0) or 0), "losses": int(retry.get("losses", 0) or 0),
+                        "cutoffs": int(retry.get("cutoffs", 0) or 0), "unfinished": 0, "complete": True,
+                        "path": retry_path, "report_name": retry_path.name,
+                        "secondary_retry": True, "original_path": record["path"]})
+        overlaid.append(updated)
+        applied.append(updated)
+    return overlaid, applied
+
+
 def pair_totals(records: list[dict[str, Any]]) -> list[dict[str, Any]]:
     groups: dict[tuple[str, str], dict[str, Any]] = {}
     for record in records:
@@ -266,7 +318,8 @@ def render(summary_path: Path) -> Path:
     duel_cfg = config.get("duels") or {}
     expected = int(duel_cfg.get("games", 0) or 0) * max(0, len(models) - 1) * len(seeds)
     cpu = primary_records(records, "equal_cpu_time")
-    fixed = primary_records(records, "equal_simulations")
+    fixed_records, secondary_retries = secondary_retry_overlay(records, report_dir)
+    fixed = primary_records(fixed_records, "equal_simulations")
     cpu_rank = pooled_ranking(cpu, models, expected)
     fixed_pairs = pair_totals(fixed)
     cpu_pairs = pair_totals(cpu)
@@ -288,6 +341,10 @@ def render(summary_path: Path) -> Path:
     pair_rows = [[row["left"] + " vs " + row["right"], row["wins"], row["losses"], row["cutoffs"], row["games"], f"{pct(wilson(row['wins'], row['games'])[0])}–{pct(wilson(row['wins'], row['games'])[1])}"] for row in cpu_pairs]
     lines.append(table(pair_rows, ["Pair (left perspective)", "Left W", "Left L", "C", "Games", "Wilson 95% (left)"]) if pair_rows else "No complete equal-CPU pairs are available.")
     lines += ["", "## Fixed-simulation pairwise", ""]
+    if secondary_retries:
+        lines += [f"Three incomplete fixed-simulation matches reached the original {duel_cfg.get('seconds_sim', '—')}-second whole-match cap. "
+                  f"Their verified frozen-checkpoint retries used a 180-second cap and replace only those rows below; raw initial and retry reports remain linked for audit. "
+                  f"All {len(fixed)} secondary pair/seed matches are now complete. The primary equal-CPU ranking above is unchanged.", ""]
     fixed_rows = [[row["left"] + " vs " + row["right"], row["wins"], row["losses"], row["cutoffs"], row["games"], f"{pct(wilson(row['wins'], row['games'])[0])}–{pct(wilson(row['wins'], row['games'])[1])}"] for row in fixed_pairs]
     lines.append(table(fixed_rows, ["Pair (left perspective)", "Left W", "Left L", "C", "Games", "Wilson 95% (left)"]) if fixed_rows else "No complete fixed-simulation pairs are available.")
     tie = [record for record in records if record["tie_break"]]

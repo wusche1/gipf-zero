@@ -40,6 +40,30 @@ def test_orphan_raw_duel_is_linked_but_cannot_enter_primary_pool(tmp_path):
     assert renderer.primary_records(records, "equal_cpu_time") == []
 
 
+def test_secondary_retry_replaces_only_matching_incomplete_fixed_record(tmp_path, monkeypatch):
+    monkeypatch.setattr(renderer, "ROOT", tmp_path)
+    report_dir = tmp_path / "reports" / "overnight" / "tag"
+    write_json(report_dir / "summary.json", {"tag": "tag", "duels": [
+        {"left": "a-seed1", "right": "b-seed1", "mode": "equal_cpu_time", "seed": 1, "attempt": 1, "complete": True, "report": "cpu.json"},
+        {"left": "a-seed1", "right": "b-seed1", "mode": "equal_simulations", "seed": 1, "attempt": 1, "complete": False, "report": "fixed.json"},
+    ]})
+    write_json(report_dir / "cpu.json", {**duel(8, 4), "hashes": ["cpu-a", "cpu-b"]})
+    write_json(report_dir / "fixed.json", {**duel(5, 2, unfinished=5), "hashes": ["a", "b"]})
+    write_json(report_dir / "fixed-retry-complete.json", {**duel(9, 1), "hashes": ["a", "b"]})
+    write_json(report_dir / "secondary-retries.json", {"all_complete": True, "entries": [{
+        "original_report": "fixed.json", "retry_report": "fixed-retry-complete.json",
+        "left": "a-seed1", "right": "b-seed1", "seed": 1, "frozen_hashes_match_original": True,
+    }]})
+    records = renderer.duel_records(report_dir, renderer.read_json(report_dir / "summary.json"))
+    overlaid, applied = renderer.secondary_retry_overlay(records, report_dir)
+    fixed = renderer.primary_records(overlaid, "equal_simulations")
+    assert len(applied) == len(fixed) == 1
+    assert (fixed[0]["wins"], fixed[0]["losses"], fixed[0]["unfinished"]) == (9, 1, 0)
+    assert fixed[0]["original_path"].name == "fixed.json"
+    # The CPU primary pool is never altered and the retry is not double-counted.
+    assert renderer.primary_records(records, "equal_cpu_time") == renderer.primary_records(overlaid, "equal_cpu_time")
+
+
 def test_render_marks_incomplete_protocol_and_links_raw_reports(tmp_path, monkeypatch):
     monkeypatch.setattr(renderer, "ROOT", tmp_path)
     tag = "20260101T000000Z"
