@@ -21,16 +21,7 @@ jobs:
       - name: Version browser assets
         env:
           ASSET_VERSION: ${{ github.sha }}
-        run: |
-          python3 - <<'PYTHON'
-          import os, re
-          from pathlib import Path
-          page = Path('web/index.html')
-          html = page.read_text()
-          for asset in ('styles.css', 'app.js', 'gipf_engine.js'):
-              html = re.sub(re.escape(asset) + r'(?:\?v=[^"\s]*)?(?=")', asset + '?v=' + os.environ['ASSET_VERSION'], html)
-          page.write_text(html)
-          PYTHON
+        run: python3 ops/version_web_assets.py
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

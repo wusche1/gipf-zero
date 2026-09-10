@@ -1,4 +1,8 @@
 import * as game from './game.js';
+import { createLocalAiClient } from './local-ai.js';
+import { registerOffline } from './offline.js';
+
+const offlineRegistration = registerOffline();
 
 const $ = (id) => document.getElementById(id);
 const svgNS = 'http://www.w3.org/2000/svg';
@@ -10,7 +14,7 @@ const els = {
   undo: $('undo')
 };
 
-let config = { aiEndpoint: '', engineUrl: '', requestTimeoutMs: 5000 };
+let config = { aiMode: 'browser', engineUrl: '' };
 let state;
 let past = [];
 let legal = [];
@@ -23,6 +27,20 @@ let aiModelName = '';
 let toastTimer;
 let activeMotion = null;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const requestedAiBackend = new URLSearchParams(window.location.search).get('aiBackend');
+const localAi = createLocalAiClient({
+  backend: requestedAiBackend === 'webgpu' ? 'webgpu' : 'wasm',
+  onStatus(status, detail) {
+    if (status === 'loading') { els.aiStatus.textContent = 'Loading local model…'; $('retry-ai').hidden = true; }
+    if (status === 'ready') {
+      aiModelName = detail?.model || aiModelName;
+      els.aiStatus.textContent = aiModelName ? `${aiModelName} ready` : 'Local model ready';
+      $('retry-ai').hidden = true;
+    }
+    if (status === 'error') { els.aiStatus.textContent = 'Local model unavailable'; $('retry-ai').hidden = false; }
+    if (status === 'cancelled') els.aiStatus.textContent = aiModelName ? `${aiModelName} ready` : 'Local model ready when needed';
+  }
+});
 
 start();
 
@@ -37,7 +55,7 @@ async function start() {
   state = game.newGame();
   drawBoardGeometry();
   bindControls();
-  await checkAiStatus();
+  els.aiStatus.textContent = 'Local model ready when needed';
   render();
 }
 
@@ -354,11 +372,18 @@ function chooseCapture() {
   playAction(selectedCapture.action || { type: 'capture', row: selectedCapture.id || selectedCapture }, 'human');
 }
 
+function cancelAiSearch(reason) {
+  localAi.cancel(reason);
+  aiThinking = false;
+  $('retry-ai').hidden = true;
+}
+
 function bindControls() {
-  $('new-game').addEventListener('click', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; past = []; selectedCapture = null; state = game.newGame(); render(); showToast('A new table is ready'); });
+  $('retry-ai').addEventListener('click', () => { gameRevision += 1; cancelAiSearch('retry'); aiBlocked = false; render(); });
+  $('new-game').addEventListener('click', () => { gameRevision += 1; cancelAiSearch('new game'); aiBlocked = false; past = []; selectedCapture = null; state = game.newGame(); render(); showToast('A new table is ready'); });
   els.undo.addEventListener('click', () => {
     if (!canUndo()) return;
-    gameRevision += 1; aiThinking = false; aiBlocked = false;
+    gameRevision += 1; cancelAiSearch('undo'); aiBlocked = false;
     if (els.mode.value === 'ai') {
       let entry;
       while (past.length) {
@@ -372,8 +397,8 @@ function bindControls() {
     selectedCapture = null; render();
   });
   els.confirmCapture.addEventListener('click', chooseCapture);
-  els.mode.addEventListener('change', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); render(); });
-  els.aiColor.addEventListener('change', () => { gameRevision += 1; aiThinking = false; aiBlocked = false; render(); });
+  els.mode.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('mode changed'); aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); render(); });
+  els.aiColor.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('machine colour changed'); aiBlocked = false; render(); });
   els.difficulty.addEventListener('change', maybeAiMove);
   const dialog = $('rules-dialog');
   [$('rules-open'), $('rules-open-secondary')].forEach(button => button.addEventListener('click', () => dialog.showModal()));
@@ -384,44 +409,28 @@ async function maybeAiMove() {
   if (activeMotion || els.mode.value !== 'ai' || aiThinking || aiBlocked || winnerOf(state) !== 0 || currentPlayer() !== els.aiColor.value) return;
   const revision = gameRevision;
   aiThinking = true; els.aiStatus.textContent = 'Machine thinking…'; els.hint.innerHTML = '<span class="hint-dot"></span>Machine is considering the position';
-  const budget = { casual: 250, focused: 1000, deep: 2500 }[els.difficulty.value] || 250;
-  let action; let responseModel = '';
-  let endpointSucceeded = false;
-  if (config.aiEndpoint) {
-    try {
-      const base = config.aiEndpoint.replace(/\/$/, '');
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), config.requestTimeoutMs || 3500);
-      const response = await fetch(base.endsWith('/move') ? base : `${base}/api/move`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ state: serialiseState(state), budget_ms: budget }), signal: controller.signal });
-      clearTimeout(timer);
-      if (response.ok) { const payload = await response.json(); action = payload.action; responseModel = typeof payload.model === 'string' ? payload.model : payload.model?.name || ''; endpointSucceeded = action != null; }
-    } catch (error) { console.info('[gipf] AI endpoint unavailable', error); }
-  }
-  if (revision !== gameRevision) return;
-  const isLegal = action != null && legal.some(candidate => typeof candidate === 'number' && candidate === action);
-  if (!isLegal) {
-    aiBlocked = true;
-    showToast('Machine unavailable · switch to local mode');
-    els.aiStatus.textContent = config.aiEndpoint ? 'Machine unavailable · local mode' : 'No machine connected';
-  } else {
-    aiModelName = responseModel || aiModelName;
-  }
-  aiThinking = false;
-  if (endpointSucceeded) els.aiStatus.textContent = aiModelName ? `${aiModelName} ready` : 'Machine endpoint ready';
-  if (isLegal) playAction(action, 'ai');
-  else render();
-}
-
-async function checkAiStatus() {
-  if (!config.aiEndpoint) { els.aiStatus.textContent = 'No machine connected'; return; }
+  const budget = { casual: 500, focused: 1500, deep: 5000 }[els.difficulty.value] || 1500;
   try {
-    const base = config.aiEndpoint.replace(/\/$/, '');
-    const response = await fetch(base.endsWith('/status') ? base : `${base}/api/status`, { signal: AbortSignal.timeout?.(1200) });
-    if (!response.ok) throw new Error(`status ${response.status}`);
-    const metadata = await response.json();
-    aiModelName = typeof metadata.model === 'string' ? metadata.model : metadata.model?.name || '';
-    els.aiStatus.textContent = aiModelName ? `${aiModelName} ready` : 'Machine endpoint ready';
-  } catch { els.aiStatus.textContent = 'Machine endpoint offline'; }
+    await offlineRegistration;
+    if (revision !== gameRevision) return;
+    const result = await localAi.search(serialiseState(state), { budgetMs: budget });
+    if (revision !== gameRevision) return;
+    const action = result?.action;
+    const isLegal = action != null && legal.some(candidate => typeof candidate === 'number' && candidate === action);
+    if (!isLegal) throw new Error('Worker returned an illegal action');
+    aiModelName = result.model || aiModelName;
+    els.aiStatus.textContent = aiModelName ? `${aiModelName} ready` : 'Local model ready';
+    aiThinking = false;
+    playAction(action, 'ai');
+  } catch (error) {
+    if (revision !== gameRevision || error?.name === 'AbortError') return;
+    aiThinking = false;
+    aiBlocked = true;
+    showToast('AI could not finish · retry or switch to local mode');
+    els.aiStatus.textContent = 'Local model unavailable';
+    $('retry-ai').hidden = false;
+    render();
+  }
 }
 
 function showPreview(key) {

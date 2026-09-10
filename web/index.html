@@ -91,8 +91,9 @@
             <div class="card-heading"><span class="eyebrow">Table</span><span class="mono-label" id="move-count">MOVE 00</span></div>
             <div class="control-row"><label for="mode-select">Mode</label><select id="mode-select"><option value="local">Local hotseat</option><option value="ai">Play the machine</option></select></div>
             <div class="control-row ai-only"><label for="ai-color">Machine plays</label><select id="ai-color"><option value="black">Obsidian</option><option value="white">Ivory</option></select></div>
-            <div class="control-row ai-only"><label for="difficulty">Tempo</label><select id="difficulty"><option value="casual">Casual · 250ms</option><option value="focused">Focused · 1s</option><option value="deep">Deep · 3s</option></select></div>
+            <div class="control-row ai-only"><label for="difficulty">Tempo</label><select id="difficulty"><option value="casual">Casual · 0.5s</option><option value="focused" selected>Focused · 1.5s</option><option value="deep">Deep · 5s</option></select></div>
             <div class="button-row"><button class="button button-primary" id="new-game" type="button">New game</button><button class="button button-quiet" id="undo" type="button" disabled>Undo</button></div>
+            <button class="button button-quiet full" id="retry-ai" type="button" hidden>Retry AI</button>
           </section>
 
           <section class="capture-card" id="capture-card" hidden>
@@ -112,7 +113,7 @@
         </aside>
       </section>
 
-      <footer class="footer"><span>GIPF / PROJECT GIPF</span><span>37 points · 42 incoming rays</span><span id="ai-status">No machine connected</span></footer>
+      <footer class="footer"><span>GIPF / PROJECT GIPF</span><span>37 points · 42 incoming rays</span><span id="ai-status">Local model ready when needed</span></footer>
     </main>
 
     <dialog id="rules-dialog">

@@ -1,5 +1,4 @@
 {
-  "aiEndpoint": "https://friend-combining-struggle-dts.trycloudflare.com",
-  "engineUrl": "./gipf_engine.js",
-  "requestTimeoutMs": 5000
+  "aiMode": "browser",
+  "engineUrl": "./gipf_engine.js"
 }

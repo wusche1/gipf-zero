@@ -1,0 +1,20 @@
+{
+  "schema": "gipf-browser-onnx-benchmark-v1",
+  "device": "CPU",
+  "threads": 1,
+  "native_forward_median_ms": {
+    "1": 0.5065277218818665,
+    "8": 1.6839876770973206,
+    "32": 3.8040094077587128
+  },
+  "forward_warmup": 5,
+  "forward_repeats": 20,
+  "onnxruntime_single_query_median_ms": {
+    "dynamic": 0.18294528126716614,
+    "static": 0.18106400966644287,
+    "warmup": 5,
+    "repeats": 50
+  },
+  "choose_action": null,
+  "native_forest_choose_action": null
+}

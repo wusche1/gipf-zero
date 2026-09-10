@@ -6,7 +6,7 @@ import gipf_engine as ge
 import pytest
 
 from test_browser_mapping import (
-    GEO, block_external_fonts, browser, browser_board, expected_board, site_url,
+    GEO, block_external_fonts, browser, browser_board, expected_board, local_worker, site_url,
 )
 
 
@@ -81,19 +81,12 @@ def motion_page(browser, site_url, initial, actions, *, ai=False, reduced=False)
       };
     ''')
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=script))
-    endpoint = "https://ai.test" if ai else ""
-    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body=json.dumps({"aiEndpoint": endpoint, "engineUrl": "./gipf_engine.js"})))
-    calls = []
+    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body=json.dumps({"aiMode": "browser", "engineUrl": "./gipf_engine.js"})))
     if ai:
-        page.route(endpoint + "/api/status", lambda route: route.fulfill(content_type="application/json", body='{"model":"test"}'))
-
-        def reply(route):
-            calls.append(route.request.post_data_json)
-            route.fulfill(content_type="application/json", body=json.dumps({"action": actions[len(calls) - 1]}))
-        page.route(endpoint + "/api/move", reply)
+        page.route("**/ai-worker.js", lambda route: route.fulfill(content_type="application/javascript", body=local_worker(actions)))
     page.goto(site_url + "/?designs=1", wait_until="domcontentloaded")
     page.wait_for_function("document.querySelector('#engine-status').textContent === 'Ready to play'")
-    return page, native, calls
+    return page, native, None
 
 
 def finish_motion(page):
@@ -138,7 +131,7 @@ def test_ai_capture_holds_the_row_then_fades_before_its_next_action(browser, sit
     try:
         page.locator('#mode-select').select_option('ai')
         page.wait_for_function('window.applied?.length === 1')
-        assert len(calls) == 1
+        assert page.locator('#ai-status').text_content() == 'test-local-1 ready'
         assert page.locator('.removal-row-line').count() == 1
         assert page.locator('.stone-removing').count() == 4
         assert '1 captured' in page.locator('#board-hint').inner_text()
@@ -153,10 +146,9 @@ def test_ai_capture_holds_the_row_then_fades_before_its_next_action(browser, sit
         assert frames[0] == {"opacity": 1, "scale": 1}
         assert 0 < frames[1]['opacity'] < 1
         assert .35 < frames[1]['scale'] < 1
-        assert len(calls) == 1
         finish_motion(page)
         page.wait_for_function('window.applied?.length === 2')
-        assert len(calls) == 2
+        assert page.locator('#ai-status').text_content() == 'test-local-2 ready'
         assert page.locator('#board').get_attribute('aria-busy') == 'true'
         finish_motion(page)
         page.wait_for_function("document.querySelector('#board').getAttribute('aria-busy') === 'false'")
@@ -180,7 +172,7 @@ def test_ai_push_uses_the_same_slide_as_a_human_move(browser, site_url):
         assert len(distances) == 4
         assert all(0 < distance < 63 for distance in distances)
         assert page.locator('#board').get_attribute('aria-busy') == 'true'
-        assert len(calls) == 1
+        assert page.locator('#ai-status').text_content() == 'test-local-1 ready'
         finish_motion(page)
         page.wait_for_function("document.querySelector('#board').getAttribute('aria-busy') === 'false'")
         assert browser_board(page) == expected_board(expected)

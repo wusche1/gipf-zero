@@ -1,0 +1,63 @@
+{
+  "test": "real browser local AI smoke",
+  "assets": "web/",
+  "model": "GIPF Zero — 43,869 games",
+  "backend": "wasm",
+  "external_requests_blocked": [],
+  "font_requests_blocked": [
+    "https://fonts.googleapis.com/"
+  ],
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 720,
+      "screenshot": "browser-ui-desktop.png",
+      "steps": [
+        "engine ready",
+        "local move",
+        "undo",
+        "human move + AI reply",
+        "AI undo",
+        "AI white opening",
+        "deep search cancellation"
+      ],
+      "result": "passed"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "screenshot": "browser-ui-mobile.png",
+      "steps": [
+        "engine ready",
+        "local move",
+        "undo",
+        "human move + AI reply",
+        "AI undo",
+        "AI white opening",
+        "deep search cancellation"
+      ],
+      "result": "passed"
+    }
+  },
+  "page_errors": [],
+  "console_errors": [],
+  "notes": "All nonlocal requests were intercepted and aborted; the only attempted origin was Google Fonts. Local AI used the actual WASM worker and ONNX model.",
+  "status_after_cancellation": "GIPF Zero — 43,869 games ready",
+  "portable_browsers": {
+    "firefox": {
+      "status": "passed",
+      "version": "153.0",
+      "smoke": "WASM engine + human move + AI reply + undo",
+      "page_errors": []
+    },
+    "webkit": {
+      "status": "passed",
+      "version": "26.5",
+      "smoke": "WASM engine + human move + AI reply + undo",
+      "page_errors": []
+    }
+  },
+  "font_requests_attempted_and_aborted": [
+    "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+  ]
+}

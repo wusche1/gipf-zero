@@ -1,20 +1,37 @@
-# GIPF web table
+# Static GIPF with a local AI
 
-This directory is a static GitHub Pages site. Open `index.html` directly or serve
-the directory with any static web server.
+Serve this directory over HTTP or HTTPS (for example `python -m http.server
+8000 --directory web`). Both local hotseat and the learned AI run in the browser.
+There is no inference endpoint, account token, CDN runtime, or Hugging Face fetch.
+Deleting the training instance does not affect the GitHub Pages deployment.
+Opening `index.html` via `file://` is not supported by browser worker/fetch rules.
 
-`game.js` is the only rules boundary. It exports `newGame()`, `legalActions(state)`,
-`applyAction(state, action)`, and `geometry`. At runtime it uses `window.GIPF_ENGINE`
-when present, or loads the module URL in `config.json` as `engineUrl`. A deliberately
-small opening-table shell keeps the board interactive while the engine artifact is
-absent; it only renders the standard opening and disables moves until the rules
-engine is present.
+`game.js` adapts the authoritative C++ rules engine compiled to WebAssembly.
+`local-ai.js` starts `ai-worker.js` lazily and terminates it on cancellation.
+The worker loads the exact promoted champion from `models/champion.onnx` using
+self-hosted ONNX Runtime Web. The native PUCT tree and actor-aware backups are
+also compiled to WASM. All inference uses one CPU thread so normal Pages hosting
+needs no cross-origin isolation headers. Search runs off the UI thread.
 
-The adapter accepts the engine contract's `State` object directly: it can construct
-`new State()`, call `state.legal_actions()`/`state.apply(action)`, read numeric
-`board` and `reserves` arrays, and handle numeric push/capture action IDs. A module
-may instead expose `newGame`, `legal_actions`, and `apply_action` on its namespace.
+AI tempos are 0.5, 1.5 (default), and 5 seconds. The simulation limit is 10,000;
+slower devices complete fewer simulations within the selected time. Initialization
+has a 60-second watchdog, and searches have a separate deadline/watchdog. A failed
+model download can be retried without discarding the game.
 
-To connect the machine endpoint, set `aiEndpoint` in `config.json` to the service
-origin. The UI calls `POST {aiEndpoint}/api/move` with `{state, budget_ms}` and
-`GET {aiEndpoint}/api/status`. The checked-in config is empty and contains no secret.
+`benchmark.html` measures inference and full search on the visitor's actual device.
+WebGPU is experimental: the worker verifies all 16 original reference positions
+before allowing GPU play, and rejects an incorrect or unavailable backend. The
+production default is the verified CPU/WASM path.
+
+## Reproduce the artifacts
+
+- `ops/export_browser_model.py`: champion export, numerical parity, native benchmarks.
+- `benchmarks/browser_inference.py`: browser WASM/WebGPU inference and search timing.
+- `benchmarks/browser_play.py`: native search parity and complete browser games.
+- `engine/build_wasm.sh`: rules and native-tree search, compiled with SIMD.
+- `ops/version_web_assets.py`: consistent cache versions for Pages deployment.
+
+Runtime files under `vendor/onnxruntime/` are pinned to `onnxruntime-web@1.29.0`.
+Its manifest records SHA-256 hashes; upstream MIT license and third-party notices
+are included. Install that exact npm package to reproduce the copied `dist/`
+JavaScript, `.mjs`, and `.wasm` files. Only the selected backend's files are fetched.

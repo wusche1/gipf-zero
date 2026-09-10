@@ -1,0 +1,47 @@
+{
+  "package": "onnxruntime-web",
+  "version": "1.29.0",
+  "source": "https://www.npmjs.com/package/onnxruntime-web/v/1.29.0",
+  "files": {
+    "ort.wasm.min.js": {
+      "sha256": "f87630372da0668a72b4304e062365117cbe432d6060ca146799b1c1888460ae",
+      "bytes": 50196
+    },
+    "ort-wasm-simd-threaded.mjs": {
+      "sha256": "5a15f1fd086b3f6c2baf1f35105b8f502653b567e165cef80028870b39748747",
+      "bytes": 24218
+    },
+    "ort-wasm-simd-threaded.wasm": {
+      "sha256": "ec8580a9d7b9476ceee52e10a7f94124e4dc71a019d666ed6d4726697c109a4d",
+      "bytes": 13961845
+    },
+    "ort.webgpu.min.js": {
+      "sha256": "2d0bac4406b97d87c2ee2f279a0e6ad089567e62283d41e7e535a40e5c03d2f5",
+      "bytes": 66416
+    },
+    "ort-wasm-simd-threaded.jsep.mjs": {
+      "sha256": "3d68fa7af88c48894d4b0c8629de12018ab73b77519bc0b05dc8d908ad82749f",
+      "bytes": 46676
+    },
+    "ort-wasm-simd-threaded.jsep.wasm": {
+      "sha256": "db816fadbab47a755170c08f933961e231412ac17f5981f9a62e519708a44dea",
+      "bytes": 27797172
+    },
+    "ort-wasm-simd-threaded.asyncify.mjs": {
+      "sha256": "5d25483158d53d8f34d0e9c06a654d56c8dca4ebdf370ea0982ef11315a00e0e",
+      "bytes": 51407
+    },
+    "ort-wasm-simd-threaded.asyncify.wasm": {
+      "sha256": "503d17cb7411b79781b9fad1cf0978f03cf06b050c7d399c730e914f473bf549",
+      "bytes": 25749873
+    },
+    "ort-wasm-simd-threaded.jspi.mjs": {
+      "sha256": "f4a22e988ac3c2345e58c823a9254ac15f39271f86241bb2bbda0bc7e6b4dde6",
+      "bytes": 49268
+    },
+    "ort-wasm-simd-threaded.jspi.wasm": {
+      "sha256": "8ef22fea2fec3d90dc2858e0392382cf6800b0855acfd6722ca1390e2fe15c56",
+      "bytes": 16025636
+    }
+  }
+}

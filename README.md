@@ -39,28 +39,34 @@ ablation.
 [Full comparison, uncertainty, and raw results](reports/overnight/20260909T235853Z/RESULTS.md)
 · [Download the verified public model and comparison checkpoints](https://huggingface.co/wuschelschulz/gipf-zero)
 
-The website supports local two-player play entirely in your browser. Remote AI
-requires the inference host to remain online. Automated wins against these
-opponents do not establish a human or expert rating.
+Both two-player mode and the learned AI now run **entirely in the browser**.
+The model, inference runtime, and C++ search engine are hosted on GitHub Pages;
+no training instance or inference server is required. The default uses CPU/WASM
+in a worker, with a 1.5-second thinking budget and an optional 5-second deep mode.
+[Browser validation and performance](reports/BROWSER_AI.md) ·
+[Benchmark your own device](https://wusche1.github.io/gipf-zero/benchmark.html).
+Automated wins against these opponents do not establish a human or expert rating.
 
 ## Run locally
 
-Python 3.12 and a C++17 compiler:
+No Python ML packages or native build are needed to play. Serve the committed
+static assets with any HTTP server:
+
+```sh
+python -m http.server 8000 --directory web
+```
+
+Open `http://localhost:8000` for hotseat or AI play. To develop the native engine
+and training pipeline, use Python 3.12 and a C++17 compiler:
 
 ```sh
 python -m pip install pybind11 setuptools numpy torch fastapi uvicorn pytest
 python setup.py build_ext --inplace
 python -m pytest -q
-python -m http.server 8000 --directory web
 ```
 
-Open `http://localhost:8000` for local play. For a local inference server:
-
-```sh
-python -m uvicorn server.app:app --host 127.0.0.1 --port 17100
-```
-
-Set the API base URL in `web/config.json`. The public service permits the GitHub Pages origin; configure CORS for your own frontend when hosting elsewhere.
+The legacy `server.app` API remains available for research, but the published
+website does not call it.
 
 ## Train and evaluate
 

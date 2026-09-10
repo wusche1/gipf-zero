@@ -24,42 +24,58 @@ def fake_engine(initial):
     '''
 
 
-def configure(page, site_url, script, endpoint="https://ai.test"):
+def local_worker(*, delay_ms=0):
+    """Return a deterministic classic worker matching the browser AI protocol."""
+    return f'''
+      let searches = 0;
+      self.onmessage = (event) => {{
+        const request = event.data;
+        if (request.type === 'init') {{
+          self.postMessage({{ id: request.id, ready: true, model: 'test-local', backend: 'wasm' }});
+          return;
+        }}
+        if (request.type === 'search') {{
+          searches += 1;
+          const reply = () => self.postMessage({{ id: request.id, action: 0, model: `test-local-${{searches}}` }});
+          {"setTimeout(reply, %d);" % delay_ms if delay_ms else "reply();"}
+        }}
+      }};
+    '''
+
+
+def configure(page, site_url, script, *, worker=None, worker_requests=None):
     block_external_fonts(page)
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=script))
     page.route(
         "**/config.json",
         lambda route: route.fulfill(
             content_type="application/json",
-            body=json.dumps({"aiEndpoint": endpoint, "engineUrl": "./gipf_engine.js"}),
+            body=json.dumps({"aiMode": "browser", "engineUrl": "./gipf_engine.js"}),
         ),
     )
-    if endpoint:
-        page.route(f"{endpoint}/api/status", lambda route: route.fulfill(content_type="application/json", body='{"model":"test"}'))
+    def serve_worker(route):
+        if worker_requests is not None:
+            worker_requests.append(route.request.url)
+        route.fulfill(content_type="application/javascript", body=worker if worker is not None else local_worker())
+    page.route("**/ai-worker.js", serve_worker)
     page.goto(site_url, wait_until="domcontentloaded")
 
 
 def test_ai_undo_restores_latest_human_decision_without_replaying_ai(browser, site_url):
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
-    calls = []
     initial = ge.State().serialize()
     configure(page, site_url, fake_engine(initial))
-
-    def ai_route(route):
-        calls.append(route.request.post_data_json)
-        route.fulfill(content_type="application/json", body='{"action":0,"model":"test"}')
-
-    page.route("https://ai.test/api/move", ai_route)
     try:
         page.locator("#mode-select").select_option("ai")
         page.locator('.ray-hit[data-ray-id="0"]').click()
         page.wait_for_function("document.querySelector('#move-count').textContent === 'MOVE 02'")
-        assert len(calls) == 1
+        assert page.locator("#ai-status").text_content() == "test-local-1 ready"
         page.locator("#undo").click()
         assert page.locator("#move-count").text_content() == "MOVE 00"
         assert page.locator("#undo").is_disabled()
-        assert len(calls) == 1
+        page.wait_for_timeout(100)
+        assert page.locator("#ai-status").text_content() == "test-local-1 ready"
     finally:
         page.close()
 
@@ -68,13 +84,15 @@ def test_local_undo_reverts_one_decision(browser, site_url):
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
     initial = ge.State().serialize()
-    configure(page, site_url, fake_engine(initial), endpoint="")
+    worker_requests = []
+    configure(page, site_url, fake_engine(initial), worker_requests=worker_requests)
     try:
         page.locator('.ray-hit[data-ray-id="0"]').click()
         assert page.locator("#move-count").text_content() == "MOVE 01"
         page.locator("#undo").click()
         assert page.locator("#move-count").text_content() == "MOVE 00"
         assert page.locator("#undo").is_disabled()
+        assert worker_requests == []
     finally:
         page.close()
 
@@ -84,7 +102,6 @@ def test_ai_white_opening_has_no_human_undo(browser, site_url):
     page.set_default_timeout(5_000)
     initial = ge.State().serialize()
     configure(page, site_url, fake_engine(initial))
-    page.route("https://ai.test/api/move", lambda route: route.fulfill(content_type="application/json", body='{"action":0,"model":"test"}'))
     try:
         page.locator("#mode-select").select_option("ai")
         page.locator("#ai-color").select_option("white")
@@ -100,28 +117,16 @@ def test_pending_ai_reply_after_undo_is_ignored(browser, site_url):
     block_external_fonts(page)
     initial = ge.State().serialize()
     script = fake_engine(initial)
-    page.add_init_script("""
-      window.aiResolvers = [];
-      const nativeFetch = window.fetch.bind(window);
-      window.fetch = (input, init) => {
-        const url = typeof input === 'string' ? input : input.url;
-        if (url === 'https://ai.test/api/move') {
-          return new Promise(resolve => window.aiResolvers.push(() => resolve(new Response(JSON.stringify({action: 0, model: 'test'}), {status: 200, headers: {'content-type': 'application/json'}}))));
-        }
-        return nativeFetch(input, init);
-      };
-    """)
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=script))
-    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"https://ai.test","engineUrl":"./gipf_engine.js"}'))
-    page.route("https://ai.test/api/status", lambda route: route.fulfill(content_type="application/json", body='{"model":"test"}'))
+    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiMode":"browser","engineUrl":"./gipf_engine.js"}'))
+    page.route("**/ai-worker.js", lambda route: route.fulfill(content_type="application/javascript", body=local_worker(delay_ms=250)))
     try:
         page.goto(site_url, wait_until="domcontentloaded")
         page.locator("#mode-select").select_option("ai")
         page.locator('.ray-hit[data-ray-id="0"]').click()
-        page.wait_for_function("window.aiResolvers.length === 1")
+        page.wait_for_function("document.querySelector('#undo').disabled === false")
         page.locator("#undo").click()
-        page.evaluate("window.aiResolvers[0]()")
-        page.wait_for_timeout(100)
+        page.wait_for_timeout(400)
         assert page.locator("#move-count").text_content() == "MOVE 00"
         assert page.evaluate("window.applied || []") == [0]
     finally:

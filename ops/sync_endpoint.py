@@ -10,6 +10,9 @@ CONFIG=ROOT/'web/config.json'
 PENDING=ROOT/'ops/endpoint-push-pending.json'
 
 def tick():
+    # A static browser deployment must never be rewritten to depend on this host.
+    if CONFIG.exists() and json.loads(CONFIG.read_text()).get('aiMode') == 'browser':
+        return
     if PENDING.exists():
         subprocess.run(['git','push','origin','main'],cwd=ROOT,check=True,timeout=30)
         PENDING.unlink()

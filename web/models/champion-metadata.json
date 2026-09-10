@@ -1,0 +1,313 @@
+{
+  "schema": "gipf-browser-onnx-v1",
+  "checkpoint": "checkpoints/champion.pt",
+  "checkpoint_sha256": "d5a7e3bda2966a79d22cf34f131976907260e679683d0e2680d935312f41c2f6",
+  "served_artifact_sha256": "d5a7e3bda2966a79d22cf34f131976907260e679683d0e2680d935312f41c2f6",
+  "source_checkpoint_sha256": "aa533bb8922231a3e0dc53dd2ff947cab6899ef09a9245463c89ac99ea776ef0",
+  "architecture": {
+    "kind": "resnet",
+    "width": 32,
+    "blocks": 2,
+    "head": "flat"
+  },
+  "games": 43869,
+  "iteration": 727,
+  "onnx": {
+    "path": "champion.onnx",
+    "sha256": "3d657aea6d89f73e84f189f919c17bdd8ee3f2d69d5a1ef84c6f722ee0a17a73",
+    "bytes": 4664337,
+    "opset": 17,
+    "dynamic_batch": true,
+    "input_name": "board_features",
+    "output_names": [
+      "policy_logits",
+      "value"
+    ]
+  },
+  "onnx_single": {
+    "path": "champion-single.onnx",
+    "sha256": "430ca361fddfd4e9736346c705897680dfae27c9033c76d19cfe886300b5f854",
+    "bytes": 4663604,
+    "opset": 17,
+    "dynamic_batch": false,
+    "input_name": "board_features",
+    "input_shape": [
+      1,
+      9,
+      7,
+      7
+    ],
+    "output_names": [
+      "policy_logits",
+      "value"
+    ]
+  },
+  "onnx_portable": {
+    "path": "champion-portable.onnx",
+    "sha256": "f0d87284273ce279fc7b0675c5da0c93f36f03b6829eecbad93caa91abd7b688",
+    "bytes": 4670096,
+    "opset": 17,
+    "dynamic_batch": false,
+    "input_name": "board_features",
+    "input_shape": [
+      1,
+      9,
+      7,
+      7
+    ],
+    "output_names": [
+      "policy_logits",
+      "value"
+    ],
+    "group_norm_lowering": "ReduceMean/Sub/Mul/Add/Sqrt/Div plus affine; no InstanceNormalization"
+  },
+  "model_sha256": "3d657aea6d89f73e84f189f919c17bdd8ee3f2d69d5a1ef84c6f722ee0a17a73",
+  "fixtures": {
+    "path": "champion-fixtures.json",
+    "sha256": "a7556babd8fba6e44a42d7ea3ae6380cb8102250d5c3414aa9e93a45b0de6dc5",
+    "count": 16,
+    "onnxruntime_cpu_rtol": 2e-05,
+    "onnxruntime_cpu_atol": 2e-06
+  },
+  "onnxruntime_cpu_validation": {
+    "batches": {
+      "1": {
+        "max_abs_policy_logits": 9.5367431640625e-07,
+        "max_abs_value": 9.685754776000977e-08
+      },
+      "8": {
+        "max_abs_policy_logits": 2.384185791015625e-06,
+        "max_abs_value": 1.2665987014770508e-07
+      },
+      "32": {
+        "max_abs_policy_logits": 2.86102294921875e-06,
+        "max_abs_value": 2.980232238769531e-07
+      }
+    },
+    "rtol": 2e-05,
+    "atol": 2e-06
+  },
+  "onnxruntime_cpu_single_validation": {
+    "max_abs_policy_logits": 3.814697265625e-06,
+    "max_abs_value": 1.7881393432617188e-07,
+    "legal_action_parity": true,
+    "fixtures": [
+      {
+        "id": 0,
+        "phase": "push",
+        "native_action": 34,
+        "single_action": 34
+      },
+      {
+        "id": 1,
+        "phase": "push",
+        "native_action": 35,
+        "single_action": 35
+      },
+      {
+        "id": 2,
+        "phase": "push",
+        "native_action": 7,
+        "single_action": 7
+      },
+      {
+        "id": 3,
+        "phase": "push",
+        "native_action": 20,
+        "single_action": 20
+      },
+      {
+        "id": 4,
+        "phase": "push",
+        "native_action": 7,
+        "single_action": 7
+      },
+      {
+        "id": 5,
+        "phase": "push",
+        "native_action": 37,
+        "single_action": 37
+      },
+      {
+        "id": 6,
+        "phase": "push",
+        "native_action": 7,
+        "single_action": 7
+      },
+      {
+        "id": 7,
+        "phase": "push",
+        "native_action": 38,
+        "single_action": 38
+      },
+      {
+        "id": 8,
+        "phase": "capture",
+        "native_action": 2474,
+        "single_action": 2474
+      },
+      {
+        "id": 9,
+        "phase": "capture",
+        "native_action": 430,
+        "single_action": 430
+      },
+      {
+        "id": 10,
+        "phase": "capture",
+        "native_action": 1834,
+        "single_action": 1834
+      },
+      {
+        "id": 11,
+        "phase": "capture",
+        "native_action": 811,
+        "single_action": 811
+      },
+      {
+        "id": 12,
+        "phase": "capture",
+        "native_action": 171,
+        "single_action": 171
+      },
+      {
+        "id": 13,
+        "phase": "capture",
+        "native_action": 1836,
+        "single_action": 1836
+      },
+      {
+        "id": 14,
+        "phase": "capture",
+        "native_action": 2610,
+        "single_action": 2610
+      },
+      {
+        "id": 15,
+        "phase": "capture",
+        "native_action": 1578,
+        "single_action": 1578
+      }
+    ]
+  },
+  "onnxruntime_cpu_portable_validation": {
+    "max_abs_policy_logits": 4.76837158203125e-06,
+    "max_abs_value": 2.1606683731079102e-07,
+    "legal_action_parity": true,
+    "fixtures": [
+      {
+        "id": 0,
+        "phase": "push",
+        "native_action": 34,
+        "portable_action": 34
+      },
+      {
+        "id": 1,
+        "phase": "push",
+        "native_action": 35,
+        "portable_action": 35
+      },
+      {
+        "id": 2,
+        "phase": "push",
+        "native_action": 7,
+        "portable_action": 7
+      },
+      {
+        "id": 3,
+        "phase": "push",
+        "native_action": 20,
+        "portable_action": 20
+      },
+      {
+        "id": 4,
+        "phase": "push",
+        "native_action": 7,
+        "portable_action": 7
+      },
+      {
+        "id": 5,
+        "phase": "push",
+        "native_action": 37,
+        "portable_action": 37
+      },
+      {
+        "id": 6,
+        "phase": "push",
+        "native_action": 7,
+        "portable_action": 7
+      },
+      {
+        "id": 7,
+        "phase": "push",
+        "native_action": 38,
+        "portable_action": 38
+      },
+      {
+        "id": 8,
+        "phase": "capture",
+        "native_action": 2474,
+        "portable_action": 2474
+      },
+      {
+        "id": 9,
+        "phase": "capture",
+        "native_action": 430,
+        "portable_action": 430
+      },
+      {
+        "id": 10,
+        "phase": "capture",
+        "native_action": 1834,
+        "portable_action": 1834
+      },
+      {
+        "id": 11,
+        "phase": "capture",
+        "native_action": 811,
+        "portable_action": 811
+      },
+      {
+        "id": 12,
+        "phase": "capture",
+        "native_action": 171,
+        "portable_action": 171
+      },
+      {
+        "id": 13,
+        "phase": "capture",
+        "native_action": 1836,
+        "portable_action": 1836
+      },
+      {
+        "id": 14,
+        "phase": "capture",
+        "native_action": 2610,
+        "portable_action": 2610
+      },
+      {
+        "id": 15,
+        "phase": "capture",
+        "native_action": 1578,
+        "portable_action": 1578
+      }
+    ],
+    "operators": [
+      "Add",
+      "Constant",
+      "Conv",
+      "Div",
+      "Flatten",
+      "Gemm",
+      "Mul",
+      "ReduceMean",
+      "Relu",
+      "Reshape",
+      "Sqrt",
+      "Squeeze",
+      "Sub",
+      "Tanh"
+    ]
+  },
+  "benchmark": "champion-benchmark.json"
+}

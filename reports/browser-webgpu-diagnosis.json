@@ -1,0 +1,1193 @@
+{
+  "utc": "2026-09-10T07:10:18Z",
+  "purpose": "SwiftShader WebGPU diagnostic; not a hardware performance result",
+  "launch_args": [
+    "--enable-unsafe-webgpu",
+    "--use-angle=swiftshader"
+  ],
+  "fixture_count": 16,
+  "cases": [
+    {
+      "variant": "dynamic",
+      "model_path": "champion.onnx",
+      "graph_optimization_level": "disabled",
+      "elapsed_ms": 7514.312,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.351478576660156,
+          "mean_policy_abs_error": 0.8595562598289156,
+          "value_abs_error": 0.7394284605979919
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052201986312866,
+          "mean_policy_abs_error": 0.7933897031951187,
+          "value_abs_error": 0.8273804970085621
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499090313911438,
+          "mean_policy_abs_error": 0.8153936898394235,
+          "value_abs_error": 0.7422069851309061
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.705882549285889,
+          "mean_policy_abs_error": 0.6191643533364792,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254612445831299,
+          "mean_policy_abs_error": 0.772178017184302,
+          "value_abs_error": 0.5400682184845209
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611135482788086,
+          "mean_policy_abs_error": 0.4613666321472913,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.235656023025513,
+          "mean_policy_abs_error": 0.4857159448443441,
+          "value_abs_error": 0.34424014016985893
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801629630016586,
+          "value_abs_error": 0.5076271146535873
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.405909691005945,
+          "mean_policy_abs_error": 0.18476789047687414,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.499642252922058,
+          "mean_policy_abs_error": 0.1955808080421742,
+          "value_abs_error": 0.9000312387943268
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602925181388855,
+          "mean_policy_abs_error": 0.16337296780712235,
+          "value_abs_error": 0.6654412895441055
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439892053604126,
+          "mean_policy_abs_error": 0.16458586103994155,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627458214759827,
+          "mean_policy_abs_error": 0.16124091434617435,
+          "value_abs_error": 0.35215362906455994
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389206974728343,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172013588249683,
+          "mean_policy_abs_error": 0.20948576444628625,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.6513575315475464,
+          "mean_policy_abs_error": 0.13837146680518958,
+          "value_abs_error": 0.28079988434910774
+        }
+      ],
+      "max_policy_abs_error": 10.351478576660156,
+      "max_value_abs_error": 0.9000312387943268,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "dynamic",
+      "model_path": "champion.onnx",
+      "graph_optimization_level": "basic",
+      "elapsed_ms": 7375.336,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.351478576660156,
+          "mean_policy_abs_error": 0.8595562598289156,
+          "value_abs_error": 0.7394284605979919
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052201986312866,
+          "mean_policy_abs_error": 0.7933897031951187,
+          "value_abs_error": 0.8273804970085621
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499090313911438,
+          "mean_policy_abs_error": 0.8153936898394235,
+          "value_abs_error": 0.7422069851309061
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.705882549285889,
+          "mean_policy_abs_error": 0.6191643533364792,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254612445831299,
+          "mean_policy_abs_error": 0.772178017184302,
+          "value_abs_error": 0.5400682184845209
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611135482788086,
+          "mean_policy_abs_error": 0.4613666321472913,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.235656023025513,
+          "mean_policy_abs_error": 0.4857159448443441,
+          "value_abs_error": 0.34424014016985893
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801629630016586,
+          "value_abs_error": 0.5076271146535873
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.405909691005945,
+          "mean_policy_abs_error": 0.18476789047687414,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.499642252922058,
+          "mean_policy_abs_error": 0.1955808080421742,
+          "value_abs_error": 0.9000312387943268
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602925181388855,
+          "mean_policy_abs_error": 0.16337296780712235,
+          "value_abs_error": 0.6654412895441055
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439892053604126,
+          "mean_policy_abs_error": 0.16458586103994155,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627458214759827,
+          "mean_policy_abs_error": 0.16124091434617435,
+          "value_abs_error": 0.35215362906455994
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389206974728343,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172013588249683,
+          "mean_policy_abs_error": 0.20948576444628625,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.6513575315475464,
+          "mean_policy_abs_error": 0.13837146680518958,
+          "value_abs_error": 0.28079988434910774
+        }
+      ],
+      "max_policy_abs_error": 10.351478576660156,
+      "max_value_abs_error": 0.9000312387943268,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "dynamic",
+      "model_path": "champion.onnx",
+      "graph_optimization_level": "all",
+      "elapsed_ms": 7794.33,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.351478576660156,
+          "mean_policy_abs_error": 0.8595562598289156,
+          "value_abs_error": 0.7394284605979919
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052201986312866,
+          "mean_policy_abs_error": 0.7933897031951187,
+          "value_abs_error": 0.8273804970085621
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499090313911438,
+          "mean_policy_abs_error": 0.8153936898394235,
+          "value_abs_error": 0.7422069851309061
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.705882549285889,
+          "mean_policy_abs_error": 0.6191643533364792,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254612445831299,
+          "mean_policy_abs_error": 0.772178017184302,
+          "value_abs_error": 0.5400682184845209
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611135482788086,
+          "mean_policy_abs_error": 0.4613666321472913,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.235656023025513,
+          "mean_policy_abs_error": 0.4857159448443441,
+          "value_abs_error": 0.34424014016985893
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801629630016586,
+          "value_abs_error": 0.5076271146535873
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.405909691005945,
+          "mean_policy_abs_error": 0.18476789047687414,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.499642252922058,
+          "mean_policy_abs_error": 0.1955808080421742,
+          "value_abs_error": 0.9000312387943268
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602925181388855,
+          "mean_policy_abs_error": 0.16337296780712235,
+          "value_abs_error": 0.6654412895441055
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439892053604126,
+          "mean_policy_abs_error": 0.16458586103994155,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627458214759827,
+          "mean_policy_abs_error": 0.16124091434617435,
+          "value_abs_error": 0.35215362906455994
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389206974728343,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172013588249683,
+          "mean_policy_abs_error": 0.20948576444628625,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.6513575315475464,
+          "mean_policy_abs_error": 0.13837146680518958,
+          "value_abs_error": 0.28079988434910774
+        }
+      ],
+      "max_policy_abs_error": 10.351478576660156,
+      "max_value_abs_error": 0.9000312387943268,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "single",
+      "model_path": "champion-single.onnx",
+      "graph_optimization_level": "disabled",
+      "elapsed_ms": 7836.691,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.351478576660156,
+          "mean_policy_abs_error": 0.8595562598289156,
+          "value_abs_error": 0.7394284605979919
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052201986312866,
+          "mean_policy_abs_error": 0.7933897031951187,
+          "value_abs_error": 0.8273804970085621
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499090313911438,
+          "mean_policy_abs_error": 0.8153936898394235,
+          "value_abs_error": 0.7422069851309061
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.705882549285889,
+          "mean_policy_abs_error": 0.6191643533364792,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254612445831299,
+          "mean_policy_abs_error": 0.772178017184302,
+          "value_abs_error": 0.5400682184845209
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611135482788086,
+          "mean_policy_abs_error": 0.4613666321472913,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.235656023025513,
+          "mean_policy_abs_error": 0.4857159448443441,
+          "value_abs_error": 0.34424014016985893
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801629630016586,
+          "value_abs_error": 0.5076271146535873
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.405909691005945,
+          "mean_policy_abs_error": 0.18476789047687414,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.499642252922058,
+          "mean_policy_abs_error": 0.1955808080421742,
+          "value_abs_error": 0.9000312387943268
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602925181388855,
+          "mean_policy_abs_error": 0.16337296780712235,
+          "value_abs_error": 0.6654412895441055
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439892053604126,
+          "mean_policy_abs_error": 0.16458586103994155,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627458214759827,
+          "mean_policy_abs_error": 0.16124091434617435,
+          "value_abs_error": 0.35215362906455994
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389206974728343,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172013588249683,
+          "mean_policy_abs_error": 0.20948576444628625,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.6513575315475464,
+          "mean_policy_abs_error": 0.13837146680518958,
+          "value_abs_error": 0.28079988434910774
+        }
+      ],
+      "max_policy_abs_error": 10.351478576660156,
+      "max_value_abs_error": 0.9000312387943268,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "single",
+      "model_path": "champion-single.onnx",
+      "graph_optimization_level": "basic",
+      "elapsed_ms": 7390.22,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.351478576660156,
+          "mean_policy_abs_error": 0.8595562598289156,
+          "value_abs_error": 0.7394284605979919
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052201986312866,
+          "mean_policy_abs_error": 0.7933897031951187,
+          "value_abs_error": 0.8273804970085621
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499090313911438,
+          "mean_policy_abs_error": 0.8153936898394235,
+          "value_abs_error": 0.7422069851309061
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.705882549285889,
+          "mean_policy_abs_error": 0.6191643533364792,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254612445831299,
+          "mean_policy_abs_error": 0.772178017184302,
+          "value_abs_error": 0.5400682184845209
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611135482788086,
+          "mean_policy_abs_error": 0.4613666321472913,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.235656023025513,
+          "mean_policy_abs_error": 0.4857159448443441,
+          "value_abs_error": 0.34424014016985893
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801629630016586,
+          "value_abs_error": 0.5076271146535873
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.405909691005945,
+          "mean_policy_abs_error": 0.18476789047687414,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.499642252922058,
+          "mean_policy_abs_error": 0.1955808080421742,
+          "value_abs_error": 0.9000312387943268
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602925181388855,
+          "mean_policy_abs_error": 0.16337296780712235,
+          "value_abs_error": 0.6654412895441055
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439892053604126,
+          "mean_policy_abs_error": 0.16458586103994155,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627458214759827,
+          "mean_policy_abs_error": 0.16124091434617435,
+          "value_abs_error": 0.35215362906455994
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389206974728343,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172013588249683,
+          "mean_policy_abs_error": 0.20948576444628625,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.6513575315475464,
+          "mean_policy_abs_error": 0.13837146680518958,
+          "value_abs_error": 0.28079988434910774
+        }
+      ],
+      "max_policy_abs_error": 10.351478576660156,
+      "max_value_abs_error": 0.9000312387943268,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "single",
+      "model_path": "champion-single.onnx",
+      "graph_optimization_level": "all",
+      "elapsed_ms": 7350.347,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.351478576660156,
+          "mean_policy_abs_error": 0.8595562598289156,
+          "value_abs_error": 0.7394284605979919
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052201986312866,
+          "mean_policy_abs_error": 0.7933897031951187,
+          "value_abs_error": 0.8273804970085621
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499090313911438,
+          "mean_policy_abs_error": 0.8153936898394235,
+          "value_abs_error": 0.7422069851309061
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.705882549285889,
+          "mean_policy_abs_error": 0.6191643533364792,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254612445831299,
+          "mean_policy_abs_error": 0.772178017184302,
+          "value_abs_error": 0.5400682184845209
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611135482788086,
+          "mean_policy_abs_error": 0.4613666321472913,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.235656023025513,
+          "mean_policy_abs_error": 0.4857159448443441,
+          "value_abs_error": 0.34424014016985893
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801629630016586,
+          "value_abs_error": 0.5076271146535873
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.405909691005945,
+          "mean_policy_abs_error": 0.18476789047687414,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.499642252922058,
+          "mean_policy_abs_error": 0.1955808080421742,
+          "value_abs_error": 0.9000312387943268
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602925181388855,
+          "mean_policy_abs_error": 0.16337296780712235,
+          "value_abs_error": 0.6654412895441055
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439892053604126,
+          "mean_policy_abs_error": 0.16458586103994155,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627458214759827,
+          "mean_policy_abs_error": 0.16124091434617435,
+          "value_abs_error": 0.35215362906455994
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389206974728343,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172013588249683,
+          "mean_policy_abs_error": 0.20948576444628625,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.6513575315475464,
+          "mean_policy_abs_error": 0.13837146680518958,
+          "value_abs_error": 0.28079988434910774
+        }
+      ],
+      "max_policy_abs_error": 10.351478576660156,
+      "max_value_abs_error": 0.9000312387943268,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "portable",
+      "model_path": "champion-portable.onnx",
+      "graph_optimization_level": "disabled",
+      "elapsed_ms": 6658.787,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.35147476196289,
+          "mean_policy_abs_error": 0.8595562353629351,
+          "value_abs_error": 0.7394283413887024
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052203893661499,
+          "mean_policy_abs_error": 0.7933898805059734,
+          "value_abs_error": 0.8273806758224964
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499087452888489,
+          "mean_policy_abs_error": 0.8153935479740919,
+          "value_abs_error": 0.7422068659216166
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.7058796882629395,
+          "mean_policy_abs_error": 0.6191642485002602,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254613399505615,
+          "mean_policy_abs_error": 0.7721781388685899,
+          "value_abs_error": 0.5400683972984552
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611136436462402,
+          "mean_policy_abs_error": 0.4613666677889721,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.23565411567688,
+          "mean_policy_abs_error": 0.4857158303770387,
+          "value_abs_error": 0.344239991158247
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801641541154717,
+          "value_abs_error": 0.5076272338628769
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.4059099294245243,
+          "mean_policy_abs_error": 0.18476789142926234,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.4996429681777954,
+          "mean_policy_abs_error": 0.19558082132281704,
+          "value_abs_error": 0.9000310599803925
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602924585342407,
+          "mean_policy_abs_error": 0.1633729551577661,
+          "value_abs_error": 0.6654411405324936
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439891815185547,
+          "mean_policy_abs_error": 0.16458584986611752,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627453446388245,
+          "mean_policy_abs_error": 0.16124089843249836,
+          "value_abs_error": 0.35215358436107635
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389207060653938,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172015972435474,
+          "mean_policy_abs_error": 0.20948581937709038,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.651358485221863,
+          "mean_policy_abs_error": 0.13837149727419223,
+          "value_abs_error": 0.28079985454678535
+        }
+      ],
+      "max_policy_abs_error": 10.35147476196289,
+      "max_value_abs_error": 0.9000310599803925,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "portable",
+      "model_path": "champion-portable.onnx",
+      "graph_optimization_level": "basic",
+      "elapsed_ms": 6459.176,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.35147476196289,
+          "mean_policy_abs_error": 0.8595562353629351,
+          "value_abs_error": 0.7394283413887024
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052203893661499,
+          "mean_policy_abs_error": 0.7933898805059734,
+          "value_abs_error": 0.8273806758224964
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499087452888489,
+          "mean_policy_abs_error": 0.8153935479740919,
+          "value_abs_error": 0.7422068659216166
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.7058796882629395,
+          "mean_policy_abs_error": 0.6191642485002602,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254613399505615,
+          "mean_policy_abs_error": 0.7721781388685899,
+          "value_abs_error": 0.5400683972984552
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611136436462402,
+          "mean_policy_abs_error": 0.4613666677889721,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.23565411567688,
+          "mean_policy_abs_error": 0.4857158303770387,
+          "value_abs_error": 0.344239991158247
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801641541154717,
+          "value_abs_error": 0.5076272338628769
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.4059099294245243,
+          "mean_policy_abs_error": 0.18476789142926234,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.4996429681777954,
+          "mean_policy_abs_error": 0.19558082132281704,
+          "value_abs_error": 0.9000310599803925
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602924585342407,
+          "mean_policy_abs_error": 0.1633729551577661,
+          "value_abs_error": 0.6654411405324936
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439891815185547,
+          "mean_policy_abs_error": 0.16458584986611752,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627453446388245,
+          "mean_policy_abs_error": 0.16124089843249836,
+          "value_abs_error": 0.35215358436107635
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389207060653938,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172015972435474,
+          "mean_policy_abs_error": 0.20948581937709038,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.651358485221863,
+          "mean_policy_abs_error": 0.13837149727419223,
+          "value_abs_error": 0.28079985454678535
+        }
+      ],
+      "max_policy_abs_error": 10.35147476196289,
+      "max_value_abs_error": 0.9000310599803925,
+      "strict_fixture_parity": false
+    },
+    {
+      "variant": "portable",
+      "model_path": "champion-portable.onnx",
+      "graph_optimization_level": "all",
+      "elapsed_ms": 6899.098,
+      "adapter": {
+        "vendor": "google",
+        "architecture": "swiftshader",
+        "device": "",
+        "description": "",
+        "isFallbackAdapter": true
+      },
+      "fixtures": [
+        {
+          "id": 0,
+          "phase": "push",
+          "max_policy_abs_error": 10.35147476196289,
+          "mean_policy_abs_error": 0.8595562353629351,
+          "value_abs_error": 0.7394283413887024
+        },
+        {
+          "id": 1,
+          "phase": "push",
+          "max_policy_abs_error": 9.052203893661499,
+          "mean_policy_abs_error": 0.7933898805059734,
+          "value_abs_error": 0.8273806758224964
+        },
+        {
+          "id": 2,
+          "phase": "push",
+          "max_policy_abs_error": 9.499087452888489,
+          "mean_policy_abs_error": 0.8153935479740919,
+          "value_abs_error": 0.7422068659216166
+        },
+        {
+          "id": 3,
+          "phase": "push",
+          "max_policy_abs_error": 7.7058796882629395,
+          "mean_policy_abs_error": 0.6191642485002602,
+          "value_abs_error": 0.7669862024486065
+        },
+        {
+          "id": 4,
+          "phase": "push",
+          "max_policy_abs_error": 9.254613399505615,
+          "mean_policy_abs_error": 0.7721781388685899,
+          "value_abs_error": 0.5400683972984552
+        },
+        {
+          "id": 5,
+          "phase": "push",
+          "max_policy_abs_error": 5.611136436462402,
+          "mean_policy_abs_error": 0.4613666677889721,
+          "value_abs_error": 0.7075394596904516
+        },
+        {
+          "id": 6,
+          "phase": "push",
+          "max_policy_abs_error": 6.23565411567688,
+          "mean_policy_abs_error": 0.4857158303770387,
+          "value_abs_error": 0.344239991158247
+        },
+        {
+          "id": 7,
+          "phase": "push",
+          "max_policy_abs_error": 4.418221950531006,
+          "mean_policy_abs_error": 0.36801641541154717,
+          "value_abs_error": 0.5076272338628769
+        },
+        {
+          "id": 8,
+          "phase": "capture",
+          "max_policy_abs_error": 2.4059099294245243,
+          "mean_policy_abs_error": 0.18476789142926234,
+          "value_abs_error": 0.41502226889133453
+        },
+        {
+          "id": 9,
+          "phase": "capture",
+          "max_policy_abs_error": 3.4996429681777954,
+          "mean_policy_abs_error": 0.19558082132281704,
+          "value_abs_error": 0.9000310599803925
+        },
+        {
+          "id": 10,
+          "phase": "capture",
+          "max_policy_abs_error": 1.9602924585342407,
+          "mean_policy_abs_error": 0.1633729551577661,
+          "value_abs_error": 0.6654411405324936
+        },
+        {
+          "id": 11,
+          "phase": "capture",
+          "max_policy_abs_error": 2.439891815185547,
+          "mean_policy_abs_error": 0.16458584986611752,
+          "value_abs_error": 0.05774812400341034
+        },
+        {
+          "id": 12,
+          "phase": "capture",
+          "max_policy_abs_error": 3.3627453446388245,
+          "mean_policy_abs_error": 0.16124089843249836,
+          "value_abs_error": 0.35215358436107635
+        },
+        {
+          "id": 13,
+          "phase": "capture",
+          "max_policy_abs_error": 2.125109612941742,
+          "mean_policy_abs_error": 0.13389207060653938,
+          "value_abs_error": 0.36928629875183105
+        },
+        {
+          "id": 14,
+          "phase": "capture",
+          "max_policy_abs_error": 2.9172015972435474,
+          "mean_policy_abs_error": 0.20948581937709038,
+          "value_abs_error": 0.12378484383225441
+        },
+        {
+          "id": 15,
+          "phase": "capture",
+          "max_policy_abs_error": 2.651358485221863,
+          "mean_policy_abs_error": 0.13837149727419223,
+          "value_abs_error": 0.28079985454678535
+        }
+      ],
+      "max_policy_abs_error": 10.35147476196289,
+      "max_value_abs_error": 0.9000310599803925,
+      "strict_fixture_parity": false
+    }
+  ],
+  "browser": "151.0.7922.34",
+  "conclusion": {
+    "strict_parity_proven": false,
+    "finding": "Every tested model and graph-optimization combination fails all-fixture strict parity on the SwiftShader fallback adapter.",
+    "ruled_out_by_this_test": [
+      "WebGPU graph optimization level",
+      "dynamic batch shape",
+      "InstanceNormalization export"
+    ],
+    "remaining_suspect": "WebGPU provider/SwiftShader execution of an operator shared by all variants; this test cannot identify a specific node.",
+    "production_action": "Keep WebGPU disabled by strict fixture verification; browser WASM CPU remains the verified path."
+  }
+}

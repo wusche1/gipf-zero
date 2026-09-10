@@ -80,13 +80,42 @@ def block_external_fonts(page):
     """Keep browser tests deterministic when Google Fonts is unavailable."""
     page.route("https://fonts.googleapis.com/**", lambda route: route.abort())
     page.route("https://fonts.gstatic.com/**", lambda route: route.abort())
+    # Rule/animation fixtures should exercise their explicit routes rather
+    # than a persistent cache from a prior page. Registration requests made
+    # by module code are not page-routable in every browser, so reject them
+    # before the app starts.
+    page.add_init_script("""
+      if (navigator.serviceWorker) {
+        navigator.serviceWorker.register = () => Promise.reject(new Error('service worker disabled for fixture'));
+      }
+    """)
+
+
+def local_worker(actions, *, delay_ms=0):
+    """Deterministic browser worker fixture for local-AI UI tests."""
+    return f'''
+      const actions = {json.dumps(actions)};
+      let searches = 0;
+      self.onmessage = (event) => {{
+        const request = event.data;
+        if (request.type === 'init') {{
+          self.postMessage({{ id: request.id, ready: true, model: 'test-local', backend: 'wasm' }});
+          return;
+        }}
+        if (request.type === 'search') {{
+          searches += 1;
+          const reply = () => self.postMessage({{ id: request.id, action: actions[Math.min(searches - 1, actions.length - 1)], model: `test-local-${{searches}}` }});
+          {"setTimeout(reply, %d);" % delay_ms if delay_ms else "reply();"}
+        }}
+      }};
+    '''
 
 
 def ready_page(browser, site_url):
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
     block_external_fonts(page)
-    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"","engineUrl":"./gipf_engine.js"}'))
+    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiMode":"browser","engineUrl":"./gipf_engine.js"}'))
     page.goto(site_url, wait_until="domcontentloaded")
     expect(page.locator("#engine-status")).to_have_text("Ready to play", timeout=5_000)
     return page
@@ -139,7 +168,7 @@ def test_optional_capture_toggle_preserves_the_engine_action_encoding(browser, s
     page.set_default_timeout(5_000)
     block_external_fonts(page)
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=fake_engine))
-    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"","engineUrl":"./gipf_engine.js"}'))
+    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiMode":"browser","engineUrl":"./gipf_engine.js"}'))
     try:
         page.goto(site_url, wait_until="domcontentloaded")
         page.get_by_role("button", name="Line 4").click()
@@ -179,26 +208,18 @@ def test_ai_resolves_every_capture_decision_in_a_chain(browser, site_url):
         return {{ State, geometry: () => geometry }};
       }};
     '''
-    calls = []
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
     block_external_fonts(page)
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=fake_engine))
-    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"https://ai.test","engineUrl":"./gipf_engine.js"}'))
-
-    def ai_route(route):
-        calls.append(route.request.post_data_json)
-        action = first if len(calls) == 1 else second
-        route.fulfill(content_type="application/json", body=json.dumps({"action": action, "model": "test"}))
-
-    page.route("https://ai.test/api/move", ai_route)
-    page.route("https://ai.test/api/status", lambda route: route.fulfill(content_type="application/json", body='{"model":"test"}'))
+    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiMode":"browser","engineUrl":"./gipf_engine.js"}'))
+    page.route("**/ai-worker.js", lambda route: route.fulfill(content_type="application/javascript", body=local_worker([first, second])))
     try:
         page.goto(site_url, wait_until="domcontentloaded")
         page.locator("#mode-select").select_option("ai")
         page.wait_for_function("window.aiApplied && window.aiApplied.length === 2")
         assert page.evaluate("window.aiApplied") == [first, second]
-        assert len(calls) == 2
+        assert page.locator("#ai-status").text_content() == "test-local-2 ready"
         assert page.locator("#capture-card").is_hidden()
     finally:
         page.close()
@@ -224,27 +245,13 @@ def test_stale_ai_response_cannot_mutate_a_new_game(browser, site_url):
     page = browser.new_page(viewport={"width": 1000, "height": 900})
     page.set_default_timeout(5_000)
     block_external_fonts(page)
-    page.add_init_script("""
-      window.aiResolvers = [];
-      const nativeFetch = window.fetch.bind(window);
-      window.fetch = (input, init) => {
-        const url = typeof input === 'string' ? input : input.url;
-        if (url === 'https://ai.test/api/move') {
-          return new Promise(resolve => window.aiResolvers.push(() => resolve(new Response(JSON.stringify({action: 0, model: 'test'}), {status: 200, headers: {'content-type': 'application/json'}}))));
-        }
-        return nativeFetch(input, init);
-      };
-    """)
     page.route("**/gipf_engine.js", lambda route: route.fulfill(content_type="application/javascript", body=fake_engine))
-    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiEndpoint":"https://ai.test","engineUrl":"./gipf_engine.js"}'))
-    page.route("https://ai.test/api/status", lambda route: route.fulfill(content_type="application/json", body='{"model":"test"}'))
+    page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiMode":"browser","engineUrl":"./gipf_engine.js"}'))
+    page.route("**/ai-worker.js", lambda route: route.fulfill(content_type="application/javascript", body=local_worker([0], delay_ms=250)))
     try:
         page.goto(site_url, wait_until="domcontentloaded")
         page.locator("#mode-select").select_option("ai")
-        page.wait_for_function("window.aiResolvers.length >= 1")
         page.locator("#new-game").click()
-        page.wait_for_function("window.aiResolvers.length >= 2")
-        page.evaluate("window.aiResolvers[0]()")
         page.wait_for_timeout(100)
         assert page.locator("#move-count").text_content() == "MOVE 00"
         assert page.evaluate("window.aiApplied || []") == []

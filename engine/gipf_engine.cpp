@@ -141,6 +141,36 @@ class State {
   std::vector<int> reserves() const { return {reserves_[0], reserves_[1]}; }
   std::vector<int> captured() const { return {captured_[0], captured_[1]}; }
 
+#ifdef GIPF_WASM
+  static State from_json(const std::string& text) {
+    using emscripten::val;
+    return from_value(val::global("JSON").call<val>("parse", text));
+  }
+  static State from_value(const emscripten::val& input) {
+    using emscripten::val;
+    auto ints = [](const val& value, const char* name) {
+      if (value.isUndefined() || value.isNull()) throw std::invalid_argument(std::string("missing state field: ") + name);
+      std::vector<int> result;
+      const unsigned length = value["length"].as<unsigned>();
+      result.reserve(length);
+      for (unsigned i = 0; i < length; ++i) result.push_back(value[i].as<int>());
+      return result;
+    };
+    State state;
+    state.board_ = ints(input["board"], "board");
+    const std::vector<int> reserves = ints(input["reserves"], "reserves");
+    const std::vector<int> captured = ints(input["captured"], "captured");
+    if (state.board_.size() != kBoardCells || reserves.size() != 2 || captured.size() != 2)
+      throw std::invalid_argument("board must have 37 cells; reserves and captured must have two values");
+    state.reserves_ = {reserves[0], reserves[1]}; state.captured_ = {captured[0], captured[1]};
+    state.current_player_ = input["current_player"].as<int>(); state.turn_player_ = input["turn_player"].as<int>();
+    const std::string phase = input["phase"].as<std::string>();
+    state.phase_ = phase == "push" ? Phase::Push : phase == "capture" ? Phase::Capture : throw std::invalid_argument("phase must be push or capture");
+    state.winner_ = input["winner"].as<int>(); state.ply_ = input["ply"].as<int>(); state.validate();
+    return state;
+  }
+#endif
+
 #ifndef GIPF_WASM
   py::dict serialize() const {
     py::dict result;
@@ -399,7 +429,6 @@ class State {
   }
 };
 
-#ifndef GIPF_WASM
 // Native tree nodes keep rule-state ownership and PUCT traversal out of the
 // Python inner loop.  Neural evaluation remains deliberately in Python, where
 // PyTorch can batch pending leaf states on the GPU.
@@ -415,14 +444,14 @@ struct NativeNode {
   std::vector<double> values;
   std::vector<std::shared_ptr<NativeNode>> children;
 
-  void finish_expand(std::vector<int> next_actions, const float* scores, py::ssize_t scores_size,
+  void finish_expand(std::vector<int> next_actions, const float* scores, size_t scores_size,
                      bool scores_are_compact) {
     actions = std::move(next_actions);
     if (actions.empty()) throw std::invalid_argument("cannot expand a terminal state");
     int max_action = 0;
     for (int action : actions) max_action = std::max(max_action, action);
     if ((!scores_are_compact && scores_size <= max_action) ||
-        (scores_are_compact && scores_size < static_cast<py::ssize_t>(actions.size())))
+        (scores_are_compact && scores_size < actions.size()))
       throw std::invalid_argument("logits do not cover every legal action");
     auto score = [&](size_t i) { return scores[scores_are_compact ? i : actions[i]]; };
     double maximum = -std::numeric_limits<double>::infinity();
@@ -440,7 +469,7 @@ struct NativeNode {
     expanded = true;
   }
 
-  void expand(const float* logits, py::ssize_t logits_size) {
+  void expand(const float* logits, size_t logits_size) {
     finish_expand(state.legal_actions(), logits, logits_size, false);
   }
 
@@ -504,13 +533,12 @@ class NativeForest {
   size_t select_pending(double cpuct) { return collect_pending(cpuct, false); }
   size_t expand_unexpanded_root_pending() { return collect_pending(0.0, true); }
 
-  py::array_t<float> encode_pending() const {
-    constexpr py::ssize_t kPlanes = 9;
-    constexpr py::ssize_t kSide = 7;
-    constexpr py::ssize_t kPlaneCells = kSide * kSide;
-    py::array_t<float> output({static_cast<py::ssize_t>(pending_.size()), kPlanes, kSide, kSide});
-    float* data = output.mutable_data();
-    std::fill(data, data + pending_.size() * kPlanes * kPlaneCells, 0.0F);
+  void encode_pending_into(std::vector<float>& output) const {
+    constexpr size_t kPlanes = 9;
+    constexpr size_t kSide = 7;
+    constexpr size_t kPlaneCells = kSide * kSide;
+    output.assign(pending_.size() * kPlanes * kSide * kSide, 0.0F);
+    float* data = output.data();
     const auto& coordinates = geometry_data().coordinates;
     for (size_t batch = 0; batch < pending_.size(); ++batch) {
       const State& state = pending_[batch].leaf->state;
@@ -536,54 +564,69 @@ class NativeForest {
         data[8 * kPlaneCells + offset] = mover_owns_decision ? 1.0F : 0.0F;
       }
     }
-    return output;
   }
 
-  py::array_t<int32_t> pending_action_indices() const {
-    size_t width = 0;
+  std::vector<int32_t> pending_action_indices_flat(size_t& width) const {
+    width = 0;
     for (const auto& pending : pending_) width = std::max(width, pending.actions.size());
-    py::array_t<int32_t> result({static_cast<py::ssize_t>(pending_.size()), static_cast<py::ssize_t>(width)});
-    auto* data = result.mutable_data();
-    std::fill(data, data + pending_.size() * width, 0);
+    std::vector<int32_t> result(pending_.size() * width, 0);
+    auto* data = result.data();
     for (size_t row = 0; row < pending_.size(); ++row)
       for (size_t column = 0; column < pending_[row].actions.size(); ++column)
         data[row * width + column] = pending_[row].actions[column];
     return result;
   }
 
-  void finish(py::array_t<float, py::array::c_style | py::array::forcecast> logits,
-              py::array_t<float, py::array::c_style | py::array::forcecast> leaf_values) {
-    const auto scores = logits.request();
-    const auto values = leaf_values.request();
-    if (scores.ndim != 2 || values.ndim != 1 || scores.shape[0] != values.shape[0] ||
-        scores.shape[0] != static_cast<py::ssize_t>(pending_.size()))
+  void finish_raw(const float* score_data, size_t score_rows, size_t score_width,
+                  const float* value_data, size_t value_count, bool scores_are_compact) {
+    if (score_rows != pending_.size() || value_count != pending_.size())
       throw std::invalid_argument("native forest logits and values must match pending leaves");
-    const auto* score_data = static_cast<const float*>(scores.ptr);
-    const auto* value_data = static_cast<const float*>(values.ptr);
     for (size_t i = 0; i < pending_.size(); ++i) {
       NativePending& pending = pending_[i];
-      pending.leaf->finish_expand(std::move(pending.actions), score_data + i * scores.shape[1], scores.shape[1], false);
+      pending.leaf->finish_expand(std::move(pending.actions), score_data + i * score_width, score_width, scores_are_compact);
       backup(pending.path, static_cast<double>(value_data[i]) * pending.leaf->actor);
     }
     pending_.clear();
   }
 
+  size_t pending_count() const { return pending_.size(); }
+
+#ifndef GIPF_WASM
+  py::array_t<float> encode_pending() const {
+    std::vector<float> encoded;
+    encode_pending_into(encoded);
+    py::array_t<float> output({static_cast<py::ssize_t>(pending_.size()), static_cast<py::ssize_t>(9),
+                               static_cast<py::ssize_t>(7), static_cast<py::ssize_t>(7)});
+    std::copy(encoded.begin(), encoded.end(), output.mutable_data());
+    return output;
+  }
+
+  py::array_t<int32_t> pending_action_indices() const {
+    size_t width = 0;
+    std::vector<int32_t> indices = pending_action_indices_flat(width);
+    py::array_t<int32_t> output({static_cast<py::ssize_t>(pending_.size()), static_cast<py::ssize_t>(width)});
+    std::copy(indices.begin(), indices.end(), output.mutable_data());
+    return output;
+  }
+
+  void finish(py::array_t<float, py::array::c_style | py::array::forcecast> logits,
+              py::array_t<float, py::array::c_style | py::array::forcecast> leaf_values) {
+    const auto scores = logits.request(), values = leaf_values.request();
+    if (scores.ndim != 2 || values.ndim != 1)
+      throw std::invalid_argument("native forest logits must be [B,A] and values [B]");
+    finish_raw(static_cast<const float*>(scores.ptr), scores.shape[0], scores.shape[1],
+               static_cast<const float*>(values.ptr), values.shape[0], false);
+  }
+
   void finish_selected(py::array_t<float, py::array::c_style | py::array::forcecast> logits,
                        py::array_t<float, py::array::c_style | py::array::forcecast> leaf_values) {
-    const auto scores = logits.request();
-    const auto values = leaf_values.request();
-    if (scores.ndim != 2 || values.ndim != 1 || scores.shape[0] != values.shape[0] ||
-        scores.shape[0] != static_cast<py::ssize_t>(pending_.size()))
-      throw std::invalid_argument("selected logits and values must match pending leaves");
-    const auto* score_data = static_cast<const float*>(scores.ptr);
-    const auto* value_data = static_cast<const float*>(values.ptr);
-    for (size_t i = 0; i < pending_.size(); ++i) {
-      NativePending& pending = pending_[i];
-      pending.leaf->finish_expand(std::move(pending.actions), score_data + i * scores.shape[1], scores.shape[1], true);
-      backup(pending.path, static_cast<double>(value_data[i]) * pending.leaf->actor);
-    }
-    pending_.clear();
+    const auto scores = logits.request(), values = leaf_values.request();
+    if (scores.ndim != 2 || values.ndim != 1)
+      throw std::invalid_argument("selected logits must be [B,L] and values [B]");
+    finish_raw(static_cast<const float*>(scores.ptr), scores.shape[0], scores.shape[1],
+               static_cast<const float*>(values.ptr), values.shape[0], true);
   }
+#endif
 
  private:
   size_t collect_pending(double cpuct, bool roots_only) {
@@ -625,7 +668,6 @@ class NativeForest {
   std::vector<std::shared_ptr<NativeNode>> roots_;
   std::vector<NativePending> pending_;
 };
-#endif
 
 }  // namespace
 
@@ -817,6 +859,97 @@ val wasm_geometry() {
   return result;
 }
 
+// One browser search owns a single native root and asks JavaScript to evaluate
+// exactly one pending leaf at a time.  The Float32Array view returned by
+// prepare() is valid until the following step()/delete(); callers should feed
+// it to ONNX immediately rather than retaining it across engine calls.
+class BrowserSearch {
+ public:
+  // The one-argument browser API is deliberately unbounded: the worker owns
+  // its simulation/time limit. The two-argument overload is useful for tests.
+  explicit BrowserSearch(const emscripten::val& state) : BrowserSearch(state, std::numeric_limits<int>::max()) {}
+  BrowserSearch(const emscripten::val& state, int simulations)
+      : root_(std::make_shared<NativeNode>(decode(state))), forest_({root_}), target_(simulations) {
+    if (simulations < 0) throw std::invalid_argument("simulations must be non-negative");
+  }
+
+  bool prepare() {
+    if (awaiting_) return true;
+    if (root_->state.winner() != 0 || completed_ >= target_) return false;
+    const size_t count = root_->expanded ? forest_.select_pending(cpuct_) : forest_.expand_unexpanded_root_pending();
+    if (count == 0) return false;
+    forest_.encode_pending_into(features_); awaiting_ = true; ++evaluations_; return true;
+  }
+
+  emscripten::val features() const {
+    return awaiting_ ? emscripten::val(emscripten::typed_memory_view(features_.size(), features_.data()))
+                     : emscripten::val::global("Float32Array").new_(0);
+  }
+
+  void complete(const emscripten::val& logits, float value) {
+    if (!awaiting_) throw std::logic_error("prepare() must return true before complete()");
+    if (!std::isfinite(value) || forest_.pending_count() != 1 ||
+        logits.isUndefined() || logits.isNull() || logits["length"].as<unsigned>() != 2730)
+      throw std::invalid_argument("complete expects one finite value and 2730 finite logits");
+    // Copy a TypedArray in one JS call.  Indexed embind conversion costs one
+    // JS/Wasm boundary crossing per logit on every browser inference.
+    std::vector<float> scores(2730);
+    emscripten::val(emscripten::typed_memory_view(scores.size(), scores.data()))
+        .call<void>("set", logits);
+    for (float score : scores)
+      if (!std::isfinite(score)) throw std::invalid_argument("logits must be finite Float32 values");
+    forest_.finish_raw(scores.data(), 1, 2730, &value, 1, false); awaiting_ = false;
+  }
+
+  bool step(double cpuct) {
+    if (awaiting_) throw std::logic_error("complete() is required before select()");
+    if (!std::isfinite(cpuct) || cpuct < 0) throw std::invalid_argument("cpuct must be non-negative and finite");
+    cpuct_ = cpuct;
+    if (completed_ >= target_ || root_->state.winner() != 0) return false;
+    // One call represents exactly one tree simulation, including a terminal
+    // backup.  Do not loop over terminal leaves here: the browser owns the
+    // deadline and must regain control after each simulation.
+    ++completed_;
+    if (forest_.select_pending(cpuct_) == 0) return false;
+    forest_.encode_pending_into(features_); awaiting_ = true; ++evaluations_;
+    return true;
+  }
+
+  emscripten::val result() const { return result_data(); }
+  bool done() const { return !awaiting_ && (completed_ >= target_ || root_->state.winner() != 0); }
+
+ private:
+  static State decode(const emscripten::val& value) {
+    return value.typeOf().as<std::string>() == "string" ? State::from_json(value.as<std::string>()) : State::from_value(value);
+  }
+  emscripten::val result_data() const {
+    emscripten::val result = emscripten::val::object(), visits = emscripten::val::array(), actions = emscripten::val::array();
+    int action = -1; int32_t best = -1; int64_t total = 0;
+    for (size_t i = 0; i < root_->actions.size(); ++i) {
+      const int32_t count = root_->visits[i]; actions.call<void>("push", root_->actions[i]); visits.call<void>("push", count); total += count;
+      if (count > best) { best = count; action = root_->actions[i]; }
+    }
+    // Before any completed root simulation, expose the policy action rather
+    // than relying on legal-action order (the native search has this fallback).
+    if (total == 0 && !root_->priors.empty()) {
+      size_t best_prior = 0;
+      for (size_t i = 1; i < root_->priors.size(); ++i)
+        if (root_->priors[i] > root_->priors[best_prior]) best_prior = i;
+      action = root_->actions[best_prior];
+    }
+    result.set("action", action); result.set("actions", actions); result.set("visits", visits);
+    result.set("simulations", static_cast<unsigned>(completed_)); result.set("evaluations", static_cast<unsigned>(evaluations_));
+    result.set("root_visits", static_cast<double>(total)); result.set("terminal", root_->state.winner() != 0); result.set("winner", root_->state.winner());
+    return result;
+  }
+  std::shared_ptr<NativeNode> root_;
+  NativeForest forest_;
+  std::vector<float> features_;
+  size_t target_, completed_ = 0, evaluations_ = 0;
+  double cpuct_ = 1.5;
+  bool awaiting_ = false;
+};
+
 EMSCRIPTEN_BINDINGS(gipf_engine) {
   register_vector<int>("IntVector");
   class_<State>("State")
@@ -837,5 +970,14 @@ EMSCRIPTEN_BINDINGS(gipf_engine) {
   constant("CAPTURE_BASE", kCaptureBase);
   constant("CAPTURE_LINE_STRIDE", kCaptureStride);
   function("geometry", &wasm_geometry);
+  class_<BrowserSearch>("BrowserSearch")
+      .constructor<val>()
+      .constructor<val, int>()
+      .function("prepare", &BrowserSearch::prepare)
+      .function("features", &BrowserSearch::features)
+      .function("complete", &BrowserSearch::complete)
+      .function("step", &BrowserSearch::step)
+      .function("result", &BrowserSearch::result)
+      .function("done", &BrowserSearch::done);
 }
 #endif
