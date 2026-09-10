@@ -115,18 +115,21 @@ def duel_records(report_dir: Path, summary: dict[str, Any]) -> list[dict[str, An
         match = ATTEMPT_RE.search(report_name)
         if match:
             attempt = max(attempt, int(match.group(1)))
-        wins = int(raw.get("wins", summary_record.get("result", {}).get("wins", 0)) or 0)
-        losses = int(raw.get("losses", summary_record.get("result", {}).get("losses", 0)) or 0)
-        cutoffs = int(raw.get("cutoffs", summary_record.get("result", {}).get("cutoffs", 0)) or 0)
-        unfinished = int(raw.get("unfinished", summary_record.get("result", {}).get("unfinished", 0)) or 0)
+        result = summary_record.get("result") or {}
+        wins = int(raw.get("wins", result.get("wins", 0)) or 0)
+        losses = int(raw.get("losses", result.get("losses", 0)) or 0)
+        cutoffs = int(raw.get("cutoffs", result.get("cutoffs", 0)) or 0)
+        unfinished = int(raw.get("unfinished", result.get("unfinished", 0)) or 0)
         records.append({"left": left, "right": right, "mode": mode, "seed": infer_seed(summary_record, report_name),
                         "attempt": attempt, "wins": wins, "losses": losses, "cutoffs": cutoffs,
                         "unfinished": unfinished, "complete": bool(summary_record.get("complete", unfinished == 0)) and unfinished == 0,
                         "tie_break": attempt >= 3 or (attempt >= 3 and wins + losses + cutoffs == 80),
-                        "path": path, "report_name": report_name, "order": index})
+                        "path": path, "report_name": report_name, "order": index, "eligible": True})
 
     # Raw files are useful if a process died before its summary append.  They are
-    # included as incomplete/unknown metadata rather than silently discarded.
+    # retained for audit links, but cannot enter ranking without explicit summary
+    # pair/seed metadata (otherwise a continuation or unrelated report could be
+    # mistaken for a primary trial).
     for path in sorted(report_dir.glob("*.json")):
         if path.name in {"summary.json", "config.json"} or path.resolve() in referenced:
             continue
@@ -142,7 +145,7 @@ def duel_records(report_dir: Path, summary: dict[str, Any]) -> list[dict[str, An
                         "attempt": int((ATTEMPT_RE.search(path.name) or [1, 1])[1]),
                         "wins": int(raw.get("wins", 0) or 0), "losses": int(raw.get("losses", 0) or 0),
                         "cutoffs": int(raw.get("cutoffs", 0) or 0), "unfinished": int(raw.get("unfinished", 0) or 0),
-                        "complete": int(raw.get("unfinished", 0) or 0) == 0, "tie_break": False,
+                        "complete": False, "tie_break": False, "eligible": False,
                         "path": path, "report_name": path.name, "order": 10_000})
     return records
 
@@ -151,7 +154,7 @@ def primary_records(records: list[dict[str, Any]], mode: str) -> list[dict[str, 
     """Choose the last complete retry for each unordered pair/mode/seed."""
     groups: dict[tuple[str, str, int | None], list[dict[str, Any]]] = {}
     for record in records:
-        if record["mode"] != mode or record["tie_break"]:
+        if record["mode"] != mode or record["tie_break"] or not record.get("eligible", True):
             continue
         pair = tuple(sorted((record["left"], record["right"])))
         groups.setdefault((*pair, record["seed"]), []).append(record)
@@ -213,6 +216,19 @@ def training_rows(summary: dict[str, Any], report_dir: Path, run_root: Path) -> 
         run = ROOT / run_value if run_value else run_root / str(entry.get("name", ""))
         config = read_json(run / "config.json")
         metrics = read_metrics(run / "metrics.jsonl")
+        # Continuation appends to the same metrics file.  The controlled
+        # architecture trial ends at checkpoint_frozen; never report later
+        # continuation games/updates as part of its 600-second training row.
+        freeze_time = None
+        heartbeat = run_root / "heartbeat.jsonl"
+        for event in read_metrics(heartbeat):
+            if event.get("event") == "checkpoint_frozen" and event.get("name") == entry.get("name", run.name):
+                try:
+                    freeze_time = float(event["time"])
+                except (KeyError, TypeError, ValueError):
+                    pass
+        if freeze_time is not None:
+            metrics = [row for row in metrics if float(row.get("time", 0) or 0) <= freeze_time]
         start = next((row for row in metrics if row.get("event") == "start"), {})
         last = metrics[-1] if metrics else {}
         effective = config.get("effective_model") or config
