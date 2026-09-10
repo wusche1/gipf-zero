@@ -1,0 +1,16 @@
+{
+  "browser": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/151.0.7922.34 Safari/537.36",
+  "results": {
+    "wasm": {
+      "model": "GIPF Zero \u2014 43,869 games",
+      "adapter": null,
+      "inferenceMedianMs": 0.7000007629394531,
+      "searchMs": 87.4000015258789,
+      "simulations": 128,
+      "action": 34
+    },
+    "webgpu": {
+      "unavailable": "No WebGPU adapter is available."
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "url": "https://wusche1.github.io/gipf-zero/",
+  "external_requests": [
+    "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap",
+    "https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+  ],
+  "errors": [],
+  "checks": [
+    "cold public AI reply",
+    "undo",
+    "benchmark navigation",
+    "offline reload and AI reply"
+  ],
+  "ai_status": "GIPF Zero \u2014 43,869 games ready",
+  "tested_revision": "77e1119c843d64ac0ebb357207b39b0933e4820e",
+  "tested_at_utc": "2026-09-10T07:27:23.541160+00:00",
+  "legacy_api_and_tunnel": "STOPPED throughout public test",
+  "all_non_pages_origins": "blocked"
+}

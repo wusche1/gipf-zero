@@ -95,3 +95,19 @@ check their actual browser. [GPU diagnostic evidence](browser-webgpu-diagnosis.j
 
 The repository retains the native training pipeline for reproducibility. All
 training processes were stopped; browser inference does not consume OpenAI credits.
+
+## Public deployment verification
+
+The public Pages deployment at revision `77e1119` was tested after stopping both
+`gipf_api` and its public tunnel. A fresh Chromium context loaded the actual public
+site with every non-Pages origin blocked, played a human move and a champion reply,
+and undid the turn. The same context then switched completely offline, reloaded
+the benchmark page and game, and played another AI reply. No page errors occurred.
+Only optional Google Fonts requests were blocked; no inference endpoint was used.
+[Public test evidence](browser-public-deployment.json).
+
+Offline play requires first loading the AI while online and browser cache storage
+remaining available. A brand-new visitor still needs internet access to GitHub
+Pages to download the application and model. The GPU instance is unnecessary in
+both cases. All 89 local tests passed, including native rules/search and real
+browser AI, cancellation, retry, and versioned offline-cache checks.
