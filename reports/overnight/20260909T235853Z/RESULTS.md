@@ -1,8 +1,6 @@
 # Overnight evaluation — `20260909T235853Z`
 
-**Status:** `partial`
-
-> This experiment is incomplete or still running. Missing matches are shown as unplayed; no winner is inferred from partial coverage.
+**Status:** `partial` (training/evaluation complete; publication recovered)
 
 ## Protocol
 
@@ -94,9 +92,12 @@ These intermediate continuation snapshots are included for audit. They do not by
 
 ## Promotion and publication
 
+> Training/evaluation complete; publication recovered. The raw runner status and errors are retained below for audit.
+- Raw runner errors: huggingface-upload exited 1; github-push exited 128
 - Promotion gate: `False`.
 - `duel_report`: [final-vs-served.json](final-vs-served.json)
 - Hugging Face: [wuschelschulz/gipf-zero](https://huggingface.co/wuschelschulz/gipf-zero)
+- Publication recovery receipt: [publication-recovery.json](publication-recovery.json) (`event=complete`).
 
 ## Raw duel reports
 
