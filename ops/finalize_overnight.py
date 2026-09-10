@@ -51,6 +51,7 @@ def served_metadata():
 def model_card(metadata):
  return ("# GIPF Zero checkpoint\n\n"
          "Custom PyTorch `state_dict` checkpoint for the [GIPF Zero source](https://github.com/wusche1/gipf-zero). Load it with `training.model.load_model`.\n\n"
+         f"Published public opponent: **{metadata.get('name','GIPF Zero')}**, trained for **{metadata.get('games_trained','unknown')} self-play games**. Architecture: `{json.dumps(metadata.get('architecture',{}),sort_keys=True)}`.\n\n"
          f"Source training checkpoint SHA-256: `{metadata.get('source_checkpoint_sha256','unknown')}`.\n\n"
          f"Served `champion.pt` artifact SHA-256: `{metadata.get('served_artifact_sha256','unknown')}`.\n\n"
          "`RESULTS.md` documents the controlled overnight comparison of MLP, square-CNN, hex-CNN, and query-Transformer policies, plus its separately labelled continuation evaluations. These automated results are not a human or expert rating.\n")

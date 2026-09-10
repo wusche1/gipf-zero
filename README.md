@@ -19,17 +19,29 @@ and equal 50 ms decision budgets. [Raw reports and conditions](reports/RESULTS.m
 include checkpoint hashes, seeds, actual search measurements, and confidence
 intervals.
 
-## Current experiment
+## Overnight comparison and final model
 
-The original selected CNN is the current learned opponent. A separate,
-fresh-start architecture comparison is running as a follow-up without a
-promotion path; its results are pending. Earlier pilot architecture results used
-different allocations or backend revisions and are not used as architecture
-evidence. Published results distinguish wins, losses, and game-length cutoffs.
-Beating random is a smoke test, not evidence of expert play.
+The follow-up compared MLP256, square CNN32, hex CNN32, and two query
+transformers (256-wide/two-layer and 164-wide/five-layer), with two seeds and
+600 seconds of dedicated training per seed. All 20 equal-CPU and 20
+fixed-simulation pair/seed comparisons completed, including three bounded
+fixed-simulation retries.
 
-The website serves a learned self-play checkpoint. Local two-player mode runs
-entirely in your browser; remote AI requires the inference host to remain online.
+Square CNN led the primary round robin with 80 wins in 96 games; hex CNN had
+74. Their extra direct match was 42–38 for square, an inconclusive result.
+The predeclared search-throughput tie rule selected hex for continued training.
+It reached **93,916 games**, then scored **38–42** against the existing champion
+with no cutoffs. It did not qualify for promotion, so the **43,869-game square
+CNN remains the public model**. The query transformers underperformed under
+these budgets; the different output heads mean this is not a pure architecture
+ablation.
+
+[Full comparison, uncertainty, and raw results](reports/overnight/20260909T235853Z/RESULTS.md)
+· [Download the verified public model and comparison checkpoints](https://huggingface.co/wuschelschulz/gipf-zero)
+
+The website supports local two-player play entirely in your browser. Remote AI
+requires the inference host to remain online. Automated wins against these
+opponents do not establish a human or expert rating.
 
 ## Run locally
 

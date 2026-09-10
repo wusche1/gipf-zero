@@ -1,0 +1,26 @@
+{
+  "time": 1789018647.126273,
+  "event": "complete",
+  "summary": "reports/overnight/20260909T235853Z/summary.json",
+  "hf_repo": "wuschelschulz/gipf-zero",
+  "report": "reports/overnight/20260909T235853Z/RESULTS.md",
+  "continuation_reports": [
+    "reports/overnight/20260909T235853Z/league-024737-duel.json",
+    "reports/overnight/20260909T235853Z/league-032337-duel.json",
+    "reports/overnight/20260909T235853Z/league-035932-duel.json",
+    "reports/overnight/20260909T235853Z/league-043512-duel.json"
+  ],
+  "recovery_reason": "Supervisor environment lacked working publication credentials. Reran bounded finalizer in authenticated interactive environment.",
+  "github_commit": "2379f2e",
+  "preserves_original_runner_errors": true,
+  "hf_verification": {
+    "revision": "55e998f5dde0c66ff6ca77eed73ba32fd797b068",
+    "served_artifact_sha256": "d5a7e3bda2966a79d22cf34f131976907260e679683d0e2680d935312f41c2f6",
+    "bytes": 4663985,
+    "download_hash_matches": true,
+    "cpu_load_and_finite_forward": true,
+    "comparison_checkpoints": 10,
+    "finalist_checkpoints": 1
+  },
+  "github_release": "https://github.com/wusche1/gipf-zero/releases/tag/overnight-20260909T235853Z"
+}

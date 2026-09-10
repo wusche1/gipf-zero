@@ -18,13 +18,21 @@
   },
   "games": 93916,
   "iteration": 2873,
-  "evaluation_pending": true,
+  "evaluation_pending": false,
   "evaluation_report": "reports/overnight/20260909T235853Z/final-vs-served.json",
-  "interpretation": "Frozen final training checkpoint only; evaluation and promotion were pending when this receipt was created. It is not claimed as strongest or served champion.",
+  "interpretation": "Preserved final training checkpoint; completed evaluation did not pass promotion. The separately published champion.pt remains served.",
   "upload_protocol": {
     "per_process_timeout_seconds": 180,
     "maximum_retries": 1,
     "network_upload_attempts": 1
   },
-  "repository_commit": "8682c0c683117b697b3f1c36ff63008acf3295b8"
+  "repository_commit": "8682c0c683117b697b3f1c36ff63008acf3295b8",
+  "final_evaluation": {
+    "wins": 38,
+    "losses": 42,
+    "cutoffs": 0,
+    "unfinished": 0,
+    "promotion_passed": false,
+    "report": "final-vs-served.json"
+  }
 }

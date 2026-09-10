@@ -101,7 +101,7 @@ def status():
     if p.exists():
         try:report=json.loads(p.read_text())
         except ValueError:pass
-    return {'ok':True,'game':'standard-gipf','model':report or {'name':'MCTS baseline','kind':'baseline'},'training_deadline':'2026-09-09T22:00:00Z'}
+    return {'ok':True,'game':'standard-gipf','model':report or {'name':'MCTS baseline','kind':'baseline'},'training_deadline':'2026-09-10T05:30:00Z'}
 
 @app.post('/api/move')
 async def move(body:MoveRequest,request:Request):
