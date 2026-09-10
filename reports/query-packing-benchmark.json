@@ -1,0 +1,61 @@
+{
+  "recorded_at": "2026-09-09",
+  "command": "PYTHONPATH=/workspace/gipf /venv/main/bin/python benchmarks/benchmark_query_packing.py --device <cpu|cuda>",
+  "model": {
+    "kind": "transformer",
+    "width": 64,
+    "blocks": 2,
+    "checkpoint": null,
+    "initialization": "random"
+  },
+  "state_cycle": [
+    "initial push state",
+    "synthetic white capture: four singles, own double, opponent double",
+    "synthetic black capture: four singles, own double, opponent double",
+    "initial push state"
+  ],
+  "method": {
+    "packed": "one base pass, one pass for all capture rows, one pass for all double-prefix boards",
+    "reference": "base pass plus per-state/per-depth capture query passes",
+    "warmup": {"cpu": 2, "cuda": 3},
+    "repeats": 5,
+    "cpu_threads": 1,
+    "synchronization": "CUDA synchronized before and after each timing"
+  },
+  "correctness": {
+    "reference_policy_and_value_close": true,
+    "cpu_rtol": 0.00001,
+    "cpu_atol": 0.000001,
+    "cuda_rtol": 0.00002,
+    "cuda_atol": 0.000002,
+    "gradient_equivalence": "covered by tests/test_query_transformer.py"
+  },
+  "results": {
+    "cpu": {
+      "batch": 32,
+      "packed_seconds": [0.03981993347406387, 0.042837075889110565, 0.041704654693603516, 0.038091015070676804, 0.04855920001864433],
+      "reference_seconds": [0.07992670312523842, 0.07937150448560715, 0.0796489492058754, 0.08245286718010902, 0.0823880173265934],
+      "packed_median_seconds": 0.041704654693603516,
+      "reference_median_seconds": 0.07992670312523842,
+      "speedup": 1.9164935835686763
+    },
+    "cuda": [
+      {
+        "batch": 64,
+        "packed_seconds": [0.02022436633706093, 0.02234046906232834, 0.022374019026756287, 0.022069264203310013, 0.02048160880804062],
+        "reference_seconds": [0.0959528349339962, 0.09616341814398766, 0.09756329283118248, 0.09548138082027435, 0.11228622496128082],
+        "packed_median_seconds": 0.022069264203310013,
+        "reference_median_seconds": 0.09616341814398766,
+        "speedup": 4.357345911404005
+      },
+      {
+        "batch": 256,
+        "packed_seconds": [0.0734538622200489, 0.08071708679199219, 0.0893971361219883, 0.07897039502859116, 0.07994735613465309],
+        "reference_seconds": [0.4061273820698261, 0.4280754253268242, 0.4003228321671486, 0.41025110706686974, 0.40897366777062416],
+        "packed_median_seconds": 0.07994735613465309,
+        "reference_median_seconds": 0.40897366777062416,
+        "speedup": 5.115537117722833
+      }
+    ]
+  }
+}
