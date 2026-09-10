@@ -1,0 +1,35 @@
+{
+  "backend_revision": {
+    "gipf_engine.cpython-312-x86_64-linux-gnu.so": "c0c66af56038ea3277ff93d3511adaedf38d5927b832b675d8ae429360e6979b",
+    "training/model.py": "1130a6f7e23524c04790adc702b8ecc7a9d92008bb354a398f377735b379dd71",
+    "training/native_search.py": "88beacc193f1fcfae082e46d93b3e1c8ca5edf76bf99c2c6298bd3d6cbe359f0",
+    "training/query_transformer.py": "9ff230547d8a0f9fd393fe05414a496724b3c514f76839a8f4c956e941f70385",
+    "training/search.py": "54587d2fde6bc62a671d9ff22ca2681f6fff521bbc5ed439c9cdd2b9c1786664",
+    "training/train.py": "8cbb2ed0b29d35c5101b6d9882cc2e83dc919277a32816b322a059abf97bd648"
+  },
+  "continuation": null,
+  "deadline": 1789020000.0,
+  "duels": [],
+  "errors": [
+    {
+      "label": "train-mlp256-seed410101-attempt1",
+      "message": "train-mlp256-seed410101-attempt1 timed out",
+      "type": "TimeoutError"
+    },
+    {
+      "label": "train",
+      "message": "[Errno 32] Broken pipe",
+      "type": "BrokenPipeError"
+    }
+  ],
+  "promotion": null,
+  "publication": null,
+  "ranking": null,
+  "status": "superseded",
+  "tag": "20260909T235548Z",
+  "training": [],
+  "training_stop": 1789018200.0,
+  "version": "overnight-v1",
+  "stop_reason": "Restarted before any completed candidate to require complete equal-CPU round-robin coverage",
+  "stopped_epoch": 1788998331.5529065
+}
