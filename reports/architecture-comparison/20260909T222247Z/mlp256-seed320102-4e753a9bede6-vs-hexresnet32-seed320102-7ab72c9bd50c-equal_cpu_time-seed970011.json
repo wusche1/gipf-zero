@@ -1,0 +1,144 @@
+{
+  "candidate": "/workspace/gipf/checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6.pt",
+  "champion": "/workspace/gipf/checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320102-7ab72c9bd50c.pt",
+  "hashes": [
+    "4e753a9bede68350600a6c855a77a2a83c40146401787260ad438d728f59e2cb",
+    "7ab72c9bd50cea27aa31b97bf876927e9f2fefb1752616f256c6f39332464323"
+  ],
+  "models": [
+    {
+      "games": 9846,
+      "iteration": 304,
+      "config": {
+        "kind": "mlp",
+        "width": 256,
+        "blocks": 2,
+        "head": "flat"
+      }
+    },
+    {
+      "games": 5818,
+      "iteration": 180,
+      "config": {
+        "kind": "hexresnet",
+        "width": 32,
+        "blocks": 2,
+        "head": "flat"
+      }
+    }
+  ],
+  "wins": 1,
+  "losses": 7,
+  "cutoffs": 0,
+  "unfinished": 0,
+  "win_rate_decisive": 0.125,
+  "wilson_95_decisive": [
+    0.02241749145005667,
+    0.47088818221285345
+  ],
+  "candidate_root_simulations": {
+    "count": 278,
+    "mean": 267.9712230215827,
+    "min": 123,
+    "max": 10000
+  },
+  "champion_root_simulations": {
+    "count": 283,
+    "mean": 501.86925795053,
+    "min": 38,
+    "max": 10000
+  },
+  "candidate_search_seconds": {
+    "count": 278,
+    "mean": 0.050113944162567745,
+    "min": 0.03667834773659706,
+    "max": 0.052571073174476624
+  },
+  "champion_search_seconds": {
+    "count": 283,
+    "mean": 0.050085588197088915,
+    "min": 0.03000504896044731,
+    "max": 0.05976760759949684
+  },
+  "elapsed_seconds": 28.173125971108675,
+  "config": {
+    "candidate": "/workspace/gipf/checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6.pt",
+    "champion": "/workspace/gipf/checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320102-7ab72c9bd50c.pt",
+    "games": 8,
+    "batch": 1,
+    "simulations": 10000,
+    "seed": 970011,
+    "max_ply": 300,
+    "seconds": 90,
+    "output": "/workspace/gipf/reports/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6-vs-hexresnet32-seed320102-7ab72c9bd50c-equal_cpu_time-seed970011.json",
+    "device": "cpu",
+    "threads": 1,
+    "budget_ms": 50.0
+  },
+  "records": [
+    {
+      "game": 0,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 56
+    },
+    {
+      "game": 1,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 25
+    },
+    {
+      "game": 2,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 64
+    },
+    {
+      "game": 3,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 71
+    },
+    {
+      "game": 4,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 66
+    },
+    {
+      "game": 5,
+      "candidate_color": -1,
+      "winner": -1,
+      "outcome": "win",
+      "cutoff_reason": null,
+      "ply": 78
+    },
+    {
+      "game": 6,
+      "candidate_color": 1,
+      "winner": -1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 34
+    },
+    {
+      "game": 7,
+      "candidate_color": -1,
+      "winner": 1,
+      "outcome": "loss",
+      "cutoff_reason": null,
+      "ply": 97
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{"time": 1788995680.283496, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995710.2846267, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995740.2859766, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995770.2877355, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995800.288689, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995830.2893093, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995860.2899919, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995890.2907364, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995920.2914479, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995950.292089, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788995980.2929218, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996010.2938135, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996040.2946663, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996070.2953303, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996100.2959578, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996130.2966042, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996160.297449, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996190.2982342, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996220.2991302, "event": "waiting_for_isolated_gpu", "training": 5, "duels": 0}
+{"time": 1788996250.299811, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996280.3004787, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996310.301196, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996340.3020127, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996370.302837, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996400.3036647, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996430.3045948, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996460.3054962, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996490.3063962, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996520.3073034, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996550.307921, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996580.308579, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996610.3094492, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996640.3102713, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996670.3110042, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996700.31171, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996730.3161771, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996760.3170247, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996790.317848, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996820.318777, "event": "waiting_for_isolated_gpu", "training": 6, "duels": 0}
+{"time": 1788996850.319696, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788996880.3206322, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788996910.3214896, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788996940.322391, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788996970.3232627, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997000.3239458, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997030.3247137, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997060.3256657, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997090.326893, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997120.3280528, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997150.3292072, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997180.3300552, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997210.3308816, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997237.5130126, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997267.5138342, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997297.5146954, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997327.5154824, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997357.5161455, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997387.5167854, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997417.5175507, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997447.51817, "event": "waiting_for_isolated_gpu", "training": 7, "duels": 0}
+{"time": 1788997477.5190618, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 1}
+{"time": 1788997507.5201416, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 1}
+{"time": 1788997537.5211606, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 3}
+{"time": 1788997567.5219157, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 3}
+{"time": 1788997597.5225885, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 5}
+{"time": 1788997627.5232573, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 5}
+{"time": 1788997657.5239463, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 7}
+{"time": 1788997687.524718, "event": "waiting_for_isolated_gpu", "training": 8, "duels": 8}
+{"time": 1788997717.5273287, "event": "child_running", "label": "query-apply-check"}
+{"time": 1788997727.5279567, "event": "child_complete", "label": "query-apply-check"}
+{"time": 1788997727.530567, "event": "child_running", "label": "query-apply"}
+{"time": 1788997737.5309136, "event": "child_complete", "label": "query-apply"}
+{"time": 1788997737.5329828, "event": "child_running", "label": "apply-check"}
+{"time": 1788997747.5333648, "event": "child_complete", "label": "apply-check"}
+{"time": 1788997747.5358114, "event": "child_running", "label": "apply"}
+{"time": 1788997757.536184, "event": "child_complete", "label": "apply"}
+{"time": 1788997757.5382154, "event": "child_running", "label": "benchmark"}
+{"time": 1788997767.5387433, "event": "child_complete", "label": "benchmark"}
+{"time": 1788997767.541201, "event": "child_running", "label": "training-smoke"}
+{"time": 1788997777.5414672, "event": "child_running", "label": "training-smoke"}
+{"time": 1788997787.541843, "event": "child_running", "label": "training-smoke"}
+{"time": 1788997797.5423176, "event": "child_running", "label": "training-smoke"}
+{"time": 1788997807.5430472, "event": "child_complete", "label": "training-smoke"}
+{"time": 1788997807.543639, "event": "complete", "benchmark_speedup": 0.561187331961924, "smoke_games": 485, "smoke_updates": 14}

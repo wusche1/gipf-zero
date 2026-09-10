@@ -1,0 +1,207 @@
+{
+  "backend_revision": {
+    "gipf_engine.cpython-312-x86_64-linux-gnu.so": "c0c66af56038ea3277ff93d3511adaedf38d5927b832b675d8ae429360e6979b",
+    "training/native_search.py": "88beacc193f1fcfae082e46d93b3e1c8ca5edf76bf99c2c6298bd3d6cbe359f0",
+    "training/search.py": "54587d2fde6bc62a671d9ff22ca2681f6fff521bbc5ed439c9cdd2b9c1786664"
+  },
+  "deadline": 1789000067.0,
+  "duels": [
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/resnet32-seed320101-5374e8e4b522.pt",
+      "completed": true,
+      "mode": "equal_simulations",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8-vs-resnet32-seed320101-5374e8e4b522-equal_simulations-seed970000.json",
+      "result": {
+        "cutoffs": 0,
+        "losses": 5,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.13684428582359742,
+          0.6942576053973726
+        ],
+        "wins": 3
+      },
+      "seed": 970000
+    },
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/resnet32-seed320101-5374e8e4b522.pt",
+      "completed": true,
+      "mode": "equal_cpu_time",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8-vs-resnet32-seed320101-5374e8e4b522-equal_cpu_time-seed970001.json",
+      "result": {
+        "cutoffs": 0,
+        "losses": 3,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.3057423946026274,
+          0.8631557141764026
+        ],
+        "wins": 5
+      },
+      "seed": 970001
+    },
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/resnet32-seed320102-9b9f4cbc4f77.pt",
+      "completed": true,
+      "mode": "equal_simulations",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6-vs-resnet32-seed320102-9b9f4cbc4f77-equal_simulations-seed970010.json",
+      "result": {
+        "cutoffs": 2,
+        "losses": 4,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.09677141110578047,
+          0.700006684861608
+        ],
+        "wins": 2
+      },
+      "seed": 970010
+    },
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/resnet32-seed320102-9b9f4cbc4f77.pt",
+      "completed": true,
+      "mode": "equal_cpu_time",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6-vs-resnet32-seed320102-9b9f4cbc4f77-equal_cpu_time-seed970011.json",
+      "result": {
+        "cutoffs": 0,
+        "losses": 4,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.21521606221387762,
+          0.7847839377861223
+        ],
+        "wins": 4
+      },
+      "seed": 970011
+    },
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320101-a7f4960de480.pt",
+      "completed": true,
+      "mode": "equal_simulations",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8-vs-hexresnet32-seed320101-a7f4960de480-equal_simulations-seed970000.json",
+      "result": {
+        "cutoffs": 0,
+        "losses": 6,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.07147921275210906,
+          0.5907245696898311
+        ],
+        "wins": 2
+      },
+      "seed": 970000
+    },
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320101-a7f4960de480.pt",
+      "completed": true,
+      "mode": "equal_cpu_time",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8-vs-hexresnet32-seed320101-a7f4960de480-equal_cpu_time-seed970001.json",
+      "result": {
+        "cutoffs": 1,
+        "losses": 5,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.08221892400405678,
+          0.6410655481673806
+        ],
+        "wins": 2
+      },
+      "seed": 970001
+    },
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320102-7ab72c9bd50c.pt",
+      "completed": true,
+      "mode": "equal_simulations",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6-vs-hexresnet32-seed320102-7ab72c9bd50c-equal_simulations-seed970010.json",
+      "result": {
+        "cutoffs": 1,
+        "losses": 6,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.02567962434474355,
+          0.5131278292743188
+        ],
+        "wins": 1
+      },
+      "seed": 970010
+    },
+    {
+      "candidate": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6.pt",
+      "champion": "checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320102-7ab72c9bd50c.pt",
+      "completed": true,
+      "mode": "equal_cpu_time",
+      "report": "reports/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6-vs-hexresnet32-seed320102-7ab72c9bd50c-equal_cpu_time-seed970011.json",
+      "result": {
+        "cutoffs": 0,
+        "losses": 7,
+        "unfinished": 0,
+        "wilson_95_decisive": [
+          0.02241749145005667,
+          0.47088818221285345
+        ],
+        "wins": 1
+      },
+      "seed": 970011
+    }
+  ],
+  "errors": [],
+  "paths": {
+    "checkpoints": "checkpoints/architecture-comparison/20260909T222247Z",
+    "reports": "reports/architecture-comparison/20260909T222247Z",
+    "runs": "runs/architecture-comparison/20260909T222247Z"
+  },
+  "status": "superseded",
+  "tag": "20260909T222247Z",
+  "training": [
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320101-0336a24105b8.pt",
+      "completed": true,
+      "name": "mlp256-seed320101"
+    },
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/mlp256-seed320102-4e753a9bede6.pt",
+      "completed": true,
+      "name": "mlp256-seed320102"
+    },
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/resnet32-seed320101-5374e8e4b522.pt",
+      "completed": true,
+      "name": "resnet32-seed320101"
+    },
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/resnet32-seed320102-9b9f4cbc4f77.pt",
+      "completed": true,
+      "name": "resnet32-seed320102"
+    },
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320101-a7f4960de480.pt",
+      "completed": true,
+      "name": "hexresnet32-seed320101"
+    },
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/hexresnet32-seed320102-7ab72c9bd50c.pt",
+      "completed": true,
+      "name": "hexresnet32-seed320102"
+    },
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/transformer64-seed320101-7a4dc104cf87.pt",
+      "completed": true,
+      "name": "transformer64-seed320101"
+    },
+    {
+      "checkpoint": "checkpoints/architecture-comparison/20260909T222247Z/transformer64-seed320102-c79d34048640.pt",
+      "completed": true,
+      "name": "transformer64-seed320102"
+    }
+  ],
+  "version": "architecture-comparison-v1-native-forest",
+  "stop_reason": "User authorized discontinuing older comparison for five-model overnight experiment",
+  "stopped_epoch": 1788997690.0800633
+}

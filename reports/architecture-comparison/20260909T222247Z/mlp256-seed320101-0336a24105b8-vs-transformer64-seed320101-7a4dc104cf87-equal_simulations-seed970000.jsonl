@@ -1,0 +1,6 @@
+{"game": 1, "candidate_color": -1, "winner": -1, "outcome": "win", "cutoff_reason": null, "ply": 28}
+{"game": 5, "candidate_color": -1, "winner": -1, "outcome": "win", "cutoff_reason": null, "ply": 42}
+{"game": 3, "candidate_color": -1, "winner": 1, "outcome": "loss", "cutoff_reason": null, "ply": 59}
+{"game": 7, "candidate_color": -1, "winner": 1, "outcome": "loss", "cutoff_reason": null, "ply": 59}
+{"game": 0, "candidate_color": 1, "winner": 1, "outcome": "win", "cutoff_reason": null, "ply": 59}
+{"game": 6, "candidate_color": 1, "winner": 1, "outcome": "win", "cutoff_reason": null, "ply": 71}

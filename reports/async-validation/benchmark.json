@@ -1,0 +1,30 @@
+{
+  "model_config": {
+    "kind": "mlp",
+    "width": 256,
+    "blocks": 2,
+    "head": "flat"
+  },
+  "workers": 4,
+  "roots_per_worker": 32,
+  "simulations": 64,
+  "native_seconds": [
+    0.07695801183581352,
+    0.09689955413341522,
+    0.09344309195876122
+  ],
+  "async_seconds": [
+    0.16650962457060814,
+    0.11873481050133705,
+    0.21540432795882225
+  ],
+  "native_median": 0.09344309195876122,
+  "async_median": 0.16650962457060814,
+  "speedup": 0.561187331961924,
+  "exact_policy_identity": true,
+  "queue_batches": 213,
+  "mean_batch_fill": 118.30985915492958,
+  "max_batch_fill": 128,
+  "mean_queue_wait_ms": 1.4046410651644692,
+  "p95_queue_wait_ms": 2.3943521082401276
+}
