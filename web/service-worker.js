@@ -77,7 +77,7 @@ async function putBestEffort(cacheName, request, response) {
 
 async function cacheShell(cache) {
   try {
-    await cache.addAll([...SHELL_ASSETS, ...REVISIONED_SHELL_ASSETS]);
+    await cache.addAll([...new Set([...SHELL_ASSETS, ...REVISIONED_SHELL_ASSETS])]);
     // The Pages build adds a revision query to script/style/engine references.
     // Cache those exact URLs too; stable asset lookups intentionally do not
     // ignore query strings because model and export hashes are meaningful.

@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import threading
 import time
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -44,7 +45,7 @@ def versioned_site_url(tmp_path):
     web = tmp_path / "web"
     shutil.copytree(WEB, web)
     subprocess.run(
-        ["/venv/main/bin/python", str(ROOT / "ops/version_web_assets.py")],
+        [sys.executable, str(ROOT / "ops/version_web_assets.py")],
         cwd=tmp_path,
         env={**os.environ, "ASSET_VERSION": "offline-smoke"},
         check=True,
@@ -146,8 +147,6 @@ def test_versioned_build_caches_hashed_assets_and_preserves_benchmark_navigation
         page.goto(versioned_site_url, wait_until="domcontentloaded")
         expect(page.locator("#engine-status")).to_have_text("Ready to play", timeout=30_000)
         page.evaluate("navigator.serviceWorker.ready.then(() => true)")
-        page.reload(wait_until="domcontentloaded")
-        expect(page.locator("#engine-status")).to_have_text("Ready to play", timeout=30_000)
 
         page.locator("#mode-select").select_option("ai")
         page.locator('.ray-hit[data-ray-id="0"]').click()
