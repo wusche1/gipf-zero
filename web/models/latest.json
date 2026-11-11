@@ -3,14 +3,14 @@
   "format": "kernel",
   "path": "latest.bin",
   "arch": {
-    "width": 96,
-    "blocks": 6,
+    "width": 64,
+    "blocks": 4,
     "heads": 4,
-    "ff": 192,
+    "ff": 128,
     "relu": false,
     "int16": false
   },
-  "sha256": "5e657db8572ea969b4b595513f4d8234679f586a129c10905edf734ea61a1172",
+  "sha256": "81c1381ca743975d2801d23c966d59aa31fe6f39ff9f4b5190c77134eaee51a5",
   "cpuct": 1.0,
   "fpu": 0.1,
   "budgetsMs": {
