@@ -138,7 +138,7 @@ async function search(request, ponder) {
   // An explicit simulation count is an exact request: no time management.
   const exact = Number(request.simulations) || 0;
   const limit = Math.min(20000, exact || 10000);
-  let budget = ponder ? model.ponder.maxMs : Math.min(10000, Math.max(50, Number(request.budgetMs) || model.budgetsMs[request.level] || model.budgetsMs.normal));
+  let budget = ponder ? model.ponder.maxMs : exact ? Infinity : Math.min(10000, Math.max(50, Number(request.budgetMs) || model.budgetsMs[request.level] || model.budgetsMs.normal));
   // Capture choices continue a turn whose push was already searched.
   if (!ponder && !exact && request.state.phase === 'capture') budget /= 4;
   const forced = !ponder && !exact && tree.choices() === 1;

@@ -20,6 +20,7 @@ def test_real_browser_ai_works_with_only_static_origin(browser, site_url):
     page=context.new_page();page.set_default_timeout(30000)
     try:
         page.goto(site_url,wait_until='domcontentloaded')
+        page.locator('#engine-status').get_by_text('Ready to play').wait_for()
         page.locator('#mode-select').select_option('ai')
         page.locator('#difficulty').select_option('fast')
         page.locator('.ray-hit[data-ray-id="1"]').click()

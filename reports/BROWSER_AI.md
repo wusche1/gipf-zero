@@ -123,3 +123,15 @@ simulation figures above describe the earlier fixed-budget worker; see
 `web/README.md` for the current behaviour and the model swap commands.
 `tests/test_browser_persistent_search.py` covers reuse, pondering, time
 management, a model swap and complete games through the real worker.
+
+## In-engine transformer kernel — 11 November 2026
+
+The default opponent is now a `HexFormer` checkpoint evaluated by a WASM SIMD
+kernel inside the engine; search slices of about 15 ms run select, encode,
+forward, expand and backup without leaving WASM. ONNX Runtime is fetched only for
+the "Classic" champion. Measured in the real worker in headless Chromium on the
+shared 4-core host (width 96, 6 blocks, interleaved runs, medians): about 1,000
+evaluations/s on the kernel path against about 430 for the same network through
+ONNX Runtime Web. `tests/test_browser_search_wasm.py` checks the kernel search
+against the Python search driving the PyTorch model; see `web/README.md` for the
+swap command.

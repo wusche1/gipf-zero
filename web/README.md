@@ -7,11 +7,17 @@ Deleting the training instance does not affect the GitHub Pages deployment.
 Opening `index.html` via `file://` is not supported by browser worker/fetch rules.
 
 `game.js` adapts the authoritative C++ rules engine compiled to WebAssembly.
-`local-ai.js` starts `ai-worker.js` lazily. `config.json` names the model
-(`"model": "champion"`); the worker reads `models/<name>.json` for the ONNX file,
-its SHA-256, `cpuct`, `fpu` (negative = off), thinking budgets and ponder caps, and
-runs it with self-hosted ONNX Runtime Web. The native PUCT tree and actor-aware
-backups are also compiled to WASM. All inference uses one CPU thread so normal
+`local-ai.js` starts `ai-worker.js` lazily. `config.json` names the default model
+(`"model": "latest"`) and the earlier champion offered as "Classic" in the
+Opponent selector (`"classic": "champion"`, shown only while its metadata exists).
+The worker reads `models/<name>.json` for the model file, its SHA-256, `cpuct`,
+`fpu` (negative = off), thinking budgets and ponder caps. `"format": "kernel"`
+models are a flat float32 weight file plus an `arch` block (width, blocks, heads,
+ff, relu, int16); the transformer forward pass (`engine/former_infer.cpp`, WASM
+SIMD) is compiled into the engine and whole search slices run inside WASM
+(`BrowserSearch.think`). `"format": "onnx"` models run with self-hosted ONNX
+Runtime Web, which is downloaded only when such a model is selected. The native
+PUCT tree and actor-aware backups are also compiled to WASM. All inference uses one CPU thread so normal
 Pages hosting needs no cross-origin isolation headers. Search runs off the UI thread.
 
 The worker keeps one search tree alive. A request for a position below the
@@ -28,11 +34,18 @@ visit share are an optional overlay. Cancelling stops the search without
 discarding the worker; initialization and searches still have watchdogs, and a
 failed model download can be retried without discarding the game.
 
-To ship another network (same I/O contract):
+To ship another transformer checkpoint (any width/depth/heads/ffmul):
+
+    python -m ops.web_model NAME --checkpoint CKPT.pt --title "Shown name" --cpuct 1.5 --fpu -1
+    # then set "model": "NAME" in web/config.json
+
+This writes `models/NAME.bin` and, only after the WASM kernel reproduced the
+PyTorch logits and value on 16 random-play positions, `models/NAME.json`. Add
+`--int16` for the quantised kernel (about 1.4x faster, logits within ~5e-3).
+An ONNX network (same I/O contract) still works:
 
     python -m ops.export_onnx --checkpoint CKPT --tokens --output web/models/NAME.onnx
     python -m ops.web_model NAME --title "Shown name" --cpuct 1.5 --fpu -1
-    # then set "model": "NAME" in web/config.json
 
 `benchmark.html` measures inference and full search on the visitor's actual device.
 WebGPU is experimental: the worker verifies all 16 original reference positions
@@ -44,7 +57,7 @@ production default is the verified CPU/WASM path.
 - `ops/export_browser_model.py`: champion export, numerical parity, native benchmarks.
 - `benchmarks/browser_inference.py`: browser WASM/WebGPU inference and search timing.
 - `benchmarks/browser_play.py`: native search parity and complete browser games.
-- `engine/build_wasm.sh`: rules and native-tree search, compiled with SIMD.
+- `engine/build_wasm.sh`: rules, native-tree search and the transformer kernel, compiled with SIMD.
 - `ops/version_web_assets.py`: consistent cache versions for Pages deployment.
 
 Runtime files under `vendor/onnxruntime/` are pinned to `onnxruntime-web@1.29.0`.
