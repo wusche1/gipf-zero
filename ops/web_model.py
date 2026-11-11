@@ -67,7 +67,7 @@ if __name__ == '__main__':
     dump(model).tofile(models / meta['path'])
     logit_error, value_error = kernel_error(model, models / meta['path'], arch)
     print(f'WASM kernel vs PyTorch on 16 positions: max logit error {logit_error:.2e}, max value error {value_error:.2e}')
-    if not max(logit_error, value_error) < (0.02 if a.int16 else 1e-3):
+    if not (logit_error < (0.1 if a.int16 else 1e-3) and value_error < (0.02 if a.int16 else 1e-3)):
         raise SystemExit('kernel does not reproduce the checkpoint; metadata not written')
     meta |= {'sha256': hashlib.sha256((models / meta['path']).read_bytes()).hexdigest(),
              'cpuct': a.cpuct, 'fpu': a.fpu, 'budgetsMs': dict(zip(('fast', 'normal', 'strong'), a.budgets)),

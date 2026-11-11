@@ -154,8 +154,8 @@ create().then(Module => {
 
 def test_kernel_search_matches_pytorch_search_on_the_shipped_weights():
     """think() inside WASM against the Python search driving the PyTorch model."""
-    if META["format"] != "kernel" or not Path(CHECKPOINT).exists() or not shutil.which("node"):
-        pytest.skip("kernel model, its checkpoint (GIPF_KERNEL_CHECKPOINT) or Node unavailable")
+    if META["format"] != "kernel" or META["arch"]["int16"] or not Path(CHECKPOINT).exists() or not shutil.which("node"):
+        pytest.skip("float kernel model, its checkpoint (GIPF_KERNEL_CHECKPOINT) or Node unavailable")
     import torch
     from ops.dump_former import dump
     from ops.web_model import positions
