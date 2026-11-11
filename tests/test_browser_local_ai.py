@@ -14,7 +14,7 @@ def test_real_browser_ai_works_with_only_static_origin(browser, site_url):
     try:
         page.goto(site_url,wait_until='domcontentloaded')
         page.locator('#mode-select').select_option('ai')
-        page.locator('#difficulty').select_option('casual')
+        page.locator('#difficulty').select_option('fast')
         page.locator('.ray-hit[data-ray-id="1"]').click()
         page.wait_for_function("document.querySelector('#move-count').textContent === 'MOVE 02'")
         assert '43,869 games' in page.locator('#ai-status').text_content()
@@ -45,7 +45,7 @@ def test_model_download_retry_preserves_current_game(browser, site_url):
     try:
         page.goto(site_url,wait_until='domcontentloaded')
         page.locator('#mode-select').select_option('ai')
-        page.locator('#difficulty').select_option('casual')
+        page.locator('#difficulty').select_option('fast')
         page.locator('.ray-hit[data-ray-id="1"]').click()
         page.locator('#retry-ai').wait_for(state='visible')
         assert page.locator('#move-count').text_content()=='MOVE 01'

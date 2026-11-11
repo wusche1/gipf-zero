@@ -87,7 +87,7 @@ def browser(fixtures: list[dict]) -> tuple[dict, str]:
             if ready.get("error"): raise RuntimeError(ready["error"])
             rows = []
             for fixture in fixtures:
-                request = {"type": "search", "state": fixture["state"], "simulations": SIMULATIONS, "budgetMs": 10_000}
+                request = {"type": "search", "state": fixture["state"], "simulations": SIMULATIONS, "budgetMs": 10_000, "fresh": True}
                 page.evaluate("request => rpc(request)", request)  # excluded warm tree
                 samples = []; worker_elapsed = []; response = None
                 for _ in range(SAMPLES):

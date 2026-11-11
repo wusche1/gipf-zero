@@ -12,7 +12,7 @@ button.addEventListener('click',async()=>{
    try{
     const init=await rpc({type:'init',backend,modelVariant:backend==='webgpu'?'portable':'dynamic'});
     const inference=await rpc({type:'benchmark',features:fixture.encoded_input,repeats:30});
-    const search=await rpc({type:'search',state:fixture.state,simulations:128,budgetMs:10000});
+    const search=await rpc({type:'search',state:fixture.state,simulations:128,fresh:true});
     report.results[backend]={model:init.model,adapter:init.adapterInfo,inferenceMedianMs:inference.medianMs,searchMs:search.stats.elapsedMs,simulations:search.stats.simulations,action:search.action};
    }catch(error){report.results[backend]={unavailable:error.message};}
    finally{worker?.terminate();worker=null;output.textContent=JSON.stringify(report,null,2);}

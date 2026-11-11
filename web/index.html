@@ -48,6 +48,10 @@
             <div><span class="eyebrow">Round <span id="round-number">01</span></span><h1 id="phase-title">Place a piece</h1></div>
             <div class="phase-badge" id="phase-badge">Ivory to move</div>
           </div>
+          <div class="eval ai-only" id="eval">
+            <div class="eval-track" id="eval-track" role="meter" aria-label="Ivory win probability" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span id="eval-fill"></span></div>
+            <div class="eval-meta"><span id="eval-label">Even</span><span id="think-readout">Waiting for the first search</span></div>
+          </div>
           <div class="board-wrap">
             <div class="board-halo" aria-hidden="true"></div>
             <svg id="board" viewBox="0 0 800 800" role="img" aria-labelledby="board-title board-desc">
@@ -66,6 +70,7 @@
               <g id="grid-layer"></g>
               <g id="capture-layer" aria-hidden="true"></g>
               <g id="outer-layer" aria-hidden="true"></g>
+              <g id="hint-layer" aria-hidden="true"></g>
               <g id="piece-layer"></g>
               <g id="removal-layer" aria-hidden="true"></g>
               <g id="interaction-layer"></g>
@@ -91,7 +96,9 @@
             <div class="card-heading"><span class="eyebrow">Table</span><span class="mono-label" id="move-count">MOVE 00</span></div>
             <div class="control-row"><label for="mode-select">Mode</label><select id="mode-select"><option value="local">Local hotseat</option><option value="ai">Play the machine</option></select></div>
             <div class="control-row ai-only"><label for="ai-color">Machine plays</label><select id="ai-color"><option value="black">Obsidian</option><option value="white">Ivory</option></select></div>
-            <div class="control-row ai-only"><label for="difficulty">Tempo</label><select id="difficulty"><option value="casual">Casual · 0.5s</option><option value="focused" selected>Focused · 1.5s</option><option value="deep">Deep · 5s</option></select></div>
+            <div class="control-row ai-only"><label for="difficulty">Strength</label><select id="difficulty"><option value="fast">Fast</option><option value="normal" selected>Normal</option><option value="strong">Strong</option></select></div>
+            <div class="control-row ai-only"><label for="ponder">Think on your turn</label><input id="ponder" type="checkbox" checked /></div>
+            <div class="control-row ai-only"><label for="hints">Show candidate moves</label><input id="hints" type="checkbox" /></div>
             <div class="button-row"><button class="button button-primary" id="new-game" type="button">New game</button><button class="button button-quiet" id="undo" type="button" disabled>Undo</button></div>
             <button class="button button-quiet full" id="retry-ai" type="button" hidden>Retry AI</button>
           </section>

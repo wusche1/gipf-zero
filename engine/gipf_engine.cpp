@@ -14,6 +14,7 @@
 #include <cstdint>
 #include <limits>
 #include <memory>
+#include <numeric>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -473,15 +474,19 @@ struct NativeNode {
     finish_expand(state.legal_actions(), logits, logits_size, false);
   }
 
-  size_t select(double cpuct) const {
+  size_t select(double cpuct, double fpu = -1.0) const {
     int64_t total = 0;
-    for (int32_t visit : visits) total += visit;
+    double sum = 0.0, mass = 0.0;
+    for (size_t i = 0; i < actions.size(); ++i) {
+      total += visits[i]; sum += values[i];
+      if (visits[i]) mass += priors[i];
+    }
+    const double unvisited = fpu < 0.0 || total == 0 ? 0.0 : sum / static_cast<double>(total) - fpu * std::sqrt(mass);
     const double sqrt_total = std::sqrt(1.0 + static_cast<double>(total));
     size_t best = 0;
-    double best_score = (visits[0] == 0 ? 0.0 : values[0] / static_cast<double>(visits[0])) +
-        (cpuct * priors[0]) * sqrt_total / (1.0 + static_cast<double>(visits[0]));
-    for (size_t i = 1; i < actions.size(); ++i) {
-      const double score = (visits[i] == 0 ? 0.0 : values[i] / static_cast<double>(visits[i])) +
+    double best_score = -std::numeric_limits<double>::infinity();
+    for (size_t i = 0; i < actions.size(); ++i) {
+      const double score = (visits[i] == 0 ? unvisited : values[i] / static_cast<double>(visits[i])) +
           (cpuct * priors[i]) * sqrt_total / (1.0 + static_cast<double>(visits[i]));
       if (score > best_score) { best = i; best_score = score; }
     }
@@ -590,6 +595,7 @@ class NativeForest {
   }
 
   size_t pending_count() const { return pending_.size(); }
+  void set_fpu(double fpu) { fpu_ = fpu; }
 
 #ifndef GIPF_WASM
   py::array_t<float> encode_pending() const {
@@ -638,7 +644,7 @@ class NativeForest {
         if (node->state.winner() != 0 || node->expanded) continue;
       } else {
         while (node->expanded && node->state.winner() == 0) {
-          const size_t choice = node->select(cpuct);
+          const size_t choice = node->select(cpuct, fpu_);
           path.push_back({node, choice});
           node = node->child(choice);
         }
@@ -667,6 +673,7 @@ class NativeForest {
   }
   std::vector<std::shared_ptr<NativeNode>> roots_;
   std::vector<NativePending> pending_;
+  double fpu_ = -1.0;
 };
 
 }  // namespace
@@ -709,6 +716,7 @@ PYBIND11_MODULE(gipf_engine, m) {
       .def("expand_unexpanded_root_pending", &NativeForest::expand_unexpanded_root_pending)
       .def("select_leaves", &NativeForest::select_leaves, py::arg("cpuct"))
       .def("select_pending", &NativeForest::select_pending, py::arg("cpuct"))
+      .def("set_fpu", &NativeForest::set_fpu)
       .def("encode_pending", &NativeForest::encode_pending)
       .def("pending_action_indices", &NativeForest::pending_action_indices)
       .def("finish", &NativeForest::finish, py::arg("logits"), py::arg("values"))
@@ -863,6 +871,8 @@ val wasm_geometry() {
 // exactly one pending leaf at a time.  The Float32Array view returned by
 // prepare() is valid until the following step()/delete(); callers should feed
 // it to ONNX immediately rather than retaining it across engine calls.
+// The tree persists: reroot() moves the root onto an already-searched
+// descendant so its statistics carry over to the next decision.
 class BrowserSearch {
  public:
   // The one-argument browser API is deliberately unbounded: the worker owns
@@ -871,6 +881,18 @@ class BrowserSearch {
   BrowserSearch(const emscripten::val& state, int simulations)
       : root_(std::make_shared<NativeNode>(decode(state))), forest_({root_}), target_(simulations) {
     if (simulations < 0) throw std::invalid_argument("simulations must be non-negative");
+  }
+
+  void set_fpu(double fpu) { fpu_ = fpu; forest_.set_fpu(fpu); }
+
+  bool reroot(const emscripten::val& state) {
+    const State target = decode(state);
+    const int ahead = target.ply() - root_->state.ply();
+    std::shared_ptr<NativeNode> node = ahead < 0 || ahead > 2 ? nullptr : find(root_, target);
+    if (!node) return false;
+    root_ = node; forest_ = NativeForest({root_}); forest_.set_fpu(fpu_);
+    awaiting_ = false; completed_ = 0; evaluations_ = 0;
+    return true;
   }
 
   bool prepare() {
@@ -917,16 +939,42 @@ class BrowserSearch {
 
   emscripten::val result() const { return result_data(); }
   bool done() const { return !awaiting_ && (completed_ >= target_ || root_->state.winner() != 0); }
+  int choices() const { return static_cast<int>(root_->actions.size()); }
+  double root_visits() const { return static_cast<double>(std::accumulate(root_->visits.begin(), root_->visits.end(), int64_t{0})); }
+  // Visits by which the most-visited root action leads the runner-up.
+  int margin() const {
+    int32_t first = 0, second = 0;
+    for (int32_t count : root_->visits) {
+      if (count > first) { second = first; first = count; }
+      else if (count > second) second = count;
+    }
+    return first - second;
+  }
 
  private:
   static State decode(const emscripten::val& value) {
     return value.typeOf().as<std::string>() == "string" ? State::from_json(value.as<std::string>()) : State::from_value(value);
   }
+  static bool same(const State& a, const State& b) {
+    return a.ply() == b.ply() && a.current_player() == b.current_player() && a.turn_player() == b.turn_player() &&
+           a.winner() == b.winner() && a.phase() == b.phase() && a.board() == b.board() &&
+           a.reserves() == b.reserves() && a.captured() == b.captured();
+  }
+  static std::shared_ptr<NativeNode> find(const std::shared_ptr<NativeNode>& node, const State& target) {
+    if (node->state.ply() > target.ply()) return nullptr;
+    if (same(node->state, target)) return node;
+    for (const auto& child : node->children)
+      if (child)
+        if (auto found = find(child, target)) return found;
+    return nullptr;
+  }
   emscripten::val result_data() const {
-    emscripten::val result = emscripten::val::object(), visits = emscripten::val::array(), actions = emscripten::val::array();
-    int action = -1; int32_t best = -1; int64_t total = 0;
+    emscripten::val result = emscripten::val::object(), visits = emscripten::val::array(), actions = emscripten::val::array(),
+                    q = emscripten::val::array(), pv = emscripten::val::array();
+    int action = -1; int32_t best = -1; int64_t total = 0; double sum = 0.0;
     for (size_t i = 0; i < root_->actions.size(); ++i) {
       const int32_t count = root_->visits[i]; actions.call<void>("push", root_->actions[i]); visits.call<void>("push", count); total += count;
+      sum += root_->values[i]; q.call<void>("push", count ? root_->values[i] / count : 0.0);
       if (count > best) { best = count; action = root_->actions[i]; }
     }
     // Before any completed root simulation, expose the policy action rather
@@ -937,7 +985,16 @@ class BrowserSearch {
         if (root_->priors[i] > root_->priors[best_prior]) best_prior = i;
       action = root_->actions[best_prior];
     }
-    result.set("action", action); result.set("actions", actions); result.set("visits", visits);
+    for (const NativeNode* node = root_.get(); node && node->expanded;) {
+      const size_t i = std::max_element(node->visits.begin(), node->visits.end()) - node->visits.begin();
+      if (node->visits[i] == 0) break;
+      pv.call<void>("push", node->actions[i]);
+      node = node->children[i].get();
+    }
+    // Mean backed-up value for the player deciding at the root, and for White.
+    const double value = total ? sum / static_cast<double>(total) : 0.0;
+    result.set("action", action); result.set("actions", actions); result.set("visits", visits); result.set("q", q); result.set("pv", pv);
+    result.set("value", value); result.set("white_value", value * root_->actor); result.set("actor", root_->actor);
     result.set("simulations", static_cast<unsigned>(completed_)); result.set("evaluations", static_cast<unsigned>(evaluations_));
     result.set("root_visits", static_cast<double>(total)); result.set("terminal", root_->state.winner() != 0); result.set("winner", root_->state.winner());
     return result;
@@ -946,7 +1003,7 @@ class BrowserSearch {
   NativeForest forest_;
   std::vector<float> features_;
   size_t target_, completed_ = 0, evaluations_ = 0;
-  double cpuct_ = 1.5;
+  double cpuct_ = 1.5, fpu_ = -1.0;
   bool awaiting_ = false;
 };
 
@@ -978,6 +1035,11 @@ EMSCRIPTEN_BINDINGS(gipf_engine) {
       .function("complete", &BrowserSearch::complete)
       .function("step", &BrowserSearch::step)
       .function("result", &BrowserSearch::result)
-      .function("done", &BrowserSearch::done);
+      .function("done", &BrowserSearch::done)
+      .function("set_fpu", &BrowserSearch::set_fpu)
+      .function("reroot", &BrowserSearch::reroot)
+      .function("choices", &BrowserSearch::choices)
+      .function("root_visits", &BrowserSearch::root_visits)
+      .function("margin", &BrowserSearch::margin);
 }
 #endif

@@ -21,3 +21,5 @@ ops/deadline-reached.json
 ops/endpoint-push-pending.json
 
 *.stdout
+ssh_*.json
+HEARTBEAT.md

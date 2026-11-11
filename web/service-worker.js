@@ -42,7 +42,7 @@ const REVISIONED_SHELL_ASSETS = REVISION_QUERY ? [
 const sameOrigin = (request) => new URL(request.url).origin === self.location.origin;
 const isNavigation = (request) => request.mode === 'navigate' || request.destination === 'document';
 const isConfig = (url) => url.pathname.endsWith('/config.json');
-const isMetadata = (url) => url.pathname.endsWith('/champion-metadata.json');
+const isMetadata = (url) => /\/models\/[^/]+\.json$/.test(url.pathname);
 const isStableAsset = (request, url) => {
   if (request.method !== 'GET' || !sameOrigin(request) || isConfig(url) || isMetadata(url)) return false;
   return request.destination === 'script'

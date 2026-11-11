@@ -95,3 +95,53 @@ create().then(Module => {
                                capture_output=True, timeout=2)
     assert completed.returncode == 0, completed.stderr
     assert json.loads(completed.stdout) == {"pending": False, "simulations": 1, "terminal": False}
+
+
+def test_reroot_keeps_child_statistics_and_rejects_unrelated_states():
+    wasm = ROOT / "web" / "gipf_engine.js"
+    if not wasm.exists() or not shutil.which("node"):
+        pytest.skip("WASM artifact or Node unavailable")
+    program = r"""
+const create = require(process.argv[1]);
+create().then(Module => {
+  const run = (search, n) => { for (let i = 0; i < n; i++) if (search.step(1.5)) search.complete(new Float32Array(2730), 0); };
+  const start = new Module.State();
+  const search = new Module.BrowserSearch(JSON.stringify(start.serialize()));
+  search.set_fpu(0.2);
+  search.prepare(); search.complete(new Float32Array(2730), 0);
+  run(search, 400);
+  const before = search.result();
+  const child = start.clone(); child.apply(before.action);
+  const grandchild = child.clone(); grandchild.apply(before.pv[1]);
+  const far = grandchild.clone(); for (let i = 0; i < 2; i++) far.apply(far.legal_actions().get(0));
+  const out = {before, margin: search.margin(), choices: search.choices()};
+  out.farFound = search.reroot(JSON.stringify(far.serialize()));
+  out.childFound = search.reroot(JSON.stringify(child.serialize()));
+  out.child = search.result(); out.childVisits = search.root_visits();
+  out.grandchildFound = search.reroot(JSON.stringify(grandchild.serialize()));
+  out.grandchildVisits = search.root_visits();
+  run(search, 50);
+  out.after = search.result();
+  const legal = grandchild.legal_actions(); out.legal = Array.from({length: legal.size()}, (_, i) => legal.get(i));
+  out.undoFound = search.reroot(JSON.stringify(start.serialize()));
+  console.log(JSON.stringify(out)); search.delete();
+}).catch(error => { console.error(error); process.exit(1); });
+"""
+    completed = subprocess.run(["node", "-e", program, "./web/gipf_engine.js"], text=True, cwd=ROOT, capture_output=True)
+    assert completed.returncode == 0, completed.stderr
+    out = json.loads(completed.stdout)
+    before = out["before"]
+    best = max(before["visits"])
+    assert before["root_visits"] == 400 and out["choices"] == len(before["actions"]) == 42
+    assert out["margin"] == best - sorted(before["visits"])[-2]
+    assert before["pv"][0] == before["action"] and before["actor"] == 1
+    assert before["white_value"] == before["value"] and -1 <= before["value"] <= 1
+    assert not out["farFound"] and not out["undoFound"]
+    # The first visit to a child expands it; every later one passes through.
+    assert out["childFound"] and out["childVisits"] == best - 1
+    assert out["child"]["simulations"] == 0 and out["child"]["actor"] == -1
+    assert out["child"]["white_value"] == -out["child"]["value"]
+    assert out["child"]["pv"] == before["pv"][1:]
+    assert out["grandchildFound"] and out["grandchildVisits"] == max(out["child"]["visits"]) - 1
+    assert out["after"]["root_visits"] == out["grandchildVisits"] + 50
+    assert out["after"]["actions"] == out["legal"] and out["after"]["action"] in out["legal"]

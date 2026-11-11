@@ -3,8 +3,9 @@
  *
  * The worker is deliberately lazy: local hotseat can start as soon as the
  * rules engine is ready, while AI mode pays the model startup cost only when
- * it actually needs a move.  Cancelling terminates the worker so a stale
- * search can never post a move into a newer position.
+ * it actually needs a move.  The worker keeps its search tree between
+ * requests, so cancelling asks it to stop rather than terminating it; a stale
+ * reply is dropped here because its request is no longer pending.
  */
 
 function abortError(reason = 'cancelled') {
@@ -14,16 +15,18 @@ function abortError(reason = 'cancelled') {
 }
 
 export class LocalAiClient {
-  constructor({ onStatus = () => {}, backend = 'wasm', initTimeoutMs = 60_000, searchTimeoutExtraMs = 10_000 } = {}) {
+  constructor({ onStatus = () => {}, backend = 'wasm', initTimeoutMs = 60_000, searchTimeoutMs = 30_000 } = {}) {
     this.onStatus = onStatus;
     this.backend = backend;
     this.initTimeoutMs = initTimeoutMs;
-    this.searchTimeoutExtraMs = searchTimeoutExtraMs;
+    this.searchTimeoutMs = searchTimeoutMs;
     this.worker = null;
     this.readyPromise = null;
+    this.isReady = false;
     this.pending = new Map();
     this.nextId = 1;
     this.generation = 0;
+    this.epoch = 0;
   }
 
   async ready() {
@@ -35,45 +38,50 @@ export class LocalAiClient {
     if (this.backend) init.backend = this.backend;
     this.readyPromise = this.#request(worker, generation, init, this.initTimeoutMs).then((message) => {
       if (!message.ready) throw new Error('Local AI worker did not become ready');
+      this.isReady = true;
       this.onStatus('ready', message);
       return message;
     }).catch((error) => {
       if (this.generation === generation) {
         this.onStatus('error', error);
-        this.#discardWorker(generation);
+        this.#discardWorker();
       }
       throw error;
     });
     return this.readyPromise;
   }
 
-  async search(state, { budgetMs = 250, simulations } = {}) {
-    const generation = this.generation;
+  search(state, options) { return this.#run('search', state, options, this.searchTimeoutMs); }
+
+  // Background thinking on the opponent's turn. It ends by itself at the
+  // model's cap, or as soon as any later search/ponder/stop arrives.
+  ponder(state, options) { return this.#run('ponder', state, options, 0); }
+
+  stopPonder() { this.worker?.postMessage({ type: 'stop', ponder: true, id: this.nextId++ }); }
+
+  async #run(type, state, { level, budgetMs, simulations, onProgress } = {}, timeoutMs) {
+    const epoch = this.epoch;
     const ready = await this.ready();
-    if (generation !== this.generation) throw abortError();
-    const message = { type: 'search', state, budgetMs };
-    if (simulations != null) message.simulations = simulations;
-    const result = await this.#request(this.worker, generation, message, Math.max(1, Number(budgetMs) || 250) + this.searchTimeoutExtraMs);
-    if (result?.error) throw new Error(String(result.error));
+    if (epoch !== this.epoch) throw abortError();
+    const message = { type, state, level, budgetMs, simulations, progress: Boolean(onProgress) };
+    const result = await this.#request(this.worker, this.generation, message, timeoutMs, onProgress);
     return { ...result, model: result.model || ready.model, backend: result.backend || ready.backend };
   }
 
   cancel(reason = 'cancelled') {
-    const oldGeneration = this.generation;
-    this.generation += 1;
+    this.epoch += 1;
     for (const [id, pending] of this.pending) {
-      if (pending.generation === oldGeneration) {
-        clearTimeout(pending.timer);
-        pending.reject(abortError(reason));
-      }
+      if (pending.init) continue;
+      clearTimeout(pending.timer);
+      pending.reject(abortError(reason));
       this.pending.delete(id);
     }
-    this.#discardWorker(oldGeneration);
+    this.worker?.postMessage({ type: 'stop', id: this.nextId++ });
     this.onStatus('cancelled');
   }
 
   close() {
-    this.cancel('closed');
+    this.#invalidate(abortError('closed'));
     this.onStatus('closed');
   }
 
@@ -86,6 +94,7 @@ export class LocalAiClient {
       const message = event.data || {};
       const pending = this.pending.get(message.id);
       if (!pending) return;
+      if (message.progress) { pending.onProgress?.(message.stats); return; }
       this.pending.delete(message.id);
       clearTimeout(pending.timer);
       if (message.error) pending.reject(new Error(String(message.error)));
@@ -94,62 +103,43 @@ export class LocalAiClient {
     worker.addEventListener('error', (event) => {
       if (generation !== this.generation) return;
       const error = new Error(event.message || 'Local AI worker failed');
-      for (const [id, pending] of this.pending) {
-        if (pending.generation === generation) {
-          clearTimeout(pending.timer);
-          pending.reject(error);
-          this.pending.delete(id);
-        }
-      }
+      this.#invalidate(error);
       this.onStatus('error', error);
-      this.#discardWorker(generation);
     });
     return worker;
   }
 
-  #request(worker, generation, message, timeoutMs) {
+  #request(worker, generation, message, timeoutMs, onProgress) {
     if (!worker || generation !== this.generation) return Promise.reject(abortError());
     const id = this.nextId++;
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => {
+      const timer = timeoutMs ? setTimeout(() => {
         if (!this.pending.has(id) || generation !== this.generation) return;
         const error = new Error(`${message.type === 'init' ? 'Local AI startup' : 'Local AI search'} timed out`);
         error.name = 'TimeoutError';
-        this.#invalidateGeneration(generation, error);
+        this.#invalidate(error);
         this.onStatus('error', error);
-      }, Math.max(1, timeoutMs));
-      this.pending.set(id, { resolve, reject, generation, timer });
-      try {
-        worker.postMessage({ ...message, id });
-      } catch (error) {
-        clearTimeout(timer);
-        this.pending.delete(id);
-        reject(error);
-      }
+      }, timeoutMs) : null;
+      this.pending.set(id, { resolve, reject, timer, onProgress, init: message.type === 'init' });
+      worker.postMessage({ ...message, id });
     });
   }
 
-  #invalidateGeneration(generation, reason) {
-    if (generation !== this.generation) return;
+  #invalidate(reason) {
     this.generation += 1;
-    for (const [id, pending] of this.pending) {
-      if (pending.generation === generation) {
-        clearTimeout(pending.timer);
-        pending.reject(reason);
-      }
-      this.pending.delete(id);
+    for (const pending of this.pending.values()) {
+      clearTimeout(pending.timer);
+      pending.reject(reason);
     }
-    const worker = this.worker;
-    this.worker = null;
-    this.readyPromise = null;
-    worker?.terminate();
+    this.pending.clear();
+    this.#discardWorker();
   }
 
-  #discardWorker(generation) {
-    if (generation !== this.generation && this.worker == null) return;
+  #discardWorker() {
     const worker = this.worker;
     this.worker = null;
     this.readyPromise = null;
+    this.isReady = false;
     worker?.terminate();
   }
 }

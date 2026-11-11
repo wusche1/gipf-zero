@@ -15,7 +15,7 @@ with sync_playwright() as p:
  page.on('pageerror',lambda e:result['errors'].append(str(e)))
  page.goto(url,wait_until='domcontentloaded')
  page.wait_for_function("document.querySelector('#engine-status').textContent==='Ready to play'")
- page.locator('#mode-select').select_option('ai');page.locator('#difficulty').select_option('casual')
+ page.locator('#mode-select').select_option('ai');page.locator('#difficulty').select_option('fast')
  page.locator('.ray-hit[data-ray-id="1"]').click()
  page.wait_for_function("document.querySelector('#move-count').textContent==='MOVE 02'")
  result['checks'].append('cold public AI reply');result['ai_status']=page.locator('#ai-status').text_content()
@@ -29,7 +29,7 @@ with sync_playwright() as p:
  page.reload(wait_until='domcontentloaded');assert page.locator('h1').text_content()=='How fast is your device?'
  page.goto(url,wait_until='domcontentloaded')
  page.wait_for_function("document.querySelector('#engine-status').textContent==='Ready to play'")
- page.locator('#mode-select').select_option('ai');page.locator('#difficulty').select_option('casual')
+ page.locator('#mode-select').select_option('ai');page.locator('#difficulty').select_option('fast')
  page.locator('.ray-hit[data-ray-id="1"]').click()
  page.wait_for_function("document.querySelector('#move-count').textContent==='MOVE 02'")
  result['checks'].append('offline reload and AI reply')

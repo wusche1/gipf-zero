@@ -11,7 +11,7 @@ const els = {
   status: $('engine-status'), phaseTitle: $('phase-title'), phaseBadge: $('phase-badge'), hint: $('board-hint'), round: $('round-number'), move: $('move-count'), explanation: $('explanation'),
   reserveWhite: $('reserve-white'), reserveBlack: $('reserve-black'), barWhite: $('reserve-bar-white'), barBlack: $('reserve-bar-black'), turnWhite: $('turn-white'), turnBlack: $('turn-black'), toast: $('toast'),
   capture: $('capture-card'), captureOptions: $('capture-options'), captureToggles: $('capture-toggles'), confirmCapture: $('confirm-capture'), mode: $('mode-select'), aiColor: $('ai-color'), difficulty: $('difficulty'), aiStatus: $('ai-status'),
-  undo: $('undo')
+  undo: $('undo'), hints: $('hint-layer'), evalTrack: $('eval-track'), evalFill: $('eval-fill'), evalLabel: $('eval-label'), readout: $('think-readout'), ponder: $('ponder'), showHints: $('hints')
 };
 
 let config = { aiMode: 'browser', engineUrl: '' };
@@ -26,6 +26,9 @@ let gameRevision = 0;
 let aiModelName = '';
 let toastTimer;
 let activeMotion = null;
+// Search statistics are only shown for the position they were computed on.
+let analysisToken = 0;
+let ponderToken = 0;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const requestedAiBackend = new URLSearchParams(window.location.search).get('aiBackend');
 const localAi = createLocalAiClient({
@@ -88,6 +91,8 @@ function drawBoardGeometry() {
 
 function render(transition = null) {
   cancelMotion();
+  analysisToken += 1;
+  els.hints.replaceChildren();
   const actions = game.legalActions(state) || [];
   legal = actions;
   legalByPoint = new Map();
@@ -113,6 +118,7 @@ function render(transition = null) {
     els.capture.hidden = true;
   }
   maybeAiMove();
+  maybePonder();
 }
 
 function renderPieces() {
@@ -215,6 +221,7 @@ function animateBoardChange({ before, action, previousStones, actor, player }) {
     renderMeta();
     renderCapture();
     maybeAiMove();
+    maybePonder();
   });
 }
 
@@ -400,6 +407,9 @@ function bindControls() {
   els.mode.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('mode changed'); aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); render(); });
   els.aiColor.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('machine colour changed'); aiBlocked = false; render(); });
   els.difficulty.addEventListener('change', maybeAiMove);
+  els.ponder.addEventListener('change', restartPonder);
+  els.showHints.addEventListener('change', restartPonder);
+  document.addEventListener('visibilitychange', restartPonder);
   const dialog = $('rules-dialog');
   [$('rules-open'), $('rules-open-secondary')].forEach(button => button.addEventListener('click', () => dialog.showModal()));
   [$('rules-close'), $('rules-done')].forEach(button => button.addEventListener('click', () => dialog.close()));
@@ -409,12 +419,13 @@ async function maybeAiMove() {
   if (activeMotion || els.mode.value !== 'ai' || aiThinking || aiBlocked || winnerOf(state) !== 0 || currentPlayer() !== els.aiColor.value) return;
   const revision = gameRevision;
   aiThinking = true; els.aiStatus.textContent = 'Machine thinking…'; els.hint.innerHTML = '<span class="hint-dot"></span>Machine is considering the position';
-  const budget = { casual: 500, focused: 1500, deep: 5000 }[els.difficulty.value] || 1500;
+  const token = analysisToken;
   try {
     await offlineRegistration;
     if (revision !== gameRevision) return;
-    const result = await localAi.search(serialiseState(state), { budgetMs: budget });
+    const result = await localAi.search(serialiseState(state), { level: els.difficulty.value, onProgress: stats => showAnalysis(stats, token) });
     if (revision !== gameRevision) return;
+    showAnalysis(result.stats, token);
     const action = result?.action;
     const isLegal = action != null && legal.some(candidate => typeof candidate === 'number' && candidate === action);
     if (!isLegal) throw new Error('Worker returned an illegal action');
@@ -430,6 +441,40 @@ async function maybeAiMove() {
     els.aiStatus.textContent = 'Local model unavailable';
     $('retry-ai').hidden = false;
     render();
+  }
+}
+
+// While the human decides, keep searching the same tree so the reply is warm.
+function maybePonder() {
+  if (activeMotion || els.mode.value !== 'ai' || aiThinking || aiBlocked || document.hidden || !localAi.isReady || winnerOf(state) !== 0 || currentPlayer() === els.aiColor.value) return;
+  if ((!els.ponder.checked && !els.showHints.checked) || ponderToken === analysisToken) return;
+  const token = ponderToken = analysisToken;
+  localAi.ponder(serialiseState(state), { onProgress: stats => showAnalysis(stats, token) }).then(result => showAnalysis(result.stats, token), () => {});
+}
+
+function restartPonder() {
+  els.hints.replaceChildren();
+  ponderToken = 0;
+  localAi.stopPonder();
+  maybePonder();
+}
+
+function showAnalysis(stats, token) {
+  if (token !== analysisToken || !stats?.root_visits) return;
+  const ivory = Math.round((1 + stats.white_value) * 50);
+  els.evalFill.style.width = `${ivory}%`;
+  els.evalTrack.setAttribute('aria-valuenow', ivory);
+  els.evalLabel.textContent = ivory === 50 ? 'Even' : ivory > 50 ? `Ivory ${ivory}%` : `Obsidian ${100 - ivory}%`;
+  const count = value => Math.round(value).toLocaleString('en-US');
+  els.readout.textContent = `${count(stats.root_visits)} sims · ${count(stats.evalsPerSec)} pos/s · depth ${stats.pv.length}`;
+  els.hints.replaceChildren();
+  if (!els.showHints.checked) return;
+  const candidates = stats.actions.map((action, index) => ({ action, share: stats.visits[index] / stats.root_visits }))
+    .filter(candidate => candidate.action < 42 && candidate.share > 0).sort((a, b) => b.share - a.share).slice(0, 3);
+  for (const { action, share } of candidates) {
+    const ray = game.geometry.rays[action];
+    els.hints.appendChild(svg('line', { x1: ray.outer.x, y1: ray.outer.y, x2: ray.inner.x, y2: ray.inner.y, class: 'hint-line', 'stroke-width': 3 + 6 * share, opacity: .5 + .5 * share }));
+    els.hints.appendChild(svg('text', { x: ray.outer.x + (ray.outer.x - ray.inner.x) * .45, y: ray.outer.y + (ray.outer.y - ray.inner.y) * .45, class: 'hint-label' }, `${Math.round(share * 100)}%`));
   }
 }
 

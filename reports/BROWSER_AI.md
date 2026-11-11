@@ -111,3 +111,15 @@ remaining available. A brand-new visitor still needs internet access to GitHub
 Pages to download the application and model. The GPU instance is unnecessary in
 both cases. All 89 local tests passed, including native rules/search and real
 browser AI, cancellation, retry, and versioned offline-cache checks.
+
+## Persistent search update — 11 November 2026
+
+The worker now keeps its tree between requests (re-rooting onto the played
+subtree), ponders on the visitor's turn, manages time per decision (Fast/Normal/
+Strong, early stop, forced moves), and reads the model, `cpuct`, `fpu` and budgets
+from `web/models/<name>.json` selected by `web/config.json`. The page shows a win
+estimate, a thinking readout and optional candidate-move hints. Budgets and the
+simulation figures above describe the earlier fixed-budget worker; see
+`web/README.md` for the current behaviour and the model swap commands.
+`tests/test_browser_persistent_search.py` covers reuse, pondering, time
+management, a model swap and complete games through the real worker.
