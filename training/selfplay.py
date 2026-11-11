@@ -17,8 +17,8 @@ def evaluate(model, forest, n, device):
     forest.finish_selected(torch.gather(logits.float(), 1, idx).cpu().numpy(), values.float().cpu().numpy())
 
 
-def search(model, nodes, sims, device, cpuct=1.5):
-    forest = ge.NativeForest(nodes)
+def search(model, nodes, sims, device, cpuct=1.5, fpu=-1.0):
+    forest = ge.NativeForest(nodes); forest.set_fpu(fpu)
     evaluate(model, forest, forest.expand_unexpanded_root_pending(), device)
     for _ in range(sims):
         evaluate(model, forest, forest.select_pending(cpuct), device)
@@ -31,7 +31,7 @@ def main():
     p.add_argument('--full', type=int, default=200); p.add_argument('--pfull', type=float, default=.25)
     p.add_argument('--max-ply', type=int, default=240); p.add_argument('--seed', type=int, default=1)
     p.add_argument('--shard', type=int, default=20000); p.add_argument('--device', default='cuda')
-    p.add_argument('--seconds', type=float, default=1e9)
+    p.add_argument('--seconds', type=float, default=1e9); p.add_argument('--cpuct', type=float, default=1.5); p.add_argument('--fpu', type=float, default=-1.0)
     a = p.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(a.seed); dev = a.device
@@ -46,16 +46,16 @@ def main():
             mtime = m; model, _ = load(a.weights, dev)
             roots = [ge.NativeNode(r.state) for r in roots]
         full = rng.random(G) < a.pfull
-        forest = ge.NativeForest(roots)
+        forest = ge.NativeForest(roots); forest.set_fpu(a.fpu)
         evaluate(model, forest, forest.expand_unexpanded_root_pending(), dev)
         for i in np.flatnonzero(full):
             n = len(roots[i].actions); roots[i].mix_noise(rng.dirichlet(np.full(n, 10 / n)))
         for _ in range(a.fast):
-            evaluate(model, forest, forest.select_pending(1.5), dev)
+            evaluate(model, forest, forest.select_pending(a.cpuct), dev)
         if full.any() and a.full > a.fast:
-            sub = ge.NativeForest([roots[i] for i in np.flatnonzero(full)])
+            sub = ge.NativeForest([roots[i] for i in np.flatnonzero(full)]); sub.set_fpu(a.fpu)
             for _ in range(a.full - a.fast):
-                evaluate(model, sub, sub.select_pending(1.5), dev)
+                evaluate(model, sub, sub.select_pending(a.cpuct), dev)
         board, meta = compact(ge.encode_batch([r.state for r in roots]))
         for i, root in enumerate(roots):
             visits = np.asarray(root.visits, np.float64); total = visits.sum(); pi = visits / total

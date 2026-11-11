@@ -1,0 +1,25 @@
+{
+  "name": "GIPF Zero",
+  "format": "kernel",
+  "path": "latest.bin",
+  "arch": {
+    "width": 96,
+    "blocks": 6,
+    "heads": 4,
+    "ff": 192,
+    "relu": false,
+    "int16": false
+  },
+  "sha256": "8d3b20a11bd007301ed10cf3bf2e49013c5197e0409cdcc237baae1b0ae30e56",
+  "cpuct": 1.5,
+  "fpu": -1.0,
+  "budgetsMs": {
+    "fast": 300,
+    "normal": 1000,
+    "strong": 3000
+  },
+  "ponder": {
+    "maxMs": 20000,
+    "maxVisits": 20000
+  }
+}

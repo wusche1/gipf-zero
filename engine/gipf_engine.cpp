@@ -5,6 +5,8 @@
 #else
 #include <emscripten/bind.h>
 #include <emscripten/val.h>
+#include <emscripten.h>
+#include "former_infer.h"
 #endif
 
 #include <algorithm>
@@ -873,6 +875,23 @@ val wasm_geometry() {
 // it to ONNX immediately rather than retaining it across engine calls.
 // The tree persists: reroot() moves the root onto an already-searched
 // descendant so its statistics carry over to the next decision.
+former::Net kernel_net;
+
+bool load_kernel(const emscripten::val& weights, const emscripten::val& arch) {
+  std::vector<float> w(weights["length"].as<unsigned>());
+  emscripten::val(emscripten::typed_memory_view(w.size(), w.data())).call<void>("set", weights);
+  return kernel_net.init(w.data(), w.size(), {arch["width"].as<int>(), arch["blocks"].as<int>(), arch["heads"].as<int>(),
+                                              arch["ff"].as<int>(), arch["relu"].as<bool>(), arch["int16"].as<bool>()});
+}
+
+// One position [441] -> 2730 logits followed by the value.
+emscripten::val kernel_forward(const emscripten::val& features) {
+  std::vector<float> x(441), out(2731);
+  emscripten::val(emscripten::typed_memory_view(x.size(), x.data())).call<void>("set", features);
+  kernel_net.forward(x.data(), out.data(), out.data() + 2730);
+  return emscripten::val::global("Float32Array").new_(emscripten::val(emscripten::typed_memory_view(out.size(), out.data())));
+}
+
 class BrowserSearch {
  public:
   // The one-argument browser API is deliberately unbounded: the worker owns
@@ -937,6 +956,24 @@ class BrowserSearch {
     return true;
   }
 
+  void set_cpuct(double cpuct) { cpuct_ = cpuct; }
+
+  // Whole simulations with the loaded kernel, inside WASM, until either bound
+  // is hit. Expands the root first; returns the simulations run by this call.
+  int think(int max_simulations, double max_millis) {
+    if (awaiting_) throw std::logic_error("complete() is required before think()");
+    if (root_->state.winner() != 0) return 0;
+    const double end = emscripten_get_now() + max_millis;
+    if (!root_->expanded && forest_.expand_unexpanded_root_pending()) evaluate_pending();
+    int done = 0;
+    while (done < max_simulations && completed_ < target_) {
+      ++completed_; ++done;
+      if (forest_.select_pending(cpuct_)) evaluate_pending();
+      if (emscripten_get_now() >= end) break;
+    }
+    return done;
+  }
+
   emscripten::val result() const { return result_data(); }
   bool done() const { return !awaiting_ && (completed_ >= target_ || root_->state.winner() != 0); }
   int choices() const { return static_cast<int>(root_->actions.size()); }
@@ -967,6 +1004,13 @@ class BrowserSearch {
       if (child)
         if (auto found = find(child, target)) return found;
     return nullptr;
+  }
+  void evaluate_pending() {
+    float value;
+    forest_.encode_pending_into(features_);
+    logits_.resize(2730);
+    kernel_net.forward(features_.data(), logits_.data(), &value);
+    forest_.finish_raw(logits_.data(), 1, 2730, &value, 1, false); ++evaluations_;
   }
   emscripten::val result_data() const {
     emscripten::val result = emscripten::val::object(), visits = emscripten::val::array(), actions = emscripten::val::array(),
@@ -1001,7 +1045,7 @@ class BrowserSearch {
   }
   std::shared_ptr<NativeNode> root_;
   NativeForest forest_;
-  std::vector<float> features_;
+  std::vector<float> features_, logits_;
   size_t target_, completed_ = 0, evaluations_ = 0;
   double cpuct_ = 1.5, fpu_ = -1.0;
   bool awaiting_ = false;
@@ -1027,6 +1071,8 @@ EMSCRIPTEN_BINDINGS(gipf_engine) {
   constant("CAPTURE_BASE", kCaptureBase);
   constant("CAPTURE_LINE_STRIDE", kCaptureStride);
   function("geometry", &wasm_geometry);
+  function("load_kernel", &load_kernel);
+  function("kernel_forward", &kernel_forward);
   class_<BrowserSearch>("BrowserSearch")
       .constructor<val>()
       .constructor<val, int>()
@@ -1037,6 +1083,8 @@ EMSCRIPTEN_BINDINGS(gipf_engine) {
       .function("result", &BrowserSearch::result)
       .function("done", &BrowserSearch::done)
       .function("set_fpu", &BrowserSearch::set_fpu)
+      .function("set_cpuct", &BrowserSearch::set_cpuct)
+      .function("think", &BrowserSearch::think)
       .function("reroot", &BrowserSearch::reroot)
       .function("choices", &BrowserSearch::choices)
       .function("root_visits", &BrowserSearch::root_visits)

@@ -9,8 +9,8 @@ const RUNTIME_CACHE = `${CACHE_PREFIX}runtime-${VERSION}`;
 const NAVIGATION_TIMEOUT_MS = 4000;
 const REVISION_QUERY = VERSION.startsWith('__') ? '' : `?v=${VERSION}`;
 
-// Keep this list small. The model and ORT files are filled into the runtime
-// cache only after the worker actually uses them.
+// Keep this list small. The model (.bin kernel weights or .onnx plus the ORT
+// files) is filled into the runtime cache only after the worker actually uses it.
 const SHELL_ASSETS = [
   './',
   './index.html',
@@ -49,7 +49,7 @@ const isStableAsset = (request, url) => {
     || request.destination === 'style'
     || request.destination === 'worker'
     || request.destination === 'wasm'
-    || /\.(?:js|mjs|css|wasm|onnx|json)$/i.test(url.pathname)
+    || /\.(?:js|mjs|css|wasm|onnx|bin|json)$/i.test(url.pathname)
     || url.pathname.includes('/models/')
     || url.pathname.includes('/vendor/');
 };

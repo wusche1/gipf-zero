@@ -96,10 +96,10 @@ class TBlock(nn.Module):
         self.bias = nn.Parameter(torch.zeros(heads, 169))
 
     def forward(self, x, rel):
-        B, T, d = x.shape
-        q, k, v = self.qkv(self.n1(x)).view(B, T, 3, self.h, d // self.h).permute(2, 0, 3, 1, 4)
-        a = (q @ k.transpose(-1, -2)) * (d // self.h) ** -0.5 + self.bias[:, rel]
-        x = x + self.o((a.softmax(-1) @ v).transpose(1, 2).reshape(B, T, d))
+        d, h = self.o.in_features, self.h
+        qkv = self.qkv(self.n1(x)).view(-1, CELLS, 3, h, d // h).permute(2, 0, 3, 1, 4)
+        a = (qkv[0] @ qkv[1].transpose(-1, -2)) * (d // h) ** -0.5 + self.bias[:, rel]
+        x = x + self.o((a.softmax(-1) @ qkv[2]).transpose(1, 2).reshape(-1, CELLS, d))
         return x + self.f2(F.gelu(self.f1(self.n2(x))))
 
 

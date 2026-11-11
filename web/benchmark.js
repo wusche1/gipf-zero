@@ -6,15 +6,17 @@ button.addEventListener('click',async()=>{
  try{
   status.textContent='Loading the reference position…';
   const fixtures=await (await fetch('./models/champion-fixtures.json')).json();const fixture=fixtures.fixtures[0];
-  for(const backend of ['wasm','webgpu']){
-   status.textContent=`Testing ${backend==='wasm'?'CPU':'GPU'} inference and search…`;
+  const classic=(await (await fetch('./config.json')).json()).classic;
+  // The default model on the CPU, then the earlier ONNX champion on CPU and GPU.
+  for(const [key,backend,model] of [['latest','wasm'],...(classic?[['wasm','wasm',classic],['webgpu','webgpu',classic]]:[])]){
+   status.textContent=`Testing ${key} inference and search…`;
    worker=new Worker(new URL('./ai-worker.js',import.meta.url));
    try{
-    const init=await rpc({type:'init',backend,modelVariant:backend==='webgpu'?'portable':'dynamic'});
+    const init=await rpc({type:'init',backend,model,modelVariant:backend==='webgpu'?'portable':'dynamic'});
     const inference=await rpc({type:'benchmark',features:fixture.encoded_input,repeats:30});
     const search=await rpc({type:'search',state:fixture.state,simulations:128,fresh:true});
-    report.results[backend]={model:init.model,adapter:init.adapterInfo,inferenceMedianMs:inference.medianMs,searchMs:search.stats.elapsedMs,simulations:search.stats.simulations,action:search.action};
-   }catch(error){report.results[backend]={unavailable:error.message};}
+    report.results[key]={model:init.model,adapter:init.adapterInfo,inferenceMedianMs:inference.medianMs,searchMs:search.stats.elapsedMs,simulations:search.stats.simulations,action:search.action};
+   }catch(error){report.results[key]={unavailable:error.message};}
    finally{worker?.terminate();worker=null;output.textContent=JSON.stringify(report,null,2);}
   }
   status.textContent='Finished. The game uses the verified CPU path by default.';

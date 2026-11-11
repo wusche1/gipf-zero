@@ -1,11 +1,11 @@
 /* Learned GIPF policy/value search, entirely on the visitor's device. */
 'use strict';
-let engine, session, model, backend, initialization, tree, active;
+let engine, session, model, kernel, backend, initialization, tree, active;
 let queue = Promise.resolve();
 let stopBelow = 0, ponderStopBelow = 0;
 const asset = (path) => new URL(path, self.location.href).href;
 const median = (xs) => [...xs].sort((a,b) => a-b)[Math.floor(xs.length/2)];
-// Awaiting ONNX alone never returns to the event loop, so stop requests would
+// Awaiting a search slice alone never returns to the event loop, so stop requests would
 // sit unread; a message-channel hop lets them in without a timer clamp.
 const channel = new MessageChannel();
 const tick = () => new Promise((resolve) => { channel.port1.onmessage = resolve; channel.port2.postMessage(0); });
@@ -21,17 +21,15 @@ async function initialize(request = {}) {
       if (!adapter) throw new Error('No WebGPU adapter is available.');
       adapterInfo = adapter.info ? {vendor:adapter.info.vendor, architecture:adapter.info.architecture, device:adapter.info.device, description:adapter.info.description, isFallbackAdapter:adapter.info.isFallbackAdapter} : {};
     }
-    importScripts(asset('gipf_engine.js'), asset(`vendor/onnxruntime/ort.${backend === 'webgpu' ? 'webgpu' : 'wasm'}.min.js`));
-    ort.env.wasm.wasmPaths = asset('vendor/onnxruntime/');
-    // Works on ordinary GitHub Pages: no SharedArrayBuffer or special headers.
-    ort.env.wasm.numThreads = 1;
-    ort.env.wasm.proxy = false;
-    // config.json names the model; models/<name>.json holds its file, hash,
-    // search parameters and thinking budgets.
-    const config = await (await fetch(asset('config.json'), {cache:'no-store'})).json();
-    const response = await fetch(asset(`models/${config.model}.json`));
+    importScripts(asset('gipf_engine.js'));
+    // config.json names the default model; models/<name>.json holds its format,
+    // file, hash, search parameters and thinking budgets.
+    const name = request.model || (await (await fetch(asset('config.json'), {cache:'no-store'})).json()).model;
+    const response = await fetch(asset(`models/${name}.json`));
     if (!response.ok) throw new Error('Could not download the AI model metadata.');
     model = await response.json();
+    kernel = model.format === 'kernel';
+    if (kernel && backend === 'webgpu') throw new Error('This model runs on the CPU only.');
     const modelVariant = request.modelVariant || (backend === 'webgpu' ? 'portable' : 'dynamic');
     const modelSpec = modelVariant === 'dynamic' ? model : model.variants?.[modelVariant];
     if (!modelSpec || (backend === 'webgpu' && !model.fixtures)) throw new Error('Requested model variant is unavailable.');
@@ -43,7 +41,17 @@ async function initialize(request = {}) {
       if (hash !== modelSpec.sha256) throw new Error('AI model checksum mismatch. Please reload the page.');
     }
     engine = await createGipfEngine({locateFile:(name)=>asset(name)});
-    session = await ort.InferenceSession.create(bytes, {executionProviders:[backend], graphOptimizationLevel:'all'});
+    if (kernel) {
+      if (!engine.load_kernel(new Float32Array(bytes), model.arch)) throw new Error('AI model does not match its metadata.');
+    } else {
+      // The ONNX runtime is only downloaded for ONNX models.
+      importScripts(asset(`vendor/onnxruntime/ort.${backend === 'webgpu' ? 'webgpu' : 'wasm'}.min.js`));
+      ort.env.wasm.wasmPaths = asset('vendor/onnxruntime/');
+      // Works on ordinary GitHub Pages: no SharedArrayBuffer or special headers.
+      ort.env.wasm.numThreads = 1;
+      ort.env.wasm.proxy = false;
+      session = await ort.InferenceSession.create(bytes, {executionProviders:[backend], graphOptimizationLevel:'all'});
+    }
     const warmup = await forward(new Float32Array(441), 1);
     if (!Number.isFinite(warmup.value[0])) throw new Error('AI model initialization returned an invalid value.');
     // GPU implementations vary. Never play with a backend that fails the
@@ -65,6 +73,14 @@ async function initialize(request = {}) {
 }
 
 async function forward(features, batch = 1) {
+  if (kernel) {
+    const logits = new Float32Array(batch * 2730), value = new Float32Array(batch);
+    for (let i = 0; i < batch; i++) {
+      const out = engine.kernel_forward(features.subarray(i * 441, (i + 1) * 441));
+      logits.set(out.subarray(0, 2730), i * 2730); value[i] = out[2730];
+    }
+    return {logits, value};
+  }
   const tensor = new ort.Tensor('float32', features, [batch,9,7,7]);
   const output = await session.run({board_features:tensor});
   try {
@@ -83,6 +99,21 @@ async function evaluate() {
   tree.complete(prediction.logits, prediction.value[0]);
 }
 
+// Up to `count` simulations in one slice of about `ms`. Kernel models run the
+// whole slice inside WASM; ONNX models evaluate each leaf from here.
+async function advance(count, ms) {
+  if (kernel) return tree.think(count, ms);
+  const end = performance.now() + ms;
+  let done = 0;
+  if (!tree.choices() && tree.prepare()) await evaluate();
+  while (done < count) {
+    if (tree.step(model.cpuct)) await evaluate();
+    done++;
+    if (performance.now() >= end) break;
+  }
+  return done;
+}
+
 // One search or ponder on the persistent tree. A position reached from the
 // current root keeps its subtree; anything else (undo, new game) starts fresh.
 async function search(request, ponder) {
@@ -93,17 +124,17 @@ async function search(request, ponder) {
   if (request.fresh || !tree?.reroot(state)) {
     tree?.delete(); tree = null;
     tree = new engine.BrowserSearch(state);
-    tree.set_fpu(model.fpu);
+    tree.set_fpu(model.fpu); tree.set_cpuct(model.cpuct);
   }
   if (tree.result().terminal) throw new Error('This game is already over.');
   const reusedVisits = tree.root_visits();
   const started = performance.now();
-  let simulations = 0, evaluations = 0, posted = started, yielded = started;
+  let simulations = 0, posted = started;
   const stats = () => {
-    const elapsedMs = performance.now() - started;
-    return {...tree.result(), simulations, evaluations, elapsedMs, evalsPerSec: evaluations / elapsedMs * 1000, reusedVisits, ponder};
+    const elapsedMs = performance.now() - started, result = tree.result();
+    return {...result, simulations, elapsedMs, evalsPerSec: result.evaluations / elapsedMs * 1000, reusedVisits, ponder};
   };
-  if (!tree.choices() && tree.prepare()) { await evaluate(); evaluations++; }
+  await advance(0, 0);
   // An explicit simulation count is an exact request: no time management.
   const exact = Number(request.simulations) || 0;
   const limit = Math.min(20000, exact || 10000);
@@ -117,9 +148,9 @@ async function search(request, ponder) {
     if (ponder && tree.root_visits() >= model.ponder.maxVisits) break;
     // Stop once the runner-up cannot catch the leader in the time left.
     if (!ponder && !exact && simulations >= 32 && tree.margin() > simulations / elapsed * (budget - elapsed)) break;
-    if (tree.step(model.cpuct)) { await evaluate(); evaluations++; }
-    simulations++;
-    if (now - yielded > 20) { yielded = now; await tick(); }
+    const room = ponder ? model.ponder.maxVisits - tree.root_visits() : limit;
+    simulations += await advance(Math.min(limit - simulations, room), Math.min(15, budget - elapsed));
+    await tick();
     if (request.progress && now - posted > 150) { posted = now; self.postMessage({id:request.id, progress:true, stats:stats()}); }
   }
   const result = stats();

@@ -9,6 +9,7 @@ import time
 import gipf_engine as ge
 from test_browser_mapping import ROOT, WEB, QuietStaticHandler, browser, site_url
 from test_browser_offline import versioned_site_url
+from ops.web_model import positions
 
 RPC = """() => {
   window.worker = new Worker('/ai-worker.js'); window.replies = {}; let serial = 0;
@@ -19,12 +20,12 @@ RPC = """() => {
 }"""
 
 
-def worker_page(browser, url):
+def worker_page(browser, url, model=None):
     page = browser.new_page()
     page.set_default_timeout(120_000)
     page.goto(url + "/config.json")
     page.evaluate(RPC)
-    assert page.evaluate("rpc({type:'init'})")["ready"]
+    assert page.evaluate("(model) => rpc({type:'init', model})", model)["ready"]
     return page
 
 
@@ -56,14 +57,35 @@ def test_search_reuses_the_subtree_of_the_played_move(browser, site_url):
         page.close()
 
 
+def test_onnx_champion_still_searches_through_the_same_worker(browser, site_url):
+    page = worker_page(browser, site_url, "champion")
+    try:
+        state = ge.State()
+        first = rpc(page, type="search", state=state.serialize(), simulations=120)
+        assert "43,869" in first["model"] and first["stats"]["root_visits"] == 120 == first["stats"]["simulations"]
+        assert first["stats"]["evaluations"] == 121
+        state.apply(first["action"])
+        second = rpc(page, type="search", state=state.serialize(), budgetMs=200)["stats"]
+        assert second["reusedVisits"] == max(first["stats"]["visits"]) - 1 and second["action"] in state.legal_actions()
+        assert 0 < second["elapsedMs"] < 2_000
+    finally:
+        page.close()
+
+
 def test_time_management_stops_early_and_skips_forced_decisions(browser, site_url):
     page = worker_page(browser, site_url)
     try:
+        # A position where one move takes most of the visits: its lead grows
+        # faster than the remaining budget could overturn it.
+        for state in positions(40, seed=2):
+            visits = sorted(rpc(page, type="search", state=state.serialize(), simulations=1500, fresh=True)["stats"]["visits"])
+            if visits[-1] - (visits[-2] if len(visits) > 1 else 0) >= 1000 and len(visits) > 1:
+                break
+        else:
+            raise AssertionError("no decisive position")
+        settled = rpc(page, type="search", state=state.serialize(), budgetMs=3_000)["stats"]
+        assert settled["reusedVisits"] == 1500 and 0 < settled["simulations"] and settled["elapsedMs"] < 2_000
         state = ge.State()
-        rpc(page, type="search", state=state.serialize(), simulations=3000)
-        # 3000 visits cannot be overturned by what fits into the remaining budget.
-        settled = rpc(page, type="search", state=state.serialize(), budgetMs=10_000)["stats"]
-        assert settled["elapsedMs"] < 5_000
         rng = random.Random(3)
         while len(state.legal_actions()) != 1:
             if state.winner:
@@ -149,5 +171,36 @@ def test_placeholder_model_swaps_in_through_config(browser, versioned_site_url, 
         assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
         page.locator("#hints").uncheck()
         assert page.locator("#hint-layer .hint-label").count() == 0
+    finally:
+        page.close()
+
+
+def test_kernel_checkpoint_of_another_shape_swaps_in_with_the_tool(browser, versioned_site_url, tmp_path):
+    import torch
+    from training import net
+    web = tmp_path / "web"
+    config = {"kind": "former", "width": 64, "blocks": 2, "heads": 2, "ffmul": 3}
+    torch.manual_seed(0)
+    model = net.build(config)
+    with torch.no_grad():
+        for parameter in model.parameters():
+            parameter.add_(0.05 * torch.randn_like(parameter))
+    torch.save({"model": model.state_dict(), "config": config}, tmp_path / "other.pt")
+    subprocess.run([sys.executable, "-m", "ops.web_model", "other", "--checkpoint", str(tmp_path / "other.pt"), "--title", "Other net",
+                    "--cpuct", "2.0", "--fpu", "0.2", "--web", str(web)], cwd=ROOT, check=True)
+    meta = json.loads((web / "models/other.json").read_text())
+    assert meta["format"] == "kernel" and meta["arch"] == {"width": 64, "blocks": 2, "heads": 2, "ff": 192, "relu": False, "int16": False}
+    assert (meta["cpuct"], meta["fpu"]) == (2.0, 0.2)
+    (web / "config.json").write_text(json.dumps({**json.loads((web / "config.json").read_text()), "model": "other"}))
+    page = browser.new_page()
+    page.set_default_timeout(60_000)
+    try:
+        page.goto(versioned_site_url, wait_until="domcontentloaded")
+        page.locator("#engine-status").get_by_text("Ready to play").wait_for()
+        page.locator("#mode-select").select_option("ai")
+        page.locator("#difficulty").select_option("fast")
+        page.locator('.ray-hit[data-ray-id="1"]').click()
+        page.wait_for_function("document.querySelector('#move-count').textContent === 'MOVE 02'")
+        assert page.locator("#ai-status").text_content() == "Other net ready"
     finally:
         page.close()

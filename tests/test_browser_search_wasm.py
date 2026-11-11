@@ -1,5 +1,7 @@
 """Browser NativeForest wrapper agrees with the native C++ tree on a capture state."""
+import hashlib
 import json
+import os
 import random
 import shutil
 import subprocess
@@ -11,6 +13,9 @@ import gipf_engine as ge
 
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT = json.loads((ROOT / "web/config.json").read_text())["model"]
+META = json.loads((ROOT / f"web/models/{DEFAULT}.json").read_text())
+CHECKPOINT = os.environ.get("GIPF_KERNEL_CHECKPOINT", "/workspace/tmp/gipf-work/snap/former-L1.pt")
 
 
 def capture_state():
@@ -145,3 +150,48 @@ create().then(Module => {
     assert out["grandchildFound"] and out["grandchildVisits"] == max(out["child"]["visits"]) - 1
     assert out["after"]["root_visits"] == out["grandchildVisits"] + 50
     assert out["after"]["actions"] == out["legal"] and out["after"]["action"] in out["legal"]
+
+
+def test_kernel_search_matches_pytorch_search_on_the_shipped_weights():
+    """think() inside WASM against the Python search driving the PyTorch model."""
+    if META["format"] != "kernel" or not Path(CHECKPOINT).exists() or not shutil.which("node"):
+        pytest.skip("kernel model, its checkpoint (GIPF_KERNEL_CHECKPOINT) or Node unavailable")
+    import torch
+    from ops.dump_former import dump
+    from ops.web_model import positions
+    from training import net
+    from training.selfplay import search
+    model = net.load(CHECKPOINT)[0]
+    if hashlib.sha256(dump(model).tobytes()).hexdigest() != META["sha256"]:
+        pytest.skip("GIPF_KERNEL_CHECKPOINT is not the checkpoint of the shipped weights")
+    torch.set_num_threads(1)
+    states = [ge.State(), capture_state(), *positions(6, seed=5)]
+    program = r"""
+const [engine, weights, meta] = process.argv.slice(1), fs = require('fs');
+require(engine)().then((m) => {
+  const w = fs.readFileSync(weights), {arch, cpuct, fpu} = JSON.parse(meta);
+  if (!m.load_kernel(new Float32Array(w.buffer, w.byteOffset, w.length / 4), arch)) throw new Error('bad weights');
+  console.log(JSON.stringify(JSON.parse(fs.readFileSync(0, 'utf8')).map((state) => {
+    const search = new m.BrowserSearch(JSON.stringify(state)); search.set_fpu(fpu); search.set_cpuct(cpuct);
+    let slices = 0;
+    for (let n = 0; n < 256; slices++) n += search.think(256 - n, 20);
+    return {...search.result(), slices};
+  })));
+}).catch(error => { console.error(error); process.exit(1); });
+"""
+    completed = subprocess.run(["node", "-e", program, "./web/gipf_engine.js", f"web/models/{META['path']}", json.dumps(META)],
+                               input=json.dumps([state.serialize() for state in states]), text=True, cwd=ROOT, capture_output=True)
+    assert completed.returncode == 0, completed.stderr
+    exact = 0
+    for state, browser in zip(states, json.loads(completed.stdout)):
+        root = ge.NativeNode(state)
+        search(model, [root], 256, "cpu", META["cpuct"], META["fpu"])
+        visits = np.asarray(root.visits)
+        assert browser["actions"] == list(root.actions) and browser["root_visits"] == 256 == browser["simulations"]
+        assert browser["slices"] > 1
+        assert browser["action"] == int(root.actions[int(visits.argmax())])
+        assert abs(browser["value"] - sum(root.values) / 256) < 1e-3
+        # Float rounding may flip a near-tie between two children, nothing more.
+        assert np.abs(visits - browser["visits"]).sum() <= 8
+        exact += list(visits) == browser["visits"]
+    assert exact >= len(states) - 1

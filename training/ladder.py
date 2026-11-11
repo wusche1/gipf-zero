@@ -30,13 +30,13 @@ def main():
     a = p.parse_args()
     players = {}
     for s in a.players:
-        name, rest = s.split('=', 1); path, sims = rest.rsplit(':', 1); players[name] = (path, int(sims))
+        name, rest = s.split('=', 1); f = rest.split(':'); players[name] = (f[0], int(f[1]), float(f[2]) if len(f) > 2 else 1.5, float(f[3]) if len(f) > 3 else -1.0)
     names = list(players)
     pairs = list(itertools.combinations(names, 2)) if a.pairs == 'all' else [(names[0], n) for n in names[1:]] if a.pairs == 'first' else list(zip(names, names[1:]))
     k, n = map(int, a.shard.split('/'))
     models = {path: load(path, a.device)[0] for path in {players[z][0] for pr in pairs[k::n] for z in pr}}
     for x, y in pairs[k::n]:
-        w, l, c = play([models[players[x][0]], models[players[y][0]]], [players[x][1], players[y][1]], a.games, a.seed, a.device)
+        w, l, c = play([models[players[x][0]], models[players[y][0]]], [players[x][1], players[y][1]], a.games, a.seed, a.device, cpuct=(players[x][2], players[y][2]), fpu=(players[x][3], players[y][3]))
         rec = dict(a=x, b=y, wins=w, losses=l, cutoffs=c, seed=a.seed)
         print(json.dumps(rec), flush=True)
         with open(a.out, 'a') as f:

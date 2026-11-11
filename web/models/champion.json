@@ -1,5 +1,6 @@
 {
   "name": "GIPF Zero — 43,869 games",
+  "format": "onnx",
   "path": "champion.onnx",
   "sha256": "3d657aea6d89f73e84f189f919c17bdd8ee3f2d69d5a1ef84c6f722ee0a17a73",
   "cpuct": 1.5,

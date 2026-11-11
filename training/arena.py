@@ -6,7 +6,7 @@ from .selfplay import search
 from .evaluate import settle_opening, is_insertion_cutoff
 
 
-def play(models, sims, games, seed, device, max_ply=300, cpuct=1.5, opening=4):
+def play(models, sims, games, seed, device, max_ply=300, cpuct=(1.5, 1.5), opening=4, fpu=(-1.0, -1.0)):
     active = []
     for g in range(games):
         s = ge.State(); settle_opening(s, opening, random.Random(seed + g // 2))
@@ -18,7 +18,7 @@ def play(models, sims, games, seed, device, max_ply=300, cpuct=1.5, opening=4):
             if not group:
                 continue
             nodes = [ge.NativeNode(g[0]) for g in group]
-            search(models[who], nodes, sims[who], device, cpuct)
+            search(models[who], nodes, sims[who], device, cpuct[who], fpu[who])
             for g, n in zip(group, nodes):
                 g[0].apply(n.actions[int(np.argmax(n.visits))]); g[2] += 1
         rest = []

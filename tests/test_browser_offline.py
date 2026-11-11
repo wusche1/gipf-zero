@@ -160,7 +160,11 @@ def test_versioned_build_caches_hashed_assets_and_preserves_benchmark_navigation
         assert any("gipf_engine.js?v=offline-smoke" in url for url in keys)
         assert any("gipf_engine.wasm?v=offline-smoke" in url for url in keys)
         assert any("ai-worker.js?v=offline-smoke" in url for url in keys)
-        assert any("models/champion.onnx?" in url for url in keys)
+        config = json.loads((WEB / "config.json").read_text())
+        meta = json.loads((WEB / f"models/{config['model']}.json").read_text())
+        assert meta["path"].endswith(".bin")
+        assert any(f"models/{meta['path']}?v={meta['sha256']}" in url for url in keys)
+        assert not any("/vendor/onnxruntime/" in url for url in keys)
 
         page.goto(f"{versioned_site_url}/benchmark.html", wait_until="domcontentloaded")
         expect(page.locator("h1")).to_have_text("How fast is your device?")

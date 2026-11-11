@@ -52,7 +52,7 @@ def main():
     p.add_argument('--min', type=int, default=20000); p.add_argument('--steps', type=int, default=0)
     p.add_argument('--val', type=int, default=0); p.add_argument('--init'); p.add_argument('--device', default='cuda')
     p.add_argument('--ckpt-every', type=int, default=250000); p.add_argument('--seconds', type=float, default=1e9)
-    p.add_argument('--seed', type=int, default=0); p.add_argument('--amp', default='bf16')
+    p.add_argument('--seed', type=int, default=0); p.add_argument('--amp', default='bf16'); p.add_argument('--sync-budget', type=float); p.add_argument('--compile', action='store_true')
     a = p.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True); dev = a.device; amp = None if dev == 'cpu' else dict(bf16=torch.bfloat16, fp16=torch.float16)[a.amp]
     torch.manual_seed(a.seed); torch.backends.cudnn.benchmark = True
@@ -69,7 +69,8 @@ def main():
             if 'opt' in data:
                 opt.load_state_dict(data['opt'])
     params = sum(x.numel() for x in model.parameters())
-    ring = Ring(a.window, dev)
+    ring = Ring(a.window, dev); offset = None
+    fwd = torch.compile(model) if a.compile else model
 
     def save(path, full=False):
         if not all(torch.isfinite(v).all() for v in model.state_dict().values() if v.is_floating_point()):
@@ -95,7 +96,7 @@ def main():
         nonlocal steps
         for g in opt.param_groups:
             g['lr'] = lr * min(1, (steps + 1) / 500)
-        pl, vl = losses(model, b, amp)
+        pl, vl = losses(fwd, b, amp)
         opt.zero_grad(set_to_none=True); (pl + vl).backward()
         gn = torch.nn.utils.clip_grad_norm_(model.parameters(), 5); steps += 1
         gns.append(gn.item())
@@ -125,7 +126,9 @@ def main():
 
     while time.time() - start < a.seconds:
         ring.poll(a.data)
-        budget = int(ring.total * a.reuse / a.batch) - steps
+        if offset is None:
+            offset = 0 if a.sync_budget is None else int((ring.total - a.sync_budget * ring.n) * a.reuse / a.batch) - steps
+        budget = int(ring.total * a.reuse / a.batch) - offset - steps
         if ring.total < a.min or budget <= 0:
             time.sleep(2); continue
         model.train()
