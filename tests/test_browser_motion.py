@@ -184,7 +184,7 @@ def test_undo_during_removal_restores_stones_without_ghosts(browser, site_url):
     initial, actions = capture_scenario()
     page, _, _ = motion_page(browser, site_url, initial, actions)
     try:
-        page.get_by_role('button', name='Line 4', exact=True).click()
+        page.get_by_role('button', name='Row A').click()
         page.locator('#confirm-capture').click()
         assert page.locator('.stone-removing').count() == 4
         page.locator('#undo').click()

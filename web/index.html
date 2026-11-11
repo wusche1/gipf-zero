@@ -50,7 +50,7 @@
           </div>
           <div class="eval ai-only" id="eval">
             <div class="eval-track" id="eval-track" role="meter" aria-label="Ivory win probability" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span id="eval-fill"></span></div>
-            <div class="eval-meta"><span id="eval-label">Even</span><span id="think-readout">Waiting for the first search</span></div>
+            <div class="eval-meta"><span><span class="eyebrow">Win chance</span> <span id="eval-label">Even</span></span><span id="think-readout">Waiting for the first search</span></div>
           </div>
           <div class="board-wrap">
             <div class="board-halo" aria-hidden="true"></div>
@@ -63,6 +63,7 @@
                 <linearGradient id="edge-fill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f4eee6"/><stop offset="1" stop-color="#d9cbbb"/></linearGradient>
                 <linearGradient id="ivory-piece" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffdfa"/><stop offset="1" stop-color="#dcd5cc"/></linearGradient>
                 <linearGradient id="ink-piece" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#323738"/><stop offset="1" stop-color="#0d1415"/></linearGradient>
+                <marker id="hint-arrowhead" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="5" refY="7" orient="auto"><path d="M0 1.5 L12 7 L0 12.5 z" fill="#557d62"/></marker>
                 <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6.8" refY="3.8" orient="auto"><path d="M0 0 L7 3.8 L0 7 z" fill="#a3988b"/></marker>
               </defs>
               <g id="board-base"></g>
@@ -92,6 +93,14 @@
               <p class="reserve-note">Pieces in reserve</p>
             </div>
           </section>
+          <section class="capture-card" id="capture-card" hidden>
+            <div class="card-heading"><span class="eyebrow">Capture</span><span class="capture-count" id="capture-count">1 ROW</span></div>
+            <h3 id="capture-title">Remove the completed row</h3>
+            <p id="capture-copy"></p>
+            <div class="capture-options" id="capture-options"></div>
+            <div class="capture-toggles" id="capture-toggles" hidden></div>
+            <button class="button button-primary full" id="confirm-capture" type="button" disabled>Confirm capture</button>
+          </section>
           <section class="control-card">
             <div class="card-heading"><span class="eyebrow">Table</span><span class="mono-label" id="move-count">MOVE 00</span></div>
             <div class="control-row"><label for="mode-select">Mode</label><select id="mode-select"><option value="local">Local hotseat</option><option value="ai">Play the machine</option></select></div>
@@ -99,18 +108,9 @@
             <div class="control-row ai-only"><label for="opponent">Opponent</label><select id="opponent"><option value="">Latest</option><option>Classic</option></select></div>
             <div class="control-row ai-only"><label for="difficulty">Strength</label><select id="difficulty"><option value="fast">Fast</option><option value="normal" selected>Normal</option><option value="strong">Strong</option></select></div>
             <div class="control-row ai-only"><label for="ponder">Think on your turn</label><input id="ponder" type="checkbox" checked /></div>
-            <div class="control-row ai-only"><label for="hints">Show candidate moves</label><input id="hints" type="checkbox" /></div>
+            <div class="control-row ai-only"><label for="hints">Show candidate moves <small>thinks on your turn</small></label><input id="hints" type="checkbox" /></div>
             <div class="button-row"><button class="button button-primary" id="new-game" type="button">New game</button><button class="button button-quiet" id="undo" type="button" disabled>Undo</button></div>
             <button class="button button-quiet full" id="retry-ai" type="button" hidden>Retry AI</button>
-          </section>
-
-          <section class="capture-card" id="capture-card" hidden>
-            <div class="card-heading"><span class="eyebrow">Capture</span><span class="capture-count">SELECT</span></div>
-            <h3>Choose a row to remove</h3>
-            <p>Several rows were completed. Select one, then continue your turn.</p>
-            <div class="capture-options" id="capture-options"></div>
-            <div class="capture-toggles" id="capture-toggles" hidden></div>
-            <button class="button button-primary full" id="confirm-capture" type="button" disabled>Confirm capture</button>
           </section>
 
           <section class="notes-card">

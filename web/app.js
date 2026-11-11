@@ -29,6 +29,7 @@ let activeMotion = null;
 // Search statistics are only shown for the position they were computed on.
 let analysisToken = 0;
 let ponderToken = 0;
+let ponderChoice = true;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const requestedAiBackend = new URLSearchParams(window.location.search).get('aiBackend');
 const localAi = createLocalAiClient({
@@ -121,6 +122,7 @@ function render(transition = null) {
     aiThinking = false;
     aiBlocked = true;
     els.capture.hidden = true;
+    setEval(winnerOf(state) === 'white' ? 100 : 0, `${winnerOf(state) === 'white' ? 'Ivory' : 'Obsidian'} wins`, 'Game over');
   }
   maybeAiMove();
   maybePonder();
@@ -265,13 +267,17 @@ function renderMeta() {
   els.reserveBlack.textContent = reserves.black;
   els.barWhite.style.width = `${Math.max(0, Math.min(100, reserves.white / 12 * 100))}%`;
   els.barBlack.style.width = `${Math.max(0, Math.min(100, reserves.black / 12 * 100))}%`;
-  els.turnWhite.classList.toggle('active', player === 'white');
-  els.turnBlack.classList.toggle('active', player === 'black');
-  document.querySelector('[data-player="white"] .turn-pip').setAttribute('aria-hidden', String(player !== 'white'));
+  const winner = winnerOf(state);
+  const ai = els.mode.value === 'ai';
+  for (const [side, pip, fallback] of [['white', els.turnWhite, 'Player one'], ['black', els.turnBlack, 'Player two']]) {
+    pip.classList.toggle('active', !winner && player === side);
+    pip.setAttribute('aria-hidden', String(Boolean(winner) || player !== side));
+    document.querySelector(`[data-player="${side}"] .eyebrow`).textContent = ai ? (els.aiColor.value === side ? 'Machine' : 'You') : fallback;
+  }
+  els.phaseBadge.classList.remove('thinking');
   const moveNumber = state.moves ?? state.move ?? state.ply ?? 0;
   els.round.textContent = String(Math.floor(moveNumber / 2) + 1).padStart(2, '0');
   els.move.textContent = `MOVE ${String(moveNumber).padStart(2, '0')}`;
-  const winner = winnerOf(state);
   if (winner !== 0) {
     const winnerName = winner === 'white' ? 'Ivory' : 'Obsidian';
     els.phaseTitle.textContent = `${winnerName} wins`;
@@ -287,22 +293,29 @@ function renderMeta() {
     els.hint.innerHTML = '<span class="hint-dot"></span>Rules engine required to play';
     return;
   }
-  els.phaseTitle.textContent = captureChoices().length ? 'Resolve a row' : 'Place a piece';
-  els.phaseBadge.textContent = captureChoices().length ? 'Capture required' : `${player === 'white' ? 'Ivory' : 'Obsidian'} to move`;
-  els.explanation.textContent = captureChoices().length ? 'A row is complete. Choose which capture to resolve first, then the turn continues.' : 'Click an arrow at the board’s edge to push a piece inward. Occupied pieces shift toward the first empty point.';
-  els.hint.innerHTML = captureChoices().length ? '<span class="hint-dot"></span>Choose a completed row in the capture panel' : '<span class="hint-dot"></span>Click an edge arrow to push a piece inward';
+  const rows = captureChoices().length;
+  els.phaseTitle.textContent = rows ? 'Resolve a row' : 'Place a piece';
+  els.phaseBadge.textContent = rows ? 'Capture required' : `${player === 'white' ? 'Ivory' : 'Obsidian'} to move`;
+  els.explanation.textContent = rows ? 'A row is complete. Resolve the capture, then the turn continues.' : 'Click an arrow at the board’s edge to push a piece inward. Occupied pieces shift toward the first empty point.';
+  const hint = !rows ? 'Click an edge arrow to push a piece inward' : ai && player === els.aiColor.value ? 'Machine is resolving a row' : rows === 1 ? 'Confirm the highlighted row to remove it' : 'Choose a highlighted row, then confirm';
+  els.hint.innerHTML = `<span class="hint-dot"></span>${hint}`;
 }
 
 function renderCapture() {
   const choices = captureChoices();
-  els.capture.hidden = choices.length === 0;
+  const aiCapture = els.mode.value === 'ai' && currentPlayer() === els.aiColor.value;
+  els.capture.hidden = choices.length === 0 || aiCapture;
   els.captureOptions.replaceChildren();
+  els.captureOptions.hidden = choices.length < 2;
+  $('capture-count').textContent = choices.length === 1 ? '1 ROW' : `${choices.length} ROWS`;
+  $('capture-title').textContent = choices.length === 1 ? 'Remove the completed row' : 'Choose a row to remove';
+  $('capture-copy').textContent = choices.length === 1 ? 'One row is complete and highlighted on the board. Confirm to remove it.' : `${choices.length} rows are complete. Pick one on the board or below, then confirm.`;
+  if (!selectedCapture && choices.length === 1 && !aiCapture) selectedCapture = choices[0];
   if (selectedCapture) {
     const previous = selectedCapture;
     const canonical = choices.find(choice => choice.id === previous.id) || null;
     selectedCapture = canonical && (!canonical.actions || canonical.actions.includes(previous.action)) ? { ...canonical, action: previous.action } : canonical;
   }
-  const aiCapture = els.mode.value === 'ai' && currentPlayer() === els.aiColor.value;
   choices.forEach((choice, index) => {
     const button = document.createElement('button');
     button.type = 'button'; button.disabled = aiCapture || Boolean(activeMotion); button.className = `capture-option${selectedCapture?.id === choice.id ? ' selected' : ''}`;
@@ -343,13 +356,36 @@ function refreshCaptureView() {
 
 function renderCaptureHighlight() {
   els.captureLayer.replaceChildren();
-  const info = selectedCaptureInfo();
-  if (!info) return;
-  for (let index = 1; index < info.nodes.length; index += 1) {
-    const from = info.nodes[index - 1];
-    const to = info.nodes[index];
-    els.captureLayer.appendChild(svg('line', { x1: from.x, y1: from.y, x2: to.x, y2: to.y, class: 'capture-row-line' }));
+  if (els.capture.hidden) return;
+  const choices = captureChoices().filter(choice => choice.line != null);
+  for (const choice of choices) {
+    const row = captureRow(choice.line);
+    if (row.length < 2) continue;
+    const from = row[0], to = row[row.length - 1];
+    const line = svg('line', { x1: from.x, y1: from.y, x2: to.x, y2: to.y, class: `capture-row-line${selectedCapture?.id === choice.id ? ' selected' : ''}` });
+    line.addEventListener('click', () => { selectedCapture = choice; refreshCaptureView(); });
+    els.captureLayer.appendChild(line);
+    if (choices.length > 1) {
+      const end = rowEnd(row, .6);
+      els.captureLayer.appendChild(svg('text', { x: end.x, y: end.y, class: 'capture-row-label' }, choice.letter));
+    }
   }
+}
+
+// The stones a capture removes: the occupied run on its line.
+function captureRow(line) {
+  const nodes = arrayLike(arrayLike(game.geometry.engine?.lines)?.[line])?.map(index => game.geometry.nodes[Number(index)]).filter(Boolean) || [];
+  const board = readBoard(state);
+  let run = [], best = [];
+  for (const node of nodes) {
+    run = board[node.key] ? [...run, node] : [];
+    if (run.length > best.length) best = run;
+  }
+  return best;
+}
+function rowEnd(row, step) {
+  const last = row[row.length - 1], previous = row[row.length - 2];
+  return step > 0 ? { x: last.x + (last.x - previous.x) * step, y: last.y + (last.y - previous.y) * step } : { x: row[0].x + (row[1].x - row[0].x) * step, y: row[0].y + (row[1].y - row[0].y) * step };
 }
 
 function selectedCaptureInfo() {
@@ -359,8 +395,8 @@ function selectedCaptureInfo() {
   const indices = arrayLike(rawLine);
   if (!indices?.length) return null;
   const mask = selectedCapture.action - 42 - selectedCapture.line * 128;
-  const nodes = indices.map(index => game.geometry.nodes[Number(index)]).filter(Boolean);
-  return { nodes, parts: indices.map((index, bit) => ({ key: game.geometry.nodes[Number(index)]?.key, bit, masked: Boolean(mask & (1 << bit)) })) };
+  const row = new Set(captureRow(selectedCapture.line).map(node => node.key));
+  return { parts: indices.map((index, bit) => ({ key: game.geometry.nodes[Number(index)]?.key, bit, masked: Boolean(mask & (1 << bit)) })).filter(part => row.has(part.key)) };
 }
 
 function choosePoint(key) {
@@ -392,7 +428,7 @@ function cancelAiSearch(reason) {
 
 function bindControls() {
   $('retry-ai').addEventListener('click', () => { gameRevision += 1; cancelAiSearch('retry'); aiBlocked = false; render(); });
-  $('new-game').addEventListener('click', () => { gameRevision += 1; cancelAiSearch('new game'); aiBlocked = false; past = []; selectedCapture = null; state = game.newGame(); render(); showToast('A new table is ready'); });
+  $('new-game').addEventListener('click', () => { gameRevision += 1; cancelAiSearch('new game'); aiBlocked = false; past = []; selectedCapture = null; state = game.newGame(); resetEval(); render(); showToast('A new table is ready'); });
   els.undo.addEventListener('click', () => {
     if (!canUndo()) return;
     gameRevision += 1; cancelAiSearch('undo'); aiBlocked = false;
@@ -406,20 +442,21 @@ function bindControls() {
     } else {
       state = past.pop().state;
     }
-    selectedCapture = null; render();
+    selectedCapture = null; resetEval(); render();
   });
   els.confirmCapture.addEventListener('click', chooseCapture);
-  els.mode.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('mode changed'); aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); render(); });
-  els.aiColor.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('machine colour changed'); aiBlocked = false; render(); });
+  els.mode.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('mode changed'); aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); resetEval(); render(); });
+  els.aiColor.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('machine colour changed'); aiBlocked = false; resetEval(); render(); });
   els.opponent.addEventListener('change', () => {
     gameRevision += 1; aiThinking = false; aiBlocked = false; aiModelName = ''; ponderToken = 0;
     localAi.setModel(els.opponent.value || null);
     els.aiStatus.textContent = 'Local model ready when needed'; $('retry-ai').hidden = true;
-    render();
+    resetEval(); render();
   });
   els.difficulty.addEventListener('change', maybeAiMove);
-  els.ponder.addEventListener('change', restartPonder);
-  els.showHints.addEventListener('change', restartPonder);
+  els.ponder.addEventListener('change', () => { ponderChoice = els.ponder.checked; restartPonder(); });
+  // Candidate moves come from the same bounded background search as pondering.
+  els.showHints.addEventListener('change', () => { els.ponder.disabled = els.showHints.checked; els.ponder.checked = els.showHints.checked || ponderChoice; restartPonder(); });
   document.addEventListener('visibilitychange', restartPonder);
   const dialog = $('rules-dialog');
   [$('rules-open'), $('rules-open-secondary')].forEach(button => button.addEventListener('click', () => dialog.showModal()));
@@ -429,7 +466,7 @@ function bindControls() {
 async function maybeAiMove() {
   if (activeMotion || els.mode.value !== 'ai' || aiThinking || aiBlocked || winnerOf(state) !== 0 || currentPlayer() !== els.aiColor.value) return;
   const revision = gameRevision;
-  aiThinking = true; els.aiStatus.textContent = 'Machine thinking…'; els.hint.innerHTML = '<span class="hint-dot"></span>Machine is considering the position';
+  aiThinking = true; els.aiStatus.textContent = 'Machine thinking…'; els.phaseBadge.textContent = 'Machine thinking…'; els.phaseBadge.classList.add('thinking'); els.hint.innerHTML = '<span class="hint-dot"></span>Machine is considering the position';
   const token = analysisToken;
   try {
     await offlineRegistration;
@@ -458,7 +495,7 @@ async function maybeAiMove() {
 // While the human decides, keep searching the same tree so the reply is warm.
 function maybePonder() {
   if (activeMotion || els.mode.value !== 'ai' || aiThinking || aiBlocked || document.hidden || !localAi.isReady || winnerOf(state) !== 0 || currentPlayer() === els.aiColor.value) return;
-  if ((!els.ponder.checked && !els.showHints.checked) || ponderToken === analysisToken) return;
+  if (!els.ponder.checked || ponderToken === analysisToken) return;
   const token = ponderToken = analysisToken;
   localAi.ponder(serialiseState(state), { onProgress: stats => showAnalysis(stats, token) }).then(result => showAnalysis(result.stats, token), () => {});
 }
@@ -470,22 +507,40 @@ function restartPonder() {
   maybePonder();
 }
 
+function setEval(ivory, label, readout) {
+  els.evalFill.style.width = `${ivory}%`;
+  els.evalTrack.setAttribute('aria-valuenow', ivory);
+  els.evalLabel.textContent = label;
+  els.readout.textContent = readout;
+}
+
+function resetEval() { setEval(50, 'Even', 'Waiting for the first search'); }
+
 function showAnalysis(stats, token) {
   if (token !== analysisToken || !stats?.root_visits) return;
   const ivory = Math.round((1 + stats.white_value) * 50);
-  els.evalFill.style.width = `${ivory}%`;
-  els.evalTrack.setAttribute('aria-valuenow', ivory);
-  els.evalLabel.textContent = ivory === 50 ? 'Even' : ivory > 50 ? `Ivory ${ivory}%` : `Obsidian ${100 - ivory}%`;
   const count = value => Math.round(value).toLocaleString('en-US');
-  els.readout.textContent = `${count(stats.root_visits)} sims · ${count(stats.evalsPerSec)} pos/s · depth ${stats.pv.length}`;
+  const rate = stats.evalsPerSec;
+  setEval(ivory, ivory === 50 ? 'Even' : ivory > 50 ? `Ivory ${ivory}%` : `Obsidian ${100 - ivory}%`,
+    [`${count(stats.root_visits)} sims`, Number.isFinite(rate) && rate > 0 && `${count(rate)} pos/s`, `depth ${stats.pv.length}`].filter(Boolean).join(' · '));
   els.hints.replaceChildren();
   if (!els.showHints.checked) return;
-  const candidates = stats.actions.map((action, index) => ({ action, share: stats.visits[index] / stats.root_visits }))
-    .filter(candidate => candidate.action < 42 && candidate.share > 0).sort((a, b) => b.share - a.share).slice(0, 3);
-  for (const { action, share } of candidates) {
-    const ray = game.geometry.rays[action];
-    els.hints.appendChild(svg('line', { x1: ray.outer.x, y1: ray.outer.y, x2: ray.inner.x, y2: ray.inner.y, class: 'hint-line', 'stroke-width': 3 + 6 * share, opacity: .5 + .5 * share }));
-    els.hints.appendChild(svg('text', { x: ray.outer.x + (ray.outer.x - ray.inner.x) * .45, y: ray.outer.y + (ray.outer.y - ray.inner.y) * .45, class: 'hint-label' }, `${Math.round(share * 100)}%`));
+  const label = (point, share) => els.hints.appendChild(svg('text', { ...point, class: 'hint-label' }, `${Math.round(share * 100)}%`));
+  const shares = stats.actions.map((action, index) => ({ action, share: stats.visits[index] / stats.root_visits })).filter(candidate => candidate.share > 0);
+  for (const { action, share } of shares.filter(candidate => candidate.action < 42).sort((a, b) => b.share - a.share).slice(0, 3)) {
+    const { outer, inner } = game.geometry.rays[action];
+    const dx = inner.x - outer.x, dy = inner.y - outer.y, reach = 1 - 26 / Math.hypot(dx, dy);
+    els.hints.appendChild(svg('line', { x1: outer.x, y1: outer.y, x2: outer.x + dx * reach, y2: outer.y + dy * reach, class: 'hint-line', 'stroke-width': 2 + 3 * share, opacity: .55 + .45 * share }));
+    label({ x: outer.x - dx * .75, y: outer.y - dy * .75 }, share);
+  }
+  const rows = new Map();
+  for (const { action, share } of shares.filter(candidate => candidate.action >= 42)) {
+    const line = Math.floor((action - 42) / 128);
+    rows.set(line, (rows.get(line) || 0) + share);
+  }
+  for (const [line, share] of rows) {
+    const row = captureRow(line);
+    if (row.length > 1) label(rowEnd(row, -.6), share);
   }
 }
 
@@ -518,7 +573,7 @@ function captureChoices() {
       if (!groups.has(line)) groups.set(line, []);
       groups.get(line).push(action);
     });
-    return [...groups].map(([line, actions]) => ({ id: `line-${line}`, line, label: `Line ${line + 1}`, actions, action: actions[0] }));
+    return [...groups].map(([line, actions], index) => ({ id: `line-${line}`, line, letter: String.fromCharCode(65 + index), label: `Row ${String.fromCharCode(65 + index)} · ${captureRow(line).length} stones`, actions, action: actions[0] }));
   }
   return [];
 }

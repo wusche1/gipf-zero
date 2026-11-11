@@ -171,7 +171,6 @@ def test_optional_capture_toggle_preserves_the_engine_action_encoding(browser, s
     page.route("**/config.json", lambda route: route.fulfill(content_type="application/json", body='{"aiMode":"browser","engineUrl":"./gipf_engine.js"}'))
     try:
         page.goto(site_url, wait_until="domcontentloaded")
-        page.get_by_role("button", name="Line 4").click()
         page.get_by_role("button", name="Keep D5").click()
         assert page.locator(".capture-row-line").count() > 0
         assert page.locator("circle.double-piece").count() >= 2
