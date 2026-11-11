@@ -6,7 +6,7 @@ from test_browser_motion import state_with
 
 WORKER = '''
   self.onmessage = ({data}) => {
-    if (data.type === 'init') self.postMessage({id: data.id, ready: true, model: 'test-local', backend: 'wasm'});
+    if (data.type === 'init') self.postMessage({id: data.id, ready: true, model: 'test-local'});
     if (data.type === 'search' && data.state.current_player === -1) self.postMessage({id: data.id, action: 21, stats: {root_visits: 10, white_value: -1, evalsPerSec: 0 / 0, pv: [21], actions: [21], visits: [10]}});
   };
 '''
@@ -33,10 +33,6 @@ def test_readout_omits_an_undefined_rate_and_resets_with_the_game(browser, site_
         assert evaluation(page) == neutral
         page.locator('.ray-hit[data-ray-id="1"]').click()
         page.wait_for_function("document.querySelector('#move-count').textContent === 'MOVE 02'")
-        page.locator("#opponent").select_option(label="Classic")
-        assert evaluation(page) == neutral
-        page.locator('.ray-hit[data-ray-id="0"]').click()
-        page.wait_for_function("document.querySelector('#move-count').textContent === 'MOVE 04'")
         assert evaluation(page)[0] == "Obsidian 100%"
         page.locator("#ai-color").select_option("white")
         assert evaluation(page) == neutral

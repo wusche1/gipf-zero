@@ -10,7 +10,7 @@ const els = {
   board: $('board'), base: $('board-base'), rays: $('ray-layer'), grid: $('grid-layer'), captureLayer: $('capture-layer'), pieces: $('piece-layer'), removals: $('removal-layer'), outer: $('outer-layer'), interaction: $('interaction-layer'),
   status: $('engine-status'), phaseTitle: $('phase-title'), phaseBadge: $('phase-badge'), hint: $('board-hint'), round: $('round-number'), move: $('move-count'), explanation: $('explanation'),
   reserveWhite: $('reserve-white'), reserveBlack: $('reserve-black'), barWhite: $('reserve-bar-white'), barBlack: $('reserve-bar-black'), turnWhite: $('turn-white'), turnBlack: $('turn-black'), toast: $('toast'),
-  capture: $('capture-card'), captureOptions: $('capture-options'), captureToggles: $('capture-toggles'), confirmCapture: $('confirm-capture'), mode: $('mode-select'), aiColor: $('ai-color'), difficulty: $('difficulty'), opponent: $('opponent'), aiStatus: $('ai-status'),
+  capture: $('capture-card'), captureOptions: $('capture-options'), captureToggles: $('capture-toggles'), confirmCapture: $('confirm-capture'), mode: $('mode-select'), aiColor: $('ai-color'), difficulty: $('difficulty'), aiStatus: $('ai-status'),
   undo: $('undo'), hints: $('hint-layer'), evalTrack: $('eval-track'), evalFill: $('eval-fill'), evalLabel: $('eval-label'), readout: $('think-readout'), ponder: $('ponder'), showHints: $('hints')
 };
 
@@ -31,9 +31,7 @@ let analysisToken = 0;
 let ponderToken = 0;
 let ponderChoice = true;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-const requestedAiBackend = new URLSearchParams(window.location.search).get('aiBackend');
 const localAi = createLocalAiClient({
-  backend: requestedAiBackend === 'webgpu' ? 'webgpu' : 'wasm',
   onStatus(status, detail) {
     if (status === 'loading') { els.aiStatus.textContent = 'Loading local model…'; $('retry-ai').hidden = true; }
     if (status === 'ready') {
@@ -53,11 +51,6 @@ async function start() {
     const response = await fetch('./config.json', { cache: 'no-store' });
     if (response.ok) config = { ...config, ...(await response.json()) };
   } catch { /* GitHub Pages can still run from the static shell. */ }
-  // The earlier champion stays selectable while its metadata is deployed.
-  const noClassic = () => els.opponent.closest('.control-row').remove();
-  els.opponent.options[1].value = config.classic;
-  if (config.classic) fetch(`./models/${config.classic}.json`).then(response => { if (!response.ok) noClassic(); }, noClassic);
-  else noClassic();
   const engineInfo = await game.loadEngine(config);
   els.status.textContent = engineInfo.available ? 'Ready to play' : 'Rules engine unavailable';
   if (engineInfo.available) document.querySelector('.status-dot').style.background = '#618d72';
@@ -447,12 +440,6 @@ function bindControls() {
   els.confirmCapture.addEventListener('click', chooseCapture);
   els.mode.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('mode changed'); aiBlocked = false; document.querySelectorAll('.ai-only').forEach(el => { el.style.display = els.mode.value === 'ai' ? 'flex' : ''; }); resetEval(); render(); });
   els.aiColor.addEventListener('change', () => { gameRevision += 1; cancelAiSearch('machine colour changed'); aiBlocked = false; resetEval(); render(); });
-  els.opponent.addEventListener('change', () => {
-    gameRevision += 1; aiThinking = false; aiBlocked = false; aiModelName = ''; ponderToken = 0;
-    localAi.setModel(els.opponent.value || null);
-    els.aiStatus.textContent = 'Local model ready when needed'; $('retry-ai').hidden = true;
-    resetEval(); render();
-  });
   els.difficulty.addEventListener('change', maybeAiMove);
   els.ponder.addEventListener('change', () => { ponderChoice = els.ponder.checked; restartPonder(); });
   // Candidate moves come from the same bounded background search as pondering.

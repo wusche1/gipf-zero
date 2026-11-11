@@ -49,7 +49,7 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser()
     p.add_argument('name')
     p.add_argument('--title', required=True)
-    p.add_argument('--checkpoint')
+    p.add_argument('--checkpoint', required=True)
     p.add_argument('--int16', action='store_true')
     p.add_argument('--cpuct', type=float, default=1.5)
     p.add_argument('--fpu', type=float, default=-1.0)
@@ -57,20 +57,18 @@ if __name__ == '__main__':
     p.add_argument('--web', type=Path, default=Path('web'))
     a = p.parse_args()
     models = a.web / 'models'
-    meta = {'name': a.title, 'format': 'onnx', 'path': f'{a.name}.onnx'}
-    if a.checkpoint:
-        from ops.dump_former import dump
-        from training import net
-        model = net.load(a.checkpoint)[0]
-        block = model.blocks[0]
-        arch = {'width': model.embed.out_features, 'blocks': len(model.blocks), 'heads': block.h, 'ff': block.f1.out_features,
-                'relu': False, 'int16': a.int16}
-        meta |= {'format': 'kernel', 'path': f'{a.name}.bin', 'arch': arch}
-        dump(model).tofile(models / meta['path'])
-        logit_error, value_error = kernel_error(model, models / meta['path'], arch)
-        print(f'WASM kernel vs PyTorch on 16 positions: max logit error {logit_error:.2e}, max value error {value_error:.2e}')
-        if not max(logit_error, value_error) < (0.02 if a.int16 else 1e-3):
-            raise SystemExit('kernel does not reproduce the checkpoint; metadata not written')
+    from ops.dump_former import dump
+    from training import net
+    model = net.load(a.checkpoint)[0]
+    block = model.blocks[0]
+    arch = {'width': model.embed.out_features, 'blocks': len(model.blocks), 'heads': block.h, 'ff': block.f1.out_features,
+            'relu': False, 'int16': a.int16}
+    meta = {'name': a.title, 'format': 'kernel', 'path': f'{a.name}.bin', 'arch': arch}
+    dump(model).tofile(models / meta['path'])
+    logit_error, value_error = kernel_error(model, models / meta['path'], arch)
+    print(f'WASM kernel vs PyTorch on 16 positions: max logit error {logit_error:.2e}, max value error {value_error:.2e}')
+    if not max(logit_error, value_error) < (0.02 if a.int16 else 1e-3):
+        raise SystemExit('kernel does not reproduce the checkpoint; metadata not written')
     meta |= {'sha256': hashlib.sha256((models / meta['path']).read_bytes()).hexdigest(),
              'cpuct': a.cpuct, 'fpu': a.fpu, 'budgetsMs': dict(zip(('fast', 'normal', 'strong'), a.budgets)),
              'ponder': {'maxMs': 20000, 'maxVisits': 20000}}

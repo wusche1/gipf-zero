@@ -99,7 +99,7 @@ def local_worker(actions, *, delay_ms=0):
       self.onmessage = (event) => {{
         const request = event.data;
         if (request.type === 'init') {{
-          self.postMessage({{ id: request.id, ready: true, model: 'test-local', backend: 'wasm' }});
+          self.postMessage({{ id: request.id, ready: true, model: 'test-local' }});
           return;
         }}
         if (request.type === 'search') {{

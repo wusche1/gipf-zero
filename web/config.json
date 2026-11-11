@@ -1,6 +1,5 @@
 {
   "aiMode": "browser",
   "engineUrl": "./gipf_engine.js",
-  "model": "latest",
-  "classic": "champion"
+  "model": "latest"
 }

@@ -15,10 +15,8 @@ function abortError(reason = 'cancelled') {
 }
 
 export class LocalAiClient {
-  constructor({ onStatus = () => {}, backend = 'wasm', model = null, initTimeoutMs = 60_000, searchTimeoutMs = 30_000 } = {}) {
+  constructor({ onStatus = () => {}, initTimeoutMs = 60_000, searchTimeoutMs = 30_000 } = {}) {
     this.onStatus = onStatus;
-    this.backend = backend;
-    this.model = model;
     this.initTimeoutMs = initTimeoutMs;
     this.searchTimeoutMs = searchTimeoutMs;
     this.worker = null;
@@ -35,10 +33,7 @@ export class LocalAiClient {
     const generation = this.generation;
     const worker = this.#startWorker(generation);
     this.onStatus('loading');
-    const init = { type: 'init' };
-    if (this.backend) init.backend = this.backend;
-    if (this.model) init.model = this.model;
-    this.readyPromise = this.#request(worker, generation, init, this.initTimeoutMs).then((message) => {
+    this.readyPromise = this.#request(worker, generation, { type: 'init' }, this.initTimeoutMs).then((message) => {
       if (!message.ready) throw new Error('Local AI worker did not become ready');
       this.isReady = true;
       this.onStatus('ready', message);
@@ -67,7 +62,7 @@ export class LocalAiClient {
     if (epoch !== this.epoch) throw abortError();
     const message = { type, state, level, budgetMs, simulations, progress: Boolean(onProgress) };
     const result = await this.#request(this.worker, this.generation, message, timeoutMs, onProgress);
-    return { ...result, model: result.model || ready.model, backend: result.backend || ready.backend };
+    return { ...result, model: result.model || ready.model };
   }
 
   cancel(reason = 'cancelled') {
@@ -85,13 +80,6 @@ export class LocalAiClient {
   close() {
     this.#invalidate(abortError('closed'));
     this.onStatus('closed');
-  }
-
-  // Another model means another worker: the search tree belongs to its network.
-  setModel(model) {
-    this.epoch += 1;
-    this.#invalidate(abortError('model changed'));
-    this.model = model;
   }
 
   #startWorker(generation) {

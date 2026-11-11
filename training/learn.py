@@ -6,11 +6,11 @@ from .net import build, planes, CELL_PERM, ACTION_PERM, MAXA
 
 
 class Ring:
-    def __init__(self, size, dev):
-        self.size, self.dev, self.n, self.total, self.seen = size, dev, 0, 0, set()
+    def __init__(self, size, dev, vmix=0.0):
+        self.size, self.dev, self.n, self.total, self.seen, self.vmix = size, dev, 0, 0, set(), vmix
         z = lambda *s, dtype: torch.zeros(*s, dtype=dtype, device=dev)
         self.d = dict(board=z(size, 37, dtype=torch.int8), meta=z(size, 4, dtype=torch.uint8), act=z(size, MAXA, dtype=torch.int16),
-                      pi=z(size, MAXA, dtype=torch.float16), full=z(size, dtype=torch.bool), z=z(size, dtype=torch.int8))
+                      pi=z(size, MAXA, dtype=torch.float16), full=z(size, dtype=torch.bool), z=z(size, dtype=torch.int8), q=z(size, dtype=torch.float16))
 
     def add(self, path):
         f = np.load(path); N = len(f['z'])
@@ -31,7 +31,7 @@ class Ring:
         board = self.d['board'][i].gather(1, CELL_PERM.to(self.dev)[s])
         act = self.d['act'][i].long(); pad = act < 0
         act = ACTION_PERM.to(self.dev)[s[:, None], act.clamp(min=0)]
-        return planes(board, self.d['meta'][i]), act, pad, self.d['pi'][i].float(), self.d['full'][i].float(), self.d['z'][i].float()
+        return planes(board, self.d['meta'][i]), act, pad, self.d['pi'][i].float(), self.d['full'][i].float(), (1 - self.vmix) * self.d['z'][i].float() + self.vmix * self.d['q'][i].float().clamp(-1, 1)
 
 
 def losses(model, b, amp):
@@ -52,7 +52,7 @@ def main():
     p.add_argument('--min', type=int, default=20000); p.add_argument('--steps', type=int, default=0)
     p.add_argument('--val', type=int, default=0); p.add_argument('--init'); p.add_argument('--device', default='cuda')
     p.add_argument('--ckpt-every', type=int, default=250000); p.add_argument('--seconds', type=float, default=1e9)
-    p.add_argument('--seed', type=int, default=0); p.add_argument('--amp', default='bf16'); p.add_argument('--sync-budget', type=float); p.add_argument('--compile', action='store_true')
+    p.add_argument('--seed', type=int, default=0); p.add_argument('--amp', default='bf16'); p.add_argument('--value-mix', type=float, default=0.0); p.add_argument('--sync-budget', type=float); p.add_argument('--compile', action='store_true')
     a = p.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True); dev = a.device; amp = None if dev == 'cpu' else dict(bf16=torch.bfloat16, fp16=torch.float16)[a.amp]
     torch.manual_seed(a.seed); torch.backends.cudnn.benchmark = True
@@ -69,7 +69,7 @@ def main():
             if 'opt' in data:
                 opt.load_state_dict(data['opt'])
     params = sum(x.numel() for x in model.parameters())
-    ring = Ring(a.window, dev); offset = None
+    ring = Ring(a.window, dev, a.value_mix); offset = None
     fwd = torch.compile(model) if a.compile else model
 
     def save(path, full=False):

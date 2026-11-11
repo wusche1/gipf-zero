@@ -11,6 +11,8 @@ from test_browser_mapping import ROOT, WEB, QuietStaticHandler, browser, site_ur
 from test_browser_offline import versioned_site_url
 from ops.web_model import positions
 
+META = json.loads((WEB / f"models/{json.loads((WEB / 'config.json').read_text())['model']}.json").read_text())
+
 RPC = """() => {
   window.worker = new Worker('/ai-worker.js'); window.replies = {}; let serial = 0;
   worker.onmessage = (e) => { if (!e.data.progress) window.replies[e.data.id] = e.data; else window.progress = (window.progress || 0) + 1; };
@@ -20,12 +22,12 @@ RPC = """() => {
 }"""
 
 
-def worker_page(browser, url, model=None):
+def worker_page(browser, url):
     page = browser.new_page()
     page.set_default_timeout(120_000)
     page.goto(url + "/config.json")
     page.evaluate(RPC)
-    assert page.evaluate("(model) => rpc({type:'init', model})", model)["ready"]
+    assert page.evaluate("rpc({type:'init'})")["ready"]
     return page
 
 
@@ -57,17 +59,32 @@ def test_search_reuses_the_subtree_of_the_played_move(browser, site_url):
         page.close()
 
 
-def test_onnx_champion_still_searches_through_the_same_worker(browser, site_url):
-    page = worker_page(browser, site_url, "champion")
+def test_exact_and_timed_searches_report_the_shipped_model(browser, site_url):
+    page = worker_page(browser, site_url)
     try:
         state = ge.State()
         first = rpc(page, type="search", state=state.serialize(), simulations=120)
-        assert "43,869" in first["model"] and first["stats"]["root_visits"] == 120 == first["stats"]["simulations"]
+        assert first["model"] == META["name"] and first["sha256"] == META["sha256"]
+        assert first["stats"]["root_visits"] == 120 == first["stats"]["simulations"]
         assert first["stats"]["evaluations"] == 121
         state.apply(first["action"])
         second = rpc(page, type="search", state=state.serialize(), budgetMs=200)["stats"]
         assert second["reusedVisits"] == max(first["stats"]["visits"]) - 1 and second["action"] in state.legal_actions()
         assert 0 < second["elapsedMs"] < 2_000
+    finally:
+        page.close()
+
+
+def test_benchmark_page_reports_the_shipped_model_speed(browser, site_url):
+    page = browser.new_page()
+    page.set_default_timeout(120_000)
+    try:
+        page.goto(site_url + "/benchmark.html", wait_until="domcontentloaded")
+        page.locator("#run").click()
+        page.locator("#status").get_by_text("Finished.").wait_for()
+        report = json.loads(page.locator("#result").text_content())
+        assert report["model"] == META["name"] and report["simulations"] == 128
+        assert report["positionsPerSecond"] > 0 and report["action"] in ge.State().legal_actions()
     finally:
         page.close()
 
@@ -147,14 +164,24 @@ def test_full_games_against_random_are_legal_and_finish(browser, site_url):
         page.close()
 
 
-def test_placeholder_model_swaps_in_through_config(browser, versioned_site_url, tmp_path):
+def swap_in(tmp_path, name, title, config):
+    import torch
+    from training import net
     web = tmp_path / "web"
-    subprocess.run([sys.executable, "-m", "ops.export_onnx", "--kind", "hex", "--width", "32", "--blocks", "2", "--tokens",
-                    "--output", str(web / "models/placeholder.onnx")], cwd=ROOT, check=True)
-    subprocess.run([sys.executable, "-m", "ops.web_model", "placeholder", "--title", "Placeholder net", "--cpuct", "2.0",
-                    "--fpu", "0.2", "--web", str(web)], cwd=ROOT, check=True)
-    config = json.loads((web / "config.json").read_text())
-    (web / "config.json").write_text(json.dumps({**config, "model": "placeholder"}))
+    torch.manual_seed(0)
+    model = net.build(config)
+    with torch.no_grad():
+        for parameter in model.parameters():
+            parameter.add_(0.05 * torch.randn_like(parameter))
+    torch.save({"model": model.state_dict(), "config": config}, tmp_path / f"{name}.pt")
+    subprocess.run([sys.executable, "-m", "ops.web_model", name, "--checkpoint", str(tmp_path / f"{name}.pt"), "--title", title,
+                    "--cpuct", "2.0", "--fpu", "0.2", "--web", str(web)], cwd=ROOT, check=True)
+    (web / "config.json").write_text(json.dumps({**json.loads((web / "config.json").read_text()), "model": name}))
+    return json.loads((web / f"models/{name}.json").read_text())
+
+
+def test_placeholder_model_swaps_in_through_config(browser, versioned_site_url, tmp_path):
+    swap_in(tmp_path, "placeholder", "Placeholder net", {"kind": "former", "width": 32, "blocks": 2, "heads": 2, "ffmul": 2})
     page = browser.new_page(viewport={"width": 390, "height": 844})
     page.set_default_timeout(60_000)
     try:
@@ -176,22 +203,9 @@ def test_placeholder_model_swaps_in_through_config(browser, versioned_site_url, 
 
 
 def test_kernel_checkpoint_of_another_shape_swaps_in_with_the_tool(browser, versioned_site_url, tmp_path):
-    import torch
-    from training import net
-    web = tmp_path / "web"
-    config = {"kind": "former", "width": 64, "blocks": 2, "heads": 2, "ffmul": 3}
-    torch.manual_seed(0)
-    model = net.build(config)
-    with torch.no_grad():
-        for parameter in model.parameters():
-            parameter.add_(0.05 * torch.randn_like(parameter))
-    torch.save({"model": model.state_dict(), "config": config}, tmp_path / "other.pt")
-    subprocess.run([sys.executable, "-m", "ops.web_model", "other", "--checkpoint", str(tmp_path / "other.pt"), "--title", "Other net",
-                    "--cpuct", "2.0", "--fpu", "0.2", "--web", str(web)], cwd=ROOT, check=True)
-    meta = json.loads((web / "models/other.json").read_text())
+    meta = swap_in(tmp_path, "other", "Other net", {"kind": "former", "width": 64, "blocks": 2, "heads": 2, "ffmul": 3})
     assert meta["format"] == "kernel" and meta["arch"] == {"width": 64, "blocks": 2, "heads": 2, "ff": 192, "relu": False, "int16": False}
     assert (meta["cpuct"], meta["fpu"]) == (2.0, 0.2)
-    (web / "config.json").write_text(json.dumps({**json.loads((web / "config.json").read_text()), "model": "other"}))
     page = browser.new_page()
     page.set_default_timeout(60_000)
     try:

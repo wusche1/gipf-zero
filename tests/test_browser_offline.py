@@ -99,7 +99,7 @@ def test_real_ai_assets_survive_offline_reload(browser, site_url):
         assert worker_requests == []
         page.locator("#undo").click()
 
-        # Warm the actual model and runtime assets while online.
+        # Warm the actual model while online.
         page.locator("#mode-select").select_option("ai")
         page.locator('.ray-hit[data-ray-id="0"]').click()
         page.wait_for_function("document.querySelector('#move-count').textContent === 'MOVE 02'", timeout=120_000)
@@ -164,7 +164,7 @@ def test_versioned_build_caches_hashed_assets_and_preserves_benchmark_navigation
         meta = json.loads((WEB / f"models/{config['model']}.json").read_text())
         assert meta["path"].endswith(".bin")
         assert any(f"models/{meta['path']}?v={meta['sha256']}" in url for url in keys)
-        assert not any("/vendor/onnxruntime/" in url for url in keys)
+        assert not any("/vendor/" in url or ".onnx" in url for url in keys)
 
         page.goto(f"{versioned_site_url}/benchmark.html", wait_until="domcontentloaded")
         expect(page.locator("h1")).to_have_text("How fast is your device?")

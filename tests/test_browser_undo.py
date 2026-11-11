@@ -25,13 +25,13 @@ def fake_engine(initial):
 
 
 def local_worker(*, delay_ms=0):
-    """Return a deterministic classic worker matching the browser AI protocol."""
+    """Return a deterministic worker matching the browser AI protocol."""
     return f'''
       let searches = 0;
       self.onmessage = (event) => {{
         const request = event.data;
         if (request.type === 'init') {{
-          self.postMessage({{ id: request.id, ready: true, model: 'test-local', backend: 'wasm' }});
+          self.postMessage({{ id: request.id, ready: true, model: 'test-local' }});
           return;
         }}
         if (request.type === 'search') {{

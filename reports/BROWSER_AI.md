@@ -128,10 +128,18 @@ management, a model swap and complete games through the real worker.
 
 The default opponent is now a `HexFormer` checkpoint evaluated by a WASM SIMD
 kernel inside the engine; search slices of about 15 ms run select, encode,
-forward, expand and backup without leaving WASM. ONNX Runtime is fetched only for
-the "Classic" champion. Measured in the real worker in headless Chromium on the
+forward, expand and backup without leaving WASM. Measured in the real worker in headless Chromium on the
 shared 4-core host (width 96, 6 blocks, interleaved runs, medians): about 1,000
 evaluations/s on the kernel path against about 430 for the same network through
 ONNX Runtime Web. `tests/test_browser_search_wasm.py` checks the kernel search
 against the Python search driving the PyTorch model; see `web/README.md` for the
 swap command.
+
+## Classic opponent removed — 11 November 2026
+
+The site now ships only the transformer kernel model. The "Classic" opponent
+selector, the 43,869-game ONNX champion, ONNX Runtime Web, the WebGPU path and
+the champion benchmarks (`benchmarks/browser_inference.py`,
+`browser_performance.py`, `browser_play.py`) were removed; the sections above
+that describe them are historical. `benchmark.html` reports the kernel model's
+search speed.

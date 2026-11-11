@@ -79,7 +79,7 @@ create().then(Module => {
 
 
 def test_browser_search_terminal_capture_returns_after_one_unbounded_step():
-    """A solved terminal child cannot monopolize the classic-worker event loop."""
+    """A solved terminal child cannot monopolize the worker event loop."""
     wasm = ROOT / "web" / "gipf_engine.js"
     if not wasm.exists() or not shutil.which("node"):
         pytest.skip("WASM artifact or Node unavailable")
