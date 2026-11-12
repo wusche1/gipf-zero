@@ -13,6 +13,8 @@
   "sha256": "0d79b27380b7da1c120aa6464ba55e83f0d300f9ab31a847900417f62c3d0cac",
   "cpuct": 1.5,
   "fpu": 0.1,
+  "varietyPlies": 6,
+  "varietyRatio": 0.6,
   "budgetsMs": {
     "fast": 300,
     "normal": 1000,

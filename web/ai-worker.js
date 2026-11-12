@@ -73,8 +73,23 @@ async function search(request, ponder) {
     await tick();
     if (request.progress && now - posted > 150) { posted = now; self.postMessage({id:request.id, progress:true, stats:stats()}); }
   }
-  const result = stats();
+  const result = ponder || exact ? stats() : vary(request.state, stats());
   return {...info, action:result.action, stats:result};
+}
+
+// Opening variety: an early push is drawn from the root moves close to the
+// most-visited one, in proportion to their visits. The reported line and value
+// follow the move played; the next request re-roots onto it by state.
+function vary(state, result) {
+  if (state.phase === 'capture' || state.ply >= (model.varietyPlies ?? 6)) return result;
+  const floor = (model.varietyRatio ?? 0.6) * Math.max(...result.visits);
+  const pool = result.visits.map((_, index) => index).filter((index) => result.visits[index] > 0 && result.visits[index] >= floor);
+  if (pool.length < 2) return result;
+  let roll = Math.random() * pool.reduce((sum, index) => sum + result.visits[index], 0);
+  const pick = pool.find((index) => (roll -= result.visits[index]) < 0) ?? pool[0];
+  const action = result.actions[pick];
+  if (action === result.action) return result;
+  return {...result, action, pv:[action], value:result.q[pick], white_value:result.q[pick] * result.actor};
 }
 
 // The benchmark page: a fixed search from the opening position.
