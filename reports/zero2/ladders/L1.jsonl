@@ -1,0 +1,10 @@
+{"a": "hex64r8@100", "b": "champion@100", "wins": 57, "losses": 3, "cutoffs": 0, "seed": 28348}
+{"a": "boot@100", "b": "champion@100", "wins": 53, "losses": 7, "cutoffs": 0, "seed": 13347}
+{"a": "hex96x10@100", "b": "former96x6@100", "wins": 13, "losses": 47, "cutoffs": 0, "seed": 29690}
+{"a": "boot@100", "b": "former96x6@100", "wins": 7, "losses": 53, "cutoffs": 0, "seed": 14420}
+{"a": "hex64r8@100", "b": "hex96x10@100", "wins": 28, "losses": 32, "cutoffs": 0, "seed": 1771}
+{"a": "hex64r8@100", "b": "former96x6@100", "wins": 12, "losses": 48, "cutoffs": 0, "seed": 14507}
+{"a": "boot@100", "b": "hex64r8@100", "wins": 22, "losses": 38, "cutoffs": 0, "seed": 6542}
+{"a": "boot@100", "b": "hex96x10@100", "wins": 21, "losses": 39, "cutoffs": 0, "seed": 23410}
+{"a": "hex96x10@100", "b": "champion@100", "wins": 59, "losses": 1, "cutoffs": 0, "seed": 6542}
+{"a": "former96x6@100", "b": "champion@100", "wins": 57, "losses": 3, "cutoffs": 0, "seed": 23410}

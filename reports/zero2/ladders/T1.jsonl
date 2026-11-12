@@ -1,0 +1,6 @@
+{"a": "base", "b": "c10", "wins": 51, "losses": 49, "cutoffs": 0, "seed": 23044}
+{"a": "base", "b": "f02", "wins": 29, "losses": 71, "cutoffs": 0, "seed": 22242}
+{"a": "base", "b": "c10f02", "wins": 25, "losses": 75, "cutoffs": 0, "seed": 1463}
+{"a": "base", "b": "c25", "wins": 61, "losses": 38, "cutoffs": 1, "seed": 2856}
+{"a": "base", "b": "f05", "wins": 33, "losses": 66, "cutoffs": 1, "seed": 23232}
+{"a": "base", "b": "c25f03", "wins": 43, "losses": 56, "cutoffs": 1, "seed": 6635}

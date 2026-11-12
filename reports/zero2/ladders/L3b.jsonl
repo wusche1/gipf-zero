@@ -1,0 +1,10 @@
+{"a": "main", "b": "f128x6", "wins": 43, "losses": 17, "cutoffs": 0, "seed": 30891}
+{"a": "f96r4", "b": "f128x6", "wins": 42, "losses": 18, "cutoffs": 0, "seed": 29211}
+{"a": "f128x6", "b": "f64x8", "wins": 15, "losses": 45, "cutoffs": 0, "seed": 12441}
+{"a": "main", "b": "f96r4", "wins": 41, "losses": 19, "cutoffs": 0, "seed": 1158}
+{"a": "main", "b": "f64x8", "wins": 30, "losses": 30, "cutoffs": 0, "seed": 1609}
+{"a": "f96r4", "b": "f64x4r8", "wins": 17, "losses": 43, "cutoffs": 0, "seed": 30100}
+{"a": "main", "b": "f64x4r8", "wins": 26, "losses": 34, "cutoffs": 0, "seed": 13492}
+{"a": "f96r4", "b": "f64x8", "wins": 21, "losses": 38, "cutoffs": 1, "seed": 19773}
+{"a": "f64x8", "b": "f64x4r8", "wins": 17, "losses": 43, "cutoffs": 0, "seed": 30891}
+{"a": "f128x6", "b": "f64x4r8", "wins": 5, "losses": 55, "cutoffs": 0, "seed": 1158}

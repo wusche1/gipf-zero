@@ -1,0 +1,6 @@
+{"a": "main", "b": "f64x4", "wins": 25, "losses": 35, "cutoffs": 0, "seed": 18013}
+{"a": "main", "b": "f64x6", "wins": 28, "losses": 31, "cutoffs": 1, "seed": 20895}
+{"a": "main", "b": "f48x4", "wins": 26, "losses": 34, "cutoffs": 0, "seed": 32409}
+{"a": "f64x4", "b": "f64x6", "wins": 30, "losses": 30, "cutoffs": 0, "seed": 17517}
+{"a": "f48x4", "b": "f64x6", "wins": 27, "losses": 33, "cutoffs": 0, "seed": 32443}
+{"a": "f64x4", "b": "f48x4", "wins": 31, "losses": 29, "cutoffs": 0, "seed": 25135}

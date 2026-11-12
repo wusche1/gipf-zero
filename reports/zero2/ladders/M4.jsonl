@@ -1,0 +1,3 @@
+{"a": "old", "b": "lr3", "wins": 51, "losses": 69, "cutoffs": 0, "seed": 28663}
+{"a": "main", "b": "old", "wins": 79, "losses": 41, "cutoffs": 0, "seed": 23905}
+{"a": "main", "b": "lr3", "wins": 54, "losses": 66, "cutoffs": 0, "seed": 17781}
