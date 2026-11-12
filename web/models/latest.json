@@ -11,7 +11,7 @@
     "int16": true
   },
   "sha256": "81c1381ca743975d2801d23c966d59aa31fe6f39ff9f4b5190c77134eaee51a5",
-  "cpuct": 1.0,
+  "cpuct": 1.5,
   "fpu": 0.1,
   "budgetsMs": {
     "fast": 300,
