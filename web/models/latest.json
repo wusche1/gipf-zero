@@ -10,7 +10,7 @@
     "relu": false,
     "int16": true
   },
-  "sha256": "81c1381ca743975d2801d23c966d59aa31fe6f39ff9f4b5190c77134eaee51a5",
+  "sha256": "0d79b27380b7da1c120aa6464ba55e83f0d300f9ab31a847900417f62c3d0cac",
   "cpuct": 1.5,
   "fpu": 0.1,
   "budgetsMs": {
