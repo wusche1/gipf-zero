@@ -1,0 +1,17 @@
+{"a": "tf70M", "b": "tf100M", "wins": 37, "losses": 63, "cutoffs": 0, "seed": 1470}
+{"a": "tf40M", "b": "tf70M", "wins": 45, "losses": 55, "cutoffs": 0, "seed": 32271}
+{"a": "tf200M", "b": "tf250M", "wins": 50, "losses": 50, "cutoffs": 0, "seed": 31488}
+{"a": "tf160M", "b": "tf200M", "wins": 50, "losses": 50, "cutoffs": 0, "seed": 15418}
+{"a": "tf130M", "b": "tf160M", "wins": 45, "losses": 55, "cutoffs": 0, "seed": 15943}
+{"a": "tf100M", "b": "tf130M", "wins": 45, "losses": 53, "cutoffs": 2, "seed": 27002}
+{"a": "tf250M", "b": "tf300M", "wins": 48, "losses": 52, "cutoffs": 0, "seed": 32271}
+{"a": "tf300M", "b": "tf345M", "wins": 48, "losses": 52, "cutoffs": 0, "seed": 1470}
+{"a": "tf345M", "b": "teacher128x8", "wins": 33, "losses": 67, "cutoffs": 0, "seed": 27002}
+{"a": "tf160M", "b": "tf250M", "wins": 47, "losses": 53, "cutoffs": 0, "seed": 31976}
+{"a": "tf40M", "b": "tf100M", "wins": 41, "losses": 59, "cutoffs": 0, "seed": 11070}
+{"a": "tf250M", "b": "tf345M", "wins": 42, "losses": 58, "cutoffs": 0, "seed": 8741}
+{"a": "tf100M", "b": "tf160M", "wins": 44, "losses": 55, "cutoffs": 1, "seed": 20424}
+{"a": "tf70M", "b": "tf130M", "wins": 31, "losses": 69, "cutoffs": 0, "seed": 1857}
+{"a": "tf130M", "b": "tf200M", "wins": 54, "losses": 46, "cutoffs": 0, "seed": 25659}
+{"a": "tf200M", "b": "tf300M", "wins": 44, "losses": 56, "cutoffs": 0, "seed": 20246}
+{"a": "tf300M", "b": "teacher128x8", "wins": 44, "losses": 56, "cutoffs": 0, "seed": 10177}

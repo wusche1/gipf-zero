@@ -1,0 +1,3 @@
+{"a": "big128x8", "b": "big160x8", "wins": 86, "losses": 74, "cutoffs": 0, "seed": 129}
+{"a": "main96x6", "b": "big160x8", "wins": 76, "losses": 84, "cutoffs": 0, "seed": 9184}
+{"a": "main96x6", "b": "big128x8", "wins": 61, "losses": 99, "cutoffs": 0, "seed": 21726}

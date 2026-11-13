@@ -32,13 +32,20 @@ def main():
     p.add_argument('--max-ply', type=int, default=240); p.add_argument('--seed', type=int, default=1)
     p.add_argument('--shard', type=int, default=20000); p.add_argument('--device', default='cuda')
     p.add_argument('--seconds', type=float, default=1e9); p.add_argument('--cpuct', type=float, default=1.5); p.add_argument('--fpu', type=float, default=-1.0)
+    p.add_argument('--open-random', type=float, default=0.0); p.add_argument('--temp-plies', type=int, default=16); p.add_argument('--late-power', type=float, default=4.0)
     a = p.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(a.seed); dev = a.device
     torch.backends.cudnn.benchmark = True
     mtime = os.path.getmtime(a.weights); model, _ = load(a.weights, dev)
     G = a.games
-    roots = [ge.NativeNode(ge.State()) for _ in range(G)]; hist = [[] for _ in range(G)]
+    def fresh():
+        s = ge.State()
+        if rng.random() < a.open_random:
+            for _ in range(int(rng.integers(1, 5))):
+                s.apply(int(rng.choice(s.legal_actions())))
+        return ge.NativeNode(s)
+    roots = [fresh() for _ in range(G)]; hist = [[] for _ in range(G)]
     buf = []; shards = games = positions = cutoffs = white = 0; start = last = time.time(); lengths = []
     while time.time() - start < a.seconds:
         m = os.path.getmtime(a.weights)
@@ -60,7 +67,7 @@ def main():
         for i, root in enumerate(roots):
             visits = np.asarray(root.visits, np.float64); total = visits.sum(); pi = visits / total
             q = float(np.sum(root.values) / total); acts = np.asarray(root.actions, np.int16)
-            w = pi if root.state.ply < 16 else pi ** 4
+            w = pi if root.state.ply < a.temp_plies else pi ** a.late_power
             sel = int(rng.choice(len(pi), p=w / w.sum()))
             if len(acts) > MAXA:
                 keep = np.argsort(-pi)[:MAXA]; hacts, hpi = acts[keep], pi[keep] / pi[keep].sum()
@@ -72,7 +79,7 @@ def main():
             if s.winner or cutoff:
                 games += 1; cutoffs += not s.winner; white += s.winner == 1; lengths.append(len(hist[i]))
                 buf.extend((b, mt, ac, pp, f, s.winner * actor, qq, ply) for b, mt, ac, pp, f, actor, qq, ply in hist[i])
-                roots[i] = ge.NativeNode(ge.State()); hist[i] = []
+                roots[i] = fresh(); hist[i] = []
         positions += G
         if len(buf) >= a.shard:
             N = len(buf); act = np.full((N, MAXA), -1, np.int16); pi = np.zeros((N, MAXA), np.float16)
