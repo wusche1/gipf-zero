@@ -1,0 +1,15 @@
+{"game":0,"seed":106,"depth":5,"weWhite":true,"opening":[8,27],"plies":57,"winner":1,"result":1,"gf1MsPerMove":998.1814814814812,"ourMsPerDecision":6.781492444444445,"ourSimsPerDecision":12}
+{"game":1,"seed":106,"depth":5,"weWhite":false,"opening":[8,27],"plies":58,"winner":-1,"result":1,"gf1MsPerMove":537.7142857142857,"ourMsPerDecision":5.963641064516724,"ourSimsPerDecision":12}
+{"game":2,"seed":106,"depth":5,"weWhite":true,"opening":[4,33],"plies":51,"winner":1,"result":1,"gf1MsPerMove":486.3208333333334,"ourMsPerDecision":5.169617032258107,"ourSimsPerDecision":12}
+{"game":3,"seed":106,"depth":5,"weWhite":false,"opening":[4,33],"plies":104,"winner":-1,"result":1,"gf1MsPerMove":391.4196078431372,"ourMsPerDecision":5.845923311476162,"ourSimsPerDecision":12}
+{"game":4,"seed":106,"depth":5,"weWhite":true,"opening":[10,23],"plies":37,"winner":1,"result":1,"gf1MsPerMove":466.92941176470595,"ourMsPerDecision":4.3633861363632604,"ourSimsPerDecision":12}
+{"game":5,"seed":106,"depth":5,"weWhite":false,"opening":[10,23],"plies":120,"winner":-1,"result":1,"gf1MsPerMove":217.264406779661,"ourMsPerDecision":4.194131328125877,"ourSimsPerDecision":12}
+{"game":6,"seed":106,"depth":5,"weWhite":true,"opening":[33,33],"plies":90,"winner":-1,"result":-1,"gf1MsPerMove":248.8045454545454,"ourMsPerDecision":3.698029479167417,"ourSimsPerDecision":12}
+{"game":7,"seed":106,"depth":5,"weWhite":false,"opening":[33,33],"plies":49,"winner":1,"result":-1,"gf1MsPerMove":205.16666666666666,"ourMsPerDecision":3.7950726799992847,"ourSimsPerDecision":12}
+{"game":8,"seed":106,"depth":5,"weWhite":true,"opening":[1,4],"plies":79,"winner":1,"result":1,"gf1MsPerMove":322.7763157894737,"ourMsPerDecision":5.724422875000831,"ourSimsPerDecision":12}
+{"game":9,"seed":106,"depth":5,"weWhite":false,"opening":[1,4],"plies":67,"winner":1,"result":-1,"gf1MsPerMove":221.90909090909085,"ourMsPerDecision":6.155846871794584,"ourSimsPerDecision":12}
+{"game":10,"seed":106,"depth":5,"weWhite":true,"opening":[25,41],"plies":95,"winner":1,"result":1,"gf1MsPerMove":413.58478260869566,"ourMsPerDecision":6.125858678572903,"ourSimsPerDecision":12}
+{"game":11,"seed":106,"depth":5,"weWhite":false,"opening":[25,41],"plies":75,"winner":1,"result":-1,"gf1MsPerMove":334.4243243243243,"ourMsPerDecision":4.426705804878488,"ourSimsPerDecision":12}
+{"game":12,"seed":106,"depth":5,"weWhite":true,"opening":[6,19],"plies":56,"winner":-1,"result":-1,"gf1MsPerMove":211.84814814814814,"ourMsPerDecision":3.8199184848477175,"ourSimsPerDecision":12}
+{"game":13,"seed":106,"depth":5,"weWhite":false,"opening":[6,19],"plies":88,"winner":-1,"result":1,"gf1MsPerMove":336.6627906976745,"ourMsPerDecision":3.7226590416673084,"ourSimsPerDecision":12}
+{"summary":true,"seed":106,"depth":5,"budget":"12 sims","games":14,"wins":9,"losses":5,"draws":0,"aborted":0,"score":0.6428571428571429,"ci95":[0.3918591348969202,0.8938551508173656],"ourSimsPerDecision":12,"ourMsPerDecision":5.020249531732875,"gf1MsPerMove":364.36204819277106}

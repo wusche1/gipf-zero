@@ -1,0 +1,7 @@
+{"game":0,"seed":61,"aWhite":true,"opening":[23,29,37,31],"plies":101,"winner":1,"result":1}
+{"game":1,"seed":61,"aWhite":false,"opening":[23,29,37,31],"plies":189,"winner":1,"result":-1}
+{"game":2,"seed":61,"aWhite":true,"opening":[1,8,24,17],"plies":99,"winner":1,"result":1}
+{"game":3,"seed":61,"aWhite":false,"opening":[1,8,24,17],"plies":118,"winner":-1,"result":1}
+{"game":4,"seed":61,"aWhite":true,"opening":[16,21,33,26],"plies":79,"winner":1,"result":1}
+{"game":5,"seed":61,"aWhite":false,"opening":[16,21,33,26],"plies":132,"winner":-1,"result":1}
+{"summary":true,"seed":61,"games":6,"wins":5,"losses":1,"draws":0,"score":0.8333333333333334,"ci95":[0.5351288298027429,1.1315378368639237],"a":{"spec":"bin=/workspace/tmp/gipf-work/arena/final64x4.bin,arch=/workspace/tmp/gipf-work/arena/final64x4.json,int16=1,cpuct=1.5,fpu=0.1,ms=3000","decisions":389,"simsPerDecision":4210.38560411311,"msPerDecision":1727.0200682699203,"msPerSim":0.4101809740615683},"b":{"spec":"bin=/workspace/tmp/gipf-work/arena/final64x4.bin,arch=/workspace/tmp/gipf-work/arena/final64x4.json,int16=1,cpuct=1.5,fpu=0.1,ms=1000","decisions":392,"simsPerDecision":1699.1045918367347,"msPerDecision":653.9357607321468,"msPerSim":0.3848708101160749}}

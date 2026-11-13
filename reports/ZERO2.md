@@ -33,9 +33,9 @@ Every external match compares the full board between both rule engines after eac
 | GF1 1.03, depths 3–6 | first deployed net (96x6 after 21M positions), 300 ms and 1000 ms per move | 190 wins, 1 loss in 191 valid games; 1 further game aborted on a bridge bug, since fixed |
 | GF1 depth 4 | same net, 1000 simulations | 20–0 |
 | BoardSpace Bestbot (depth 7), Smartbot, Dumbot, Weakbot | 64x4, second deployed weights; 300 ms, 1000 ms, 400 simulations | 246–0 |
-| GF1 depth 6 | final live weights, 300 ms | FINAL_GF1_D6 |
-| BoardSpace Bestbot | final live weights, 300 ms | FINAL_BESTBOT |
-| GF1 depth 5 / Bestbot | final live weights at 100 ms (proxy for a device 3–10x slower) | FINAL_SLOW |
+| GF1 depth 6 | final live weights, 300 ms | 12–0 |
+| BoardSpace Bestbot | final live weights, 300 ms | 24–0 |
+| GF1 depth 5 / Bestbot | final live weights at 100 ms (proxy for a device 3–10x slower) | 24–0 against GF1 depth 5; 23–1 against Bestbot |
 
 Handicap matches place GF1 on our scale. Our side is limited to a fixed number of simulations per move; GF1 plays at fixed depth.
 
@@ -43,14 +43,14 @@ Handicap matches place GF1 on our scale. Our side is limited to a fixed number o
 |---|---|---|
 | 64 | 26–4 | 10–2 |
 | 16 | 21–9 | 7–5 |
-| 12 | FINAL_S12 | – |
-| 8 | FINAL_S8 | – |
-| 6 | FINAL_S6 | – |
+| 12 | 28–14 | – |
+| 8 | 27–33 | – |
+| 6 | 14–28 | – |
 | 4 | 6–24 | – |
 | 1 (raw policy, no search) | 3–27 | – |
 
 The rows for 64, 16, 4 and 1 used the 64x4 snapshot from hour 40; the rows for 12, 8 and 6 used the final live weights.
-GF1 at depth 5 breaks even with our net somewhere between 4 and 16 simulations (HANDICAP_READ); depth 6 is not resolved by 12 games per cell.
+GF1 at depth 5 breaks even with our net somewhere between 4 and 16 simulations (about 9: it loses 14–28 at 6, is level at 8 and wins 28–14 at 12); depth 6 is not resolved by 12 games per cell.
 The site searches hundreds to thousands of simulations per move. GF1 at depth 6 needs about 8 s per move on this machine; deeper settings and GF1's timed mode were not tested.
 
 ## How it was built
@@ -79,10 +79,10 @@ Raw results: `reports/zero2/ladders/<name>.jsonl` (one line per pairing, wins an
 | Does a bigger net break the plateau? | Trained from scratch on the stream, 128x8 beat a same-age 96x6 79–41 after 2 h, and beat the 30-hour-old 96x6 97–62 and again 99–61. 160x8 lost to 128x8 74–86 while three hours younger | Clear for 128x8; 160x8 unresolved | `CAP1`–`CAP4` |
 | Does the stronger teacher help the students? | The 96x6 was flat from 130M to 250M positions and about 30 Elo higher at 300M–345M, after it started learning from 128x8 games | Suggestive only (interval −20 to +85), no control arm | `PROG3`, `TP1`, `TP2` |
 | Net size at equal browser time, early (hour 5) | 64x4 beat 96x6 27–12 at a simulated 1000 ms budget | Clear at that stage; simulated time, not real | `L3b`, `L3c` |
-| Net size at equal browser time, final | FINAL_SIZE | See text | `reports/zero2/arena`, `reports/zero2/final` |
+| Net size at equal browser time, final | At a real 300 ms: 96x6 against 64x4 scored 18–23–1 with the hour-40 snapshots and 47–37 with the final weights (pooled 65–60–1); 96x6 beat 64x6 23–19 and 64x6 beat 64x4 24–18. At a real 1000 ms: 16–14, 15–15 and 16–14 for the same three pairings | No pairing is significant; the three sizes are indistinguishable within roughly ±60 Elo at 300 ms and ±120 at 1000 ms | `reports/zero2/arena`, `reports/zero2/final` |
 | 128x8 in the browser | Lost to 96x6 8–22 at a real 1000 ms | Clear (p = 0.02), one budget | arena `g_t128x8_m96x6_1000_*` |
 | int16 kernel | Equal simulations: 97.5 of 202 points (−12 Elo, interval −62 to +38). Equal time: int16 beat float 64–26 | Clear at equal time | arena `a_*`, `i16ms_*` |
-| What does more thinking time buy? | FINAL_LEVELS | | `reports/zero2/final` |
+| What does more thinking time buy? | The live net at 1000 ms beat itself at 300 ms 34–2 (about 2,000 against 750 simulations per move); at 3000 ms it beat 1000 ms 16–2 (about 4,600 against 1,900) | Clear. A net playing a faster copy of itself tends to overstate the gap against other opponents | `reports/zero2/final` |
 
 Why 64x4 is deployed: at the end of training 64x4, 64x6 and 96x6 were indistinguishable at equal time, so I chose the smallest for download size and for slower devices.
 The size question shifted during training: small nets won clearly early on, and the larger ones caught up as training matured.
