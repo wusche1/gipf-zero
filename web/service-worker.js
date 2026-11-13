@@ -24,7 +24,12 @@ const SHELL_ASSETS = [
   './gipf_engine.js',
   './gipf_engine.wasm',
   './benchmark.html',
-  './benchmark.js'
+  './benchmark.js',
+  './about.html',
+  './benchmarks.html',
+  './pages.css',
+  './about.js',
+  './about-data.json'
 ];
 const REVISIONED_SHELL_ASSETS = REVISION_QUERY ? [
   `./styles.css${REVISION_QUERY}`,
@@ -36,7 +41,10 @@ const REVISIONED_SHELL_ASSETS = REVISION_QUERY ? [
   `./ai-worker.js${REVISION_QUERY}`,
   `./gipf_engine.js${REVISION_QUERY}`,
   `./gipf_engine.wasm${REVISION_QUERY}`,
-  `./benchmark.js${REVISION_QUERY}`
+  `./benchmark.js${REVISION_QUERY}`,
+  `./pages.css${REVISION_QUERY}`,
+  `./about.js${REVISION_QUERY}`,
+  `./about-data.json${REVISION_QUERY}`
 ] : [];
 
 const sameOrigin = (request) => new URL(request.url).origin === self.location.origin;
@@ -80,16 +88,10 @@ async function cacheShell(cache) {
     // The Pages build adds a revision query to script/style/engine references.
     // Cache those exact URLs too; stable asset lookups intentionally do not
     // ignore query strings because model and export hashes are meaningful.
-    const index = await fetch(new URL('./index.html', self.location).href);
-    if (index.ok) {
-      const html = await index.text();
-      const references = [...html.matchAll(/(?:src|href)=["']([^"']+\.(?:js|css)(?:\?[^"']+)?)['"]/gi)]
-        .map((match) => new URL(match[1], self.location).href);
-      await cache.addAll(references);
-    }
-    const benchmark = await fetch(new URL('./benchmark.html', self.location).href);
-    if (benchmark.ok) {
-      const html = await benchmark.text();
+    for (const name of ['index.html', 'benchmark.html', 'about.html', 'benchmarks.html']) {
+      const page = await fetch(new URL(`./${name}`, self.location).href);
+      if (!page.ok) continue;
+      const html = await page.text();
       const references = [...html.matchAll(/(?:src|href)=["']([^"']+\.(?:js|css)(?:\?[^"']+)?)['"]/gi)]
         .map((match) => new URL(match[1], self.location).href);
       await cache.addAll(references);

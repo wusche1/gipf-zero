@@ -4,7 +4,7 @@ from pathlib import Path
 
 def version_assets(web:Path,version:str):
     if not re.fullmatch(r'[A-Za-z0-9_-]+',version):raise ValueError('invalid asset version')
-    names=('styles.css','app.js','game.js','local-ai.js','ai-worker.js','gipf_engine.js','gipf_engine.wasm','benchmark.js','offline.js','service-worker.js')
+    names=('styles.css','app.js','game.js','local-ai.js','ai-worker.js','gipf_engine.js','gipf_engine.wasm','benchmark.js','offline.js','service-worker.js','pages.css','about.js','about-data.json')
     for path in [*web.glob('*.html'),web/'config.json',*(web/name for name in names if name.endswith('.js'))]:
         if not path.exists():continue
         text=path.read_text()

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f0e9" />
+    <meta name="description" content="How the GIPF machine works: a small neural network plus look-ahead search, running entirely in your browser." />
+    <title>GIPF · About the AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="pages.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="GIPF home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span><strong>GIPF</strong><small>board study</small></span>
+        </a>
+        <nav class="page-nav" aria-label="Site"><a href="./">Play</a><a href="about.html" aria-current="page">About the AI</a><a href="benchmarks.html">Benchmarks</a></nav>
+      </header>
+
+      <main class="page">
+        <p class="eyebrow">About the AI</p>
+        <h1>A small network that taught itself GIPF.</h1>
+        <p class="lede">Your opponent is a small neural network paired with look-ahead search. It runs entirely in your browser: the download is under 1&nbsp;MB and no server is involved. Nobody showed it how to play. It learned GIPF only by playing against itself.</p>
+        <div class="chips"><span>about 217,000 parameters</span><span>under 1 MB</span><span>no server</span><span>self-taught</span></div>
+
+        <section class="section" aria-labelledby="how-title">
+          <p class="eyebrow">Architecture</p>
+          <h2 id="how-title">From board to move</h2>
+          <p>Every time the machine thinks, the position travels through this pipeline thousands of times. Select a step to see what happens there.</p>
+          <div class="pipeline" id="pipeline">
+            <button class="stage" type="button" style="--i:0"><svg viewBox="0 0 100 100" data-art="board" aria-hidden="true"></svg><span class="stage-copy"><span class="eyebrow">01</span><strong>The board</strong><span class="stage-text">37 points on a hexagonal grid. The network gets the position exactly as it stands, with no hand-written strategy on top.</span></span></button>
+            <button class="stage" type="button" style="--i:1"><svg viewBox="0 0 100 100" data-art="tokens" aria-hidden="true"></svg><span class="stage-copy"><span class="eyebrow">02</span><strong>One token per point</strong><span class="stage-text">Each point becomes a short list of numbers: what is on it (its own or the opponent’s piece, single or GIPF piece), plus each side’s reserve and whose decision it is.</span></span></button>
+            <button class="stage stage-wide" type="button" style="--i:2"><svg viewBox="0 0 150 100" data-art="layers" aria-hidden="true"></svg><span class="stage-copy"><span class="eyebrow">03</span><strong>4 transformer layers</strong><span class="stage-text">In each layer every point looks at every other point through 4 attention heads, and updates what it knows about the position. The network is 64 numbers wide and has about 217,000 parameters in total.</span></span></button>
+            <button class="stage" type="button" style="--i:3"><svg viewBox="0 0 100 100" data-art="readout" aria-hidden="true"></svg><span class="stage-copy"><span class="eyebrow">04</span><strong>Readout per point</strong><span class="stage-text">Every point reports ten numbers: 6 for “push a piece in from here in this direction”, 3 for “capture the row through this point” (one per line direction), and 1 for “also take this GIPF piece”.</span></span></button>
+            <button class="stage" type="button" style="--i:4"><svg viewBox="0 0 100 100" data-art="outputs" aria-hidden="true"></svg><span class="stage-copy"><span class="eyebrow">05</span><strong>Move scores + win chance</strong><span class="stage-text">Together the readouts score every possible move. A separate small head reads all points at once and outputs the chance of winning.</span></span></button>
+            <button class="stage" type="button" style="--i:5"><svg viewBox="0 0 100 100" data-art="search" aria-hidden="true"></svg><span class="stage-copy"><span class="eyebrow">06</span><strong>Tree search</strong><span class="stage-text">The search tries a few thousand continuations per second, using the scores to decide which moves deserve a closer look and the win chance to judge where they lead.</span></span></button>
+            <button class="stage" type="button" style="--i:6"><svg viewBox="0 0 100 100" data-art="move" aria-hidden="true"></svg><span class="stage-copy"><span class="eyebrow">07</span><strong>The move</strong><span class="stage-text">When the thinking time is up, the move that held up best in the search is played.</span></span></button>
+          </div>
+          <div class="card stage-detail" id="stage-detail" aria-live="polite"></div>
+        </section>
+
+        <section class="section" aria-labelledby="att-title">
+          <p class="eyebrow">Look inside</p>
+          <h2 id="att-title">Where each point looks</h2>
+          <p>This is real data from the network you play against. Click any point on the board, then pick one of the 16 attention heads: the board shows how strongly that head prefers to look at each other point from there.</p>
+          <div class="card attention">
+            <svg id="att-board" viewBox="0 0 800 800" role="group" aria-label="Attention preferences on the GIPF board"></svg>
+            <div class="att-side">
+              <p class="eyebrow">Attention heads</p>
+              <div class="heads" id="heads"><span></span><span>Head 1</span><span>Head 2</span><span>Head 3</span><span>Head 4</span></div>
+              <div class="legend"><span>avoids</span><i></i><span>favours</span></div>
+              <p class="att-readout" id="att-readout" role="status"></p>
+              <p class="att-note">These are the network’s learned position preferences: which relative positions each head favours before it even looks at the pieces. Nobody told it about the geometry. Many heads have discovered the board’s lines and neighbourhoods by themselves.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="learn-title">
+          <p class="eyebrow">Training</p>
+          <h2 id="learn-title">How it learned</h2>
+          <div class="steps">
+            <div class="card step"><span class="eyebrow">Step 1</span>
+              <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="17" cy="24" r="11" class="art-ivory"/><circle cx="31" cy="24" r="11" class="art-ink"/><path d="M10 9a20 20 0 0 1 28 0M38 39a20 20 0 0 1-28 0" class="art-hot-line"/><path d="M41 5v7h-7zM7 43v-7h7z" class="art-hot"/></svg>
+              <h3>Play itself</h3><p>It played about 390 million positions against itself, over two days on rented graphics cards.</p></div>
+            <div class="card step"><span class="eyebrow">Step 2</span>
+              <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="16" cy="20" r="14" class="art-ink"/><circle cx="38" cy="34" r="7" class="art-hot"/><path d="M27 34h-9" class="art-line" stroke-dasharray="1 4"/><path d="M29 30l1.5 1.5" class="art-line"/></svg>
+              <h3>Teacher and student</h3><p>A larger “teacher” network played the games, while the small network you play against learned from them.</p></div>
+            <div class="card step"><span class="eyebrow">Step 3</span>
+              <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 7L9 25M24 7v18M24 7l15 18M9 25L5 41M9 25l8 16" class="art-line"/><path d="M24 7v18l8 16" class="art-hot-line"/><circle cx="24" cy="7" r="4.5" class="art-ink"/><circle cx="9" cy="25" r="3.2" class="art-dot"/><circle cx="39" cy="25" r="3.2" class="art-dot"/><circle cx="5" cy="41" r="3.2" class="art-dot"/><circle cx="17" cy="41" r="3.2" class="art-dot"/><circle cx="24" cy="25" r="4" class="art-hot"/><circle cx="32" cy="41" r="4" class="art-hot"/></svg>
+              <h3>Learn from search</h3><p>Every move in training was chosen by search. The network learned to predict the search’s choice and the final winner.</p></div>
+            <div class="card step"><span class="eyebrow">Step 4</span>
+              <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="26" width="10" height="17" rx="2" class="art-dot"/><rect x="19" y="8" width="10" height="35" rx="2" class="art-hot"/><rect x="33" y="19" width="10" height="24" rx="2" class="art-dot"/></svg>
+              <h3>Pick the best</h3><p>The best version was picked by playing candidates against each other, at the same thinking time, in the real browser engine.</p></div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="small-title">
+          <p class="eyebrow">Design choice</p>
+          <h2 id="small-title">Why small?</h2>
+          <p>In the browser, thinking time is what counts. A small, fast network can search far more positions in the same time, and that beat bigger networks at equal thinking time early in training and matched them at the end. So the smallest one was shipped.</p>
+          <div class="cta"><a class="button button-primary" href="./">Play against it</a><a class="button button-quiet" href="benchmarks.html">See the benchmarks</a><a class="button button-quiet" href="https://github.com/wusche1/gipf-zero/blob/main/reports/ZERO2.md">Full technical report ↗</a></div>
+        </section>
+      </main>
+
+      <footer class="footer"><span>GIPF / PROJECT GIPF</span><span><a href="./">Play</a> · <a href="about.html">About the AI</a> · <a href="benchmarks.html">Benchmarks</a></span><span>Runs entirely in your browser</span></footer>
+    </div>
+    <script type="module" src="about.js"></script>
+  </body>
+</html>

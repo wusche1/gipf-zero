@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f0e9" />
+    <meta name="description" content="Match results of the GIPF machine against every other GIPF program we could find and run." />
+    <title>GIPF · Benchmarks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="pages.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="GIPF home">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span><strong>GIPF</strong><small>board study</small></span>
+        </a>
+        <nav class="page-nav" aria-label="Site"><a href="./">Play</a><a href="about.html">About the AI</a><a href="benchmarks.html" aria-current="page">Benchmarks</a></nav>
+      </header>
+
+      <main class="page">
+        <p class="eyebrow">Benchmarks</p>
+        <h1>Stronger than every other GIPF program we could find and run.</h1>
+        <p class="lede">We searched for every other GIPF-playing program, got the ones that work running, and played full matches against them. The machine on this site won all of them, by a wide margin.</p>
+        <div class="cta"><a class="button button-primary" href="./">Play against it</a><a class="button button-quiet" href="about.html">How the AI works</a></div>
+
+        <section class="section" aria-labelledby="results-title">
+          <p class="eyebrow">Head to head</p>
+          <h2 id="results-title">Match results</h2>
+          <div class="duo">
+            <div class="card">
+              <p class="eyebrow">Olympiad champion</p>
+              <h3><a href="https://gf1.sourceforge.net">GF1 “Gipf for One” 1.03</a></h3>
+              <p class="byline">By Kurt Van den Branden. Winner of the GIPF event at the 2001 Computer Olympiad.</p>
+              <div class="result"><div class="result-label">Against its search depths 3 to 6<small>191 games, early version of our AI</small></div><div class="bar" role="img" aria-label="190 wins, 1 loss"><span style="width:99.5%"></span></div><div class="score"><strong>190</strong>–1</div></div>
+              <div class="result"><div class="result-label">Against its strongest tested setting, depth 6<small>final version at 0.3 s per move; GF1 took about 8 s per move</small></div><div class="bar" role="img" aria-label="12 wins, 0 losses"><span style="width:100%"></span></div><div class="score"><strong>12</strong>–0</div></div>
+              <div class="bar-key"><span><i></i>our wins</span><span><i></i>our losses</span></div>
+            </div>
+            <div class="card">
+              <p class="eyebrow">Online game server</p>
+              <h3><a href="https://www.boardspace.net">BoardSpace.net robots</a></h3>
+              <p class="byline">By Dave Dyer (<a href="https://github.com/ddyer0/boardspace.net">source</a>). Four robots: Bestbot, Smartbot, Dumbot and Weakbot.</p>
+              <div class="result"><div class="result-label">Against all four robots<small>246 games overall</small></div><div class="bar" role="img" aria-label="246 wins, 0 losses"><span style="width:100%"></span></div><div class="score"><strong>246</strong>–0</div></div>
+              <div class="result"><div class="result-label">Against Bestbot<small>final version at 0.3 s per move</small></div><div class="bar" role="img" aria-label="24 wins, 0 losses"><span style="width:100%"></span></div><div class="score"><strong>24</strong>–0</div></div>
+              <div class="result"><div class="result-label">Against Bestbot, with a handicap<small>our AI limited to 0.1 s per move</small></div><div class="bar" role="img" aria-label="23 wins, 1 loss"><span style="width:95.8%"></span></div><div class="score"><strong>23</strong>–1</div></div>
+            </div>
+          </div>
+          <div class="duo duo-wide">
+            <div class="card">
+              <p class="eyebrow">Handicap test</p>
+              <h3>How little thinking does it need?</h3>
+              <p class="byline">Against GF1 at depth 5, we cut our AI’s look-ahead down until the match was even. It needs only about 9 simulations per move to break even.</p>
+              <div class="handicap" role="img" aria-label="Results against GF1 depth 5 by simulations per move: 14–28 with 6, 27–33 with 8, 28–14 with 12, 21–9 with 16, 26–4 with 64.">
+                <span>6 <b>simulations</b></span><div class="bar bar-even"><span style="width:33.3%"></span></div><span class="score">14–28</span>
+                <span>8 <b>simulations</b></span><div class="bar bar-even"><span style="width:45%"></span></div><span class="score">27–33</span>
+                <span class="even">break-even ≈ 9</span>
+                <span>12 <b>simulations</b></span><div class="bar bar-even"><span style="width:66.7%"></span></div><span class="score">28–14</span>
+                <span>16 <b>simulations</b></span><div class="bar bar-even"><span style="width:70%"></span></div><span class="score">21–9</span>
+                <span>64 <b>simulations</b></span><div class="bar bar-even"><span style="width:86.7%"></span></div><span class="score">26–4</span>
+              </div>
+              <p class="byline">On this site it uses hundreds to thousands of simulations per move.</p>
+            </div>
+            <div class="card">
+              <p class="eyebrow">Against ourselves</p>
+              <h3>Our previous site model</h3>
+              <p class="big">+1,700<small>Elo</small></p>
+              <p class="byline">Compared with the model this site ran in September 2026, the new training network is roughly 1,700 Elo stronger at equal search.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" aria-labelledby="others-title">
+          <p class="eyebrow">The rest of the field</p>
+          <h2 id="others-title">Other GIPF programs</h2>
+          <p>These exist, but could not be played against. Here is why.</p>
+          <ul class="others">
+            <li><strong><a href="https://ludii.games">Ludii</a></strong><span>Its GIPF implementation is unfinished and has no capture rules (<a href="https://github.com/Ludeme/Ludii">source</a>).</span></li>
+            <li><strong>Gipfted</strong><span>Runner-up at the 2001 Computer Olympiad. Not available for download.</span></li>
+            <li><strong>Hobby projects</strong><span><a href="https://github.com/sooryan/gipf-ai">sooryan/gipf-ai</a>, <a href="https://github.com/frsfnrrg/gipf">frsfnrrg/gipf</a> and a few others on GitHub. Unfinished, or written for simplified rules.</span></li>
+          </ul>
+          <p>Know a GIPF engine we missed? <a href="https://github.com/wusche1/gipf-zero/issues">Open an issue</a>.</p>
+        </section>
+
+        <section class="section" aria-labelledby="method-title">
+          <p class="eyebrow">Method</p>
+          <h2 id="method-title">How the matches were run</h2>
+          <p>Each match pitted the real browser engine against the other program, with colours alternated and varied openings. After every move the complete board was compared between both programs, so differences in how they read the rules could not skew a result. The details are in the <a href="https://github.com/wusche1/gipf-zero/blob/main/reports/ZERO2.md">full technical report</a>.</p>
+          <p class="fine">Fine print: no games against human experts yet · GF1 was not tested beyond depth 6 · standard GIPF rules.</p>
+        </section>
+      </main>
+
+      <footer class="footer"><span>GIPF / PROJECT GIPF</span><span><a href="./">Play</a> · <a href="about.html">About the AI</a> · <a href="benchmarks.html">Benchmarks</a></span><span>Runs entirely in your browser</span></footer>
+    </div>
+  </body>
+</html>
