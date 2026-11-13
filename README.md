@@ -4,7 +4,13 @@ Play **standard GIPF** in your browser: two people sharing a screen, or a public
 
 **[Play the game](https://wusche1.github.io/gipf-zero/)** · [Official GIPF rules](https://www.gipf.com/gipf/rules/complete_rules.html)
 
-## Original deadline result
+## Current model (November 2026)
+
+The site plays a 4-layer, width-64 **transformer** trained by self-play, with tree search and inference running in one WebAssembly module (about 1 MB download, no server). Thinking time per move: Fast 0.3 s, Normal 1 s, Strong 3 s. It won 181 of 182 games against GF1 (2001 Computer Olympiad winner) and all 246 games against BoardSpace's robots. Full write-up: [reports/ZERO2.md](reports/ZERO2.md).
+
+The sections below describe the September 2026 models and are kept as history.
+
+## History: original deadline result (September 2026)
 
 The completed 9 September 2026 selection run chose a square 3x3 **ResNet-32
 CNN** trained for 43,869 self-play games. It won its 80-game CPU, one-thread,
@@ -19,7 +25,7 @@ and equal 50 ms decision budgets. [Raw reports and conditions](reports/RESULTS.m
 include checkpoint hashes, seeds, actual search measurements, and confidence
 intervals.
 
-## Overnight comparison and final model
+## History: overnight comparison (September 2026)
 
 The follow-up compared MLP256, square CNN32, hex CNN32, and two query
 transformers (256-wide/two-layer and 164-wide/five-layer), with two seeds and
@@ -39,10 +45,9 @@ ablation.
 [Full comparison, uncertainty, and raw results](reports/overnight/20260909T235853Z/RESULTS.md)
 · [Download the verified public model and comparison checkpoints](https://huggingface.co/wuschelschulz/gipf-zero)
 
-Both two-player mode and the learned AI now run **entirely in the browser**.
-The model, inference runtime, and C++ search engine are hosted on GitHub Pages;
-no training instance or inference server is required. The default uses CPU/WASM
-in a worker, with a 1.5-second thinking budget and an optional 5-second deep mode.
+Both two-player mode and the learned AI run **entirely in the browser**.
+The model and the C++ search engine are hosted on GitHub Pages;
+no training instance or inference server is required.
 [Browser validation and performance](reports/BROWSER_AI.md) ·
 [Benchmark your own device](https://wusche1.github.io/gipf-zero/benchmark.html).
 Automated wins against these opponents do not establish a human or expert rating.
@@ -69,6 +74,8 @@ The legacy `server.app` API remains available for research, but the published
 website does not call it.
 
 ## Train and evaluate
+
+The current pipeline (`training/selfplay.py`, `training/learn.py`, `training/ladder.py`, `ops/web_model.py`) is described with commands in the Reproduce section of [reports/ZERO2.md](reports/ZERO2.md). The September pipeline is still available:
 
 ```sh
 python -m training.train --run runs/example --kind mlp --width 128 --blocks 2 \

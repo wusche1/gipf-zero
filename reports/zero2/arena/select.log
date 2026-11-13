@@ -1,0 +1,6 @@
+c96x6 vs c64x4 @300ms: 18-23-1  sims/decision 355 vs 720
+c96x6 vs c64x6 @300ms: 23-19-0  sims/decision 405 vs 553
+c64x6 vs c64x4 @300ms: 24-18-0  sims/decision 589 vs 776
+c96x6 vs c64x4 @1000ms: 16-14-0  sims/decision 915 vs 1929
+c96x6 vs c64x6 @1000ms: 15-15-0  sims/decision 865 vs 1257
+c64x6 vs c64x4 @1000ms: 16-14-0  sims/decision 1256 vs 1812

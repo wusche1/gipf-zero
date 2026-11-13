@@ -71,6 +71,6 @@ if __name__ == '__main__':
         raise SystemExit('kernel does not reproduce the checkpoint; metadata not written')
     meta |= {'sha256': hashlib.sha256((models / meta['path']).read_bytes()).hexdigest(),
              'cpuct': a.cpuct, 'fpu': a.fpu, 'budgetsMs': dict(zip(('fast', 'normal', 'strong'), a.budgets)),
-             'ponder': {'maxMs': 20000, 'maxVisits': 20000}}
+             'ponder': {'maxMs': 20000, 'maxVisits': 20000}, 'varietyPlies': 6, 'varietyRatio': 0.6}
     (models / f'{a.name}.json').write_text(json.dumps(meta, indent=2, ensure_ascii=False) + '\n')
     print(f'wrote {models / meta["path"]} and {models / a.name}.json')

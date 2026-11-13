@@ -10,11 +10,9 @@
     "relu": false,
     "int16": true
   },
-  "sha256": "0d79b27380b7da1c120aa6464ba55e83f0d300f9ab31a847900417f62c3d0cac",
+  "sha256": "822c3ae7c1073b00e46d52ccb7ede04a647ea8d1a552ad4617e071dbbf4467dd",
   "cpuct": 1.5,
   "fpu": 0.1,
-  "varietyPlies": 6,
-  "varietyRatio": 0.6,
   "budgetsMs": {
     "fast": 300,
     "normal": 1000,
@@ -23,5 +21,7 @@
   "ponder": {
     "maxMs": 20000,
     "maxVisits": 20000
-  }
+  },
+  "varietyPlies": 6,
+  "varietyRatio": 0.6
 }

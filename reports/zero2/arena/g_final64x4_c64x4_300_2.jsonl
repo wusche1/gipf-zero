@@ -1,0 +1,13 @@
+{"game":0,"seed":2318,"aWhite":true,"opening":[16,22,13,3],"plies":163,"winner":1,"result":1}
+{"game":1,"seed":2318,"aWhite":false,"opening":[16,22,13,3],"plies":96,"winner":-1,"result":1}
+{"game":2,"seed":2318,"aWhite":true,"opening":[21,37,21,33],"plies":105,"winner":1,"result":1}
+{"game":3,"seed":2318,"aWhite":false,"opening":[21,37,21,33],"plies":126,"winner":1,"result":-1}
+{"game":4,"seed":2318,"aWhite":true,"opening":[28,7,35,41],"plies":140,"winner":-1,"result":-1}
+{"game":5,"seed":2318,"aWhite":false,"opening":[28,7,35,41],"plies":118,"winner":-1,"result":1}
+{"game":6,"seed":2318,"aWhite":true,"opening":[6,5,15,11],"plies":114,"winner":-1,"result":-1}
+{"game":7,"seed":2318,"aWhite":false,"opening":[6,5,15,11],"plies":133,"winner":1,"result":-1}
+{"game":8,"seed":2318,"aWhite":true,"opening":[22,39,23,16],"plies":90,"winner":-1,"result":-1}
+{"game":9,"seed":2318,"aWhite":false,"opening":[22,39,23,16],"plies":75,"winner":1,"result":-1}
+{"game":10,"seed":2318,"aWhite":true,"opening":[32,31,15,4],"plies":79,"winner":1,"result":1}
+{"game":11,"seed":2318,"aWhite":false,"opening":[32,31,15,4],"plies":129,"winner":1,"result":-1}
+{"game":12,"seed":2318,"aWhite":true,"opening":[34,22,40,3],"plies":73,"winner":1,"result":1}

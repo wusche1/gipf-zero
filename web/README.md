@@ -34,7 +34,7 @@ failed model download can be retried without discarding the game.
 
 To ship another transformer checkpoint (any width/depth/heads/ffmul):
 
-    python -m ops.web_model NAME --checkpoint CKPT.pt --title "Shown name" --cpuct 1.5 --fpu -1
+    python -m ops.web_model NAME --checkpoint CKPT.pt --title "Shown name" --cpuct 1.5 --fpu 0.1 --int16
     # then set "model": "NAME" in web/config.json
 
 This writes `models/NAME.bin` and, only after the WASM kernel reproduced the
