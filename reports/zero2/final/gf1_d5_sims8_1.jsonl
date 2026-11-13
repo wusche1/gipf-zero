@@ -1,0 +1,21 @@
+{"game":0,"seed":53,"depth":5,"weWhite":true,"opening":[2,34],"plies":74,"winner":-1,"result":-1,"gf1MsPerMove":350.6361111111111,"ourMsPerDecision":4.850977375000066,"ourSimsPerDecision":8}
+{"game":1,"seed":53,"depth":5,"weWhite":false,"opening":[2,34],"plies":63,"winner":1,"result":-1,"gf1MsPerMove":215.85161290322577,"ourMsPerDecision":4.324555588234997,"ourSimsPerDecision":8}
+{"game":2,"seed":53,"depth":5,"weWhite":true,"opening":[2,40],"plies":83,"winner":1,"result":1,"gf1MsPerMove":498.65250000000003,"ourMsPerDecision":4.3207309111110375,"ourSimsPerDecision":8}
+{"game":3,"seed":53,"depth":5,"weWhite":false,"opening":[2,40],"plies":49,"winner":1,"result":-1,"gf1MsPerMove":279.18333333333345,"ourMsPerDecision":2.9909595384616785,"ourSimsPerDecision":8}
+{"game":4,"seed":53,"depth":5,"weWhite":true,"opening":[3,22],"plies":69,"winner":1,"result":1,"gf1MsPerMove":213.96060606060604,"ourMsPerDecision":2.6900118378374875,"ourSimsPerDecision":8}
+{"game":5,"seed":53,"depth":5,"weWhite":false,"opening":[3,22],"plies":71,"winner":1,"result":-1,"gf1MsPerMove":173.7914285714286,"ourMsPerDecision":2.7540193846151126,"ourSimsPerDecision":8}
+{"game":6,"seed":53,"depth":5,"weWhite":true,"opening":[3,32],"plies":109,"winner":1,"result":1,"gf1MsPerMove":167.95849056603777,"ourMsPerDecision":2.632113677418191,"ourSimsPerDecision":8}
+{"game":7,"seed":53,"depth":5,"weWhite":false,"opening":[3,32],"plies":51,"winner":1,"result":-1,"gf1MsPerMove":259.20399999999995,"ourMsPerDecision":2.635572884614633,"ourSimsPerDecision":8}
+{"game":8,"seed":53,"depth":5,"weWhite":true,"opening":[22,40],"plies":113,"winner":1,"result":1,"gf1MsPerMove":128.44727272727275,"ourMsPerDecision":2.6599131406244396,"ourSimsPerDecision":8}
+{"game":9,"seed":53,"depth":5,"weWhite":false,"opening":[22,40],"plies":128,"winner":-1,"result":1,"gf1MsPerMove":322.04761904761904,"ourMsPerDecision":3.5770622750002077,"ourSimsPerDecision":8}
+{"game":10,"seed":53,"depth":5,"weWhite":true,"opening":[27,39],"plies":30,"winner":-1,"result":-1,"gf1MsPerMove":282.5,"ourMsPerDecision":2.6996779999996456,"ourSimsPerDecision":8}
+{"game":11,"seed":53,"depth":5,"weWhite":false,"opening":[27,39],"plies":51,"winner":1,"result":-1,"gf1MsPerMove":235.43200000000002,"ourMsPerDecision":2.595257392858392,"ourSimsPerDecision":8}
+{"game":12,"seed":53,"depth":5,"weWhite":true,"opening":[30,34],"plies":124,"winner":-1,"result":-1,"gf1MsPerMove":185.74918032786886,"ourMsPerDecision":2.757579753622691,"ourSimsPerDecision":8}
+{"game":13,"seed":53,"depth":5,"weWhite":false,"opening":[30,34],"plies":39,"winner":1,"result":-1,"gf1MsPerMove":156.87368421052628,"ourMsPerDecision":2.6488977894738412,"ourSimsPerDecision":8}
+{"game":14,"seed":53,"depth":5,"weWhite":true,"opening":[41,24],"plies":88,"winner":-1,"result":-1,"gf1MsPerMove":188.73255813953492,"ourMsPerDecision":2.632315808510844,"ourSimsPerDecision":8}
+{"game":15,"seed":53,"depth":5,"weWhite":false,"opening":[41,24],"plies":40,"winner":-1,"result":1,"gf1MsPerMove":323.2052631578947,"ourMsPerDecision":3.4633305416622022,"ourSimsPerDecision":8}
+{"game":16,"seed":53,"depth":5,"weWhite":true,"opening":[6,34],"plies":66,"winner":-1,"result":-1,"gf1MsPerMove":189.578125,"ourMsPerDecision":3.361619871799261,"ourSimsPerDecision":8}
+{"game":17,"seed":53,"depth":5,"weWhite":false,"opening":[6,34],"plies":55,"winner":1,"result":-1,"gf1MsPerMove":356.1185185185185,"ourMsPerDecision":2.726641322578108,"ourSimsPerDecision":8}
+{"game":18,"seed":53,"depth":5,"weWhite":true,"opening":[3,22],"plies":57,"winner":1,"result":1,"gf1MsPerMove":730,"ourMsPerDecision":2.8292860303084706,"ourSimsPerDecision":8}
+{"game":19,"seed":53,"depth":5,"weWhite":false,"opening":[3,22],"plies":43,"winner":1,"result":-1,"gf1MsPerMove":735.9666666666666,"ourMsPerDecision":4.148145039996598,"ourSimsPerDecision":8}
+{"summary":true,"seed":53,"depth":5,"budget":"8 sims","games":20,"wins":7,"losses":13,"draws":0,"aborted":0,"score":0.35,"ci95":[0.14095885572452485,0.5590411442754751],"ourSimsPerDecision":8,"ourMsPerDecision":3.1693827828862657,"gf1MsPerMove":279.78799414348464}
