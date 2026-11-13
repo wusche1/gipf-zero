@@ -6,7 +6,7 @@ Play **standard GIPF** in your browser: two people sharing a screen, or a public
 
 ## Current model (November 2026)
 
-The site plays a 4-layer, width-64 **transformer** trained by self-play, with tree search and inference running in one WebAssembly module (about 1 MB download, no server). Thinking time per move: Fast 0.3 s, Normal 1 s, Strong 3 s. It won 181 of 182 games against GF1 (2001 Computer Olympiad winner) and all 246 games against BoardSpace's robots. Full write-up: [reports/ZERO2.md](reports/ZERO2.md).
+The site plays a 4-layer, width-64 **transformer** trained by self-play, with tree search and inference running in one WebAssembly module (about 1 MB download, no server). Thinking time per move: Fast 0.3 s, Normal 1 s, Strong 3 s. Against GF1 (2001 Computer Olympiad winner) an early version won 190 of 191 games and the final weights won 12 of 12 at GF1's depth 6; against BoardSpace's robots it won all 246 games. Full write-up: [reports/ZERO2.md](reports/ZERO2.md).
 
 The sections below describe the September 2026 models and are kept as history.
 
